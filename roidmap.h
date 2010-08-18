@@ -5,26 +5,42 @@
 #define RR_MAXROIDS 100
 #endif
 
+#ifndef RR_MAXLINKS
+#define RR_MAXLINKS 6
+#endif
+
+#ifndef RR_MINDIST
+#define RR_MINDIST 25
+#endif
+
 #include "vector.h"
 
 class RR_roidmap{
   public:
     RR_vector rpos[RR_MAXROIDS];
-    int rlink[RR_MAXROIDS][6];
+    int rlink[RR_MAXROIDS][RR_MAXLINKS];
+    bool rused[RR_MAXROIDS];
     
     //Constructor
     RR_roidmap(){
       for(int i=0;i<RR_MAXROIDS;i++){
         rpos[i]=RR_vector(rand()%800,rand()%600);
-        for(int u=0;u<6;u++) rlink[i][u]=-1;
+        rused[i]=true;
+        for(int u=0;u<RR_MAXLINKS;u++) rlink[i][u]=-1;
+        for(int u=0;u<i;u++){
+          if(sqrt((rpos[i].x-rpos[u].x)*(rpos[i].x-rpos[u].x)+(rpos[i].y-rpos[u].y)*(rpos[i].y-rpos[u].y))<RR_MINDIST){
+            rused[i]=false;
+            break;
+          }
+        }
       }
       
       //Calculate links
       RR_vector cnt;
       double dis,tmpdis;
       bool makelink;
-      for(int i=0;i<RR_MAXROIDS;i++){
-        for(int u=0;u<RR_MAXROIDS;u++) if(u!=i){
+      for(int i=0;i<RR_MAXROIDS;i++) if(rused[i]){
+        for(int u=0;u<i;u++) if(rused[u]){
           
           //Get center between roids
           cnt.x=(rpos[i].x+rpos[u].x)/2.0;
@@ -35,7 +51,7 @@ class RR_roidmap{
           
           //Make sure no other roids are in the way
           makelink=true;
-          for(int j=0;j<RR_MAXROIDS;j++) if(j!=i && j!=u && makelink){
+          for(int j=0;j<RR_MAXROIDS;j++) if(j!=i && j!=u && makelink && rused[j]){
             tmpdis=sqrt((rpos[j].x-cnt.x)*(rpos[j].x-cnt.x)+(rpos[j].y-cnt.y)*(rpos[j].y-cnt.y));
             if(tmpdis<dis*0.5){
               makelink=false;
@@ -44,11 +60,11 @@ class RR_roidmap{
           
           //Make the link
           if(makelink){
-            for(int j=0;j<6;j++) if(rlink[i][j]<0){
+            for(int j=0;j<RR_MAXLINKS;j++) if(rlink[i][j]<0){
               rlink[i][j]=u;
               break;
             }
-            for(int j=0;j<6;j++) if(rlink[u][j]<0){
+            for(int j=0;j<RR_MAXLINKS;j++) if(rlink[u][j]<0){
               rlink[u][j]=i;
               break;
             }
@@ -62,7 +78,7 @@ class RR_roidmap{
       double dis=800;
       double tmpdis;
       int nearest=0;
-      for(int i=0;i<RR_MAXROIDS;i++){
+      for(int i=0;i<RR_MAXROIDS;i++) if(rused[i]){
         
         //Draw roid
         filledEllipseRGBA(
@@ -78,7 +94,7 @@ class RR_roidmap{
         );
         
         //Draw links
-        for(int u=0;u<6;u++) if(rlink[i][u]>-1) lineRGBA(
+        for(int u=0;u<RR_MAXLINKS;u++) if(rlink[i][u]>-1 && rlink[i][u]<i) lineRGBA(
           win,
           rpos[i].x,
           rpos[i].y,
@@ -87,7 +103,7 @@ class RR_roidmap{
           100,
           100,
           100,
-          25
+          50
         );
         
         //Check if roid is nearest so far
@@ -96,7 +112,19 @@ class RR_roidmap{
           dis=tmpdis;
           nearest=i;
         }
-      }
+      
+      //Draw removed roid
+      }else ellipseRGBA(
+        win,
+        rpos[i].x,
+        rpos[i].y,
+        5,
+        5,
+        255,
+        0,
+        0,
+        50
+      );
       
       //Mark nearest roid
       filledEllipseRGBA(
@@ -112,7 +140,7 @@ class RR_roidmap{
       );
         
       //Draw links
-      for(int u=0;u<6;u++) if(rlink[nearest][u]>-1) lineRGBA(
+      for(int u=0;u<RR_MAXLINKS;u++) if(rlink[nearest][u]>-1) lineRGBA(
         win,
         rpos[nearest].x,
         rpos[nearest].y,

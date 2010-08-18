@@ -32,6 +32,7 @@ int main(int argc,char* args[]){
   fspd=1.0;
   
   //Roid map
+  srand(time1);
   RR_roidmap rmap;
   
   //Game loop
