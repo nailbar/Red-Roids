@@ -13,6 +13,10 @@
 #define RR_MINDIST 25
 #endif
 
+#ifndef RR_MAXTEAMS
+#define RR_MAXTEAMS 4
+#endif
+
 #include "vector.h"
 
 class RR_roidmap{
@@ -20,13 +24,19 @@ class RR_roidmap{
     RR_vector rpos[RR_MAXROIDS];
     int rlink[RR_MAXROIDS][RR_MAXLINKS];
     bool rused[RR_MAXROIDS];
+    int rowner[RR_MAXROIDS];
     
     //Constructor
     RR_roidmap(){
+      
+      //Randomly place roids
       for(int i=0;i<RR_MAXROIDS;i++){
         rpos[i]=RR_vector(rand()%800,rand()%600);
         rused[i]=true;
+        rowner[i]=0;
         for(int u=0;u<RR_MAXLINKS;u++) rlink[i][u]=-1;
+        
+        //Remove roids too close to each other
         for(int u=0;u<i;u++){
           if(sqrt((rpos[i].x-rpos[u].x)*(rpos[i].x-rpos[u].x)+(rpos[i].y-rpos[u].y)*(rpos[i].y-rpos[u].y))<RR_MINDIST){
             rused[i]=false;
@@ -71,6 +81,13 @@ class RR_roidmap{
           }
         }
       }
+      
+      //Randomly place home bases
+      int tmpi;
+      for(int i=1;i<=RR_MAXTEAMS;i++){
+        tmpi=rand()%RR_MAXROIDS;
+        rowner[tmpi]=i;
+      }
     }
     
     //Display roidmap
@@ -92,6 +109,17 @@ class RR_roidmap{
           100,
           255
         );
+        
+        //Draw team color
+        switch(rowner[i]){
+          case 1: ellipseRGBA(win,rpos[i].x,rpos[i].y,8,8,255,0,0,255); break;
+          case 2: ellipseRGBA(win,rpos[i].x,rpos[i].y,8,8,0,255,0,255); break;
+          case 3: ellipseRGBA(win,rpos[i].x,rpos[i].y,8,8,0,0,255,255); break;
+          case 4: ellipseRGBA(win,rpos[i].x,rpos[i].y,8,8,255,255,0,255); break;
+          case 5: ellipseRGBA(win,rpos[i].x,rpos[i].y,8,8,255,0,255,255); break;
+          case 6: ellipseRGBA(win,rpos[i].x,rpos[i].y,8,8,0,255,255,255); break;
+          default: if(rowner[i]>0) ellipseRGBA(win,rpos[i].x,rpos[i].y,8,8,255,255,255,255);
+        }
         
         //Draw links
         for(int u=0;u<RR_MAXLINKS;u++) if(rlink[i][u]>-1 && rlink[i][u]<i) lineRGBA(
