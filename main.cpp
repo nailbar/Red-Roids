@@ -21,6 +21,19 @@ int main(int argc,char* args[]){
   int mpos[2]={320,200}; //Mouse coordinates
   Uint8 mkeys; //Mouse keys
   
+  //Framerate
+  Uint32 time1;
+  Uint32 time2;
+  float fspd;
+  time1=SDL_GetTicks();
+  time2=0;
+  fspd=1.0;
+  
+  //Moving object
+  double opos[]={400,400};
+  double odir[]={0,0};
+  double odis=0.0;
+  
   //Game loop
   while(inloop){
     while(SDL_PollEvent(&event)){
@@ -35,23 +48,55 @@ int main(int argc,char* args[]){
       }
     }
     
+    //Get framerate
+    time1=SDL_GetTicks();
+    if(time2){
+      fspd=float(time1-time2)/1000.0;
+      
+      //Limit framerate to fpslimit
+      if(1.0/fspd>60) SDL_Delay(int((1.0/60-fspd)*1000.0));
+    }
+    time2=time1;
+    
     //Mouse keys
     mkeys=SDL_GetMouseState(NULL,NULL);
     
     //If LMB is pressed, draw something at cursor
     if(mkeys & SDL_BUTTON(1)){
-        lineRGBA(
-          win,
-          mpos[0]+rand()%9-4,
-          mpos[1]+rand()%9-4,
-          mpos[0]+rand()%9-4,
-          mpos[1]+rand()%9-4,
-          rand()%256,
-          rand()%256,
-          rand()%256,
-          255
-        );
+      lineRGBA(
+        win,
+        mpos[0]+rand()%9-4,
+        mpos[1]+rand()%9-4,
+        mpos[0]+rand()%9-4,
+        mpos[1]+rand()%9-4,
+        rand()%256,
+        rand()%256,
+        rand()%256,
+        255
+      );
     }
+    
+    //Moving object
+    odis=sqrt((mpos[0]-opos[0])*(mpos[0]-opos[0])+(mpos[1]-opos[1])*(mpos[1]-opos[1]));
+    if(odis>0){
+      odir[0]=(mpos[0]-opos[0])/odis;
+      odir[1]=(mpos[1]-opos[1])/odis;
+    }
+    opos[0]+=odir[0]*fspd*50.0;
+    opos[1]+=odir[1]*fspd*50.0;
+    
+    //Draw the object trail too
+    lineRGBA(
+      win,
+      opos[0]+rand()%9-4,
+      opos[1]+rand()%9-4,
+      opos[0]+rand()%9-4,
+      opos[1]+rand()%9-4,
+      rand()%256,
+      0,
+      0,
+      50
+    );
     
     //Swap double buffer
     SDL_Flip(win);
