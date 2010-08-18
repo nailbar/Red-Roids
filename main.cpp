@@ -13,18 +13,51 @@ int main(int argc,char* args[]){
   //Set the window title
   SDL_WM_SetCaption("Red Roids",NULL);
   
-  //Game loop
+  //Variables for game loop
   SDL_Event event;
   bool inloop=true;
+  Uint8* keys; //Keyboard input
+  keys=SDL_GetKeyState(NULL);
+  int mpos[2]={320,200}; //Mouse coordinates
+  Uint8 mkeys; //Mouse keys
+  
+  //Game loop
   while(inloop){
     while(SDL_PollEvent(&event)){
-      if(event.type==SDL_QUIT) inloop=false;
+      switch(event.type){
+        case SDL_QUIT: inloop=false; break;
+        
+        //Mouse moved
+        case SDL_MOUSEMOTION:
+          mpos[0]=event.motion.x;
+          mpos[1]=event.motion.y;
+          break;
+      }
     }
     
-    lineRGBA(win,rand()%800,rand()%600,rand()%800,rand()%600,rand()%256,rand()%256,rand()%256,255);
+    //Mouse keys
+    mkeys=SDL_GetMouseState(NULL,NULL);
+    
+    //If LMB is pressed, draw something at cursor
+    if(mkeys & SDL_BUTTON(1)){
+        lineRGBA(
+          win,
+          mpos[0]+rand()%9-4,
+          mpos[1]+rand()%9-4,
+          mpos[0]+rand()%9-4,
+          mpos[1]+rand()%9-4,
+          rand()%256,
+          rand()%256,
+          rand()%256,
+          255
+        );
+    }
     
     //Swap double buffer
     SDL_Flip(win);
+    
+    //Close on Escape
+    if(keys[SDLK_ESCAPE]) inloop=false;
   }
   
   
