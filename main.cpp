@@ -2,6 +2,8 @@
 #include "SDL/SDL_gfxPrimitives.h"
 #include <cmath>
 
+#include "roidmap.h"
+
 int main(int argc,char* args[]){
   
   //Get it going
@@ -29,10 +31,8 @@ int main(int argc,char* args[]){
   time2=0;
   fspd=1.0;
   
-  //Moving object
-  double opos[]={400,400};
-  double odir[]={0,0};
-  double odis=0.0;
+  //Roid map
+  RR_roidmap rmap;
   
   //Game loop
   while(inloop){
@@ -61,7 +61,11 @@ int main(int argc,char* args[]){
     //Mouse keys
     mkeys=SDL_GetMouseState(NULL,NULL);
     
+    //Clear screen
+    boxRGBA(win,-5,-5,805,605,0,0,0,255);
+    
     //If LMB is pressed, draw something at cursor
+    /*
     if(mkeys & SDL_BUTTON(1)){
       lineRGBA(
         win,
@@ -96,7 +100,10 @@ int main(int argc,char* args[]){
       0,
       0,
       50
-    );
+    );*/
+    
+    //Display the roidmap
+    rmap.display(win,mpos);
     
     //Swap double buffer
     SDL_Flip(win);
