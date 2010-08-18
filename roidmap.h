@@ -14,7 +14,7 @@
 #endif
 
 #ifndef RR_MAXTEAMS
-#define RR_MAXTEAMS 4
+#define RR_MAXTEAMS 6
 #endif
 
 #include "vector.h"
@@ -25,6 +25,7 @@ class RR_roidmap{
     int rlink[RR_MAXROIDS][RR_MAXLINKS];
     bool rused[RR_MAXROIDS];
     int rowner[RR_MAXROIDS];
+    int player;
     
     //Constructor
     RR_roidmap(){
@@ -88,6 +89,9 @@ class RR_roidmap{
         tmpi=rand()%RR_MAXROIDS;
         rowner[tmpi]=i;
       }
+      
+      //Set player
+      player=(rand()%(RR_MAXTEAMS-1))+1;
     }
     
     //Display roidmap
@@ -95,7 +99,19 @@ class RR_roidmap{
       double dis=800;
       double tmpdis;
       int nearest=0;
+      int color[3];
       for(int i=0;i<RR_MAXROIDS;i++) if(rused[i]){
+        
+        //Get team color
+        switch(rowner[i]){
+          case 1: color[0]=255; color[1]=0; color[2]=0; break;
+          case 2: color[0]=0; color[1]=255; color[2]=0; break;
+          case 3: color[0]=0; color[1]=0; color[2]=255; break;
+          case 4: color[0]=255; color[1]=255; color[2]=0; break;
+          case 5: color[0]=255; color[1]=0; color[2]=255; break;
+          case 6: color[0]=0; color[1]=255; color[2]=255; break;
+          default: if(rowner[i]>0) color[0]=255; color[1]=255; color[2]=255;
+        }
         
         //Draw roid
         filledEllipseRGBA(
@@ -110,17 +126,38 @@ class RR_roidmap{
           255
         );
         
-        //Draw team color
-        switch(rowner[i]){
-          case 1: ellipseRGBA(win,rpos[i].x,rpos[i].y,8,8,255,0,0,255); break;
-          case 2: ellipseRGBA(win,rpos[i].x,rpos[i].y,8,8,0,255,0,255); break;
-          case 3: ellipseRGBA(win,rpos[i].x,rpos[i].y,8,8,0,0,255,255); break;
-          case 4: ellipseRGBA(win,rpos[i].x,rpos[i].y,8,8,255,255,0,255); break;
-          case 5: ellipseRGBA(win,rpos[i].x,rpos[i].y,8,8,255,0,255,255); break;
-          case 6: ellipseRGBA(win,rpos[i].x,rpos[i].y,8,8,0,255,255,255); break;
-          default: if(rowner[i]>0) ellipseRGBA(win,rpos[i].x,rpos[i].y,8,8,255,255,255,255);
-        }
+        //Mark roid owner
+        if(rowner[i]){
+          ellipseRGBA(win,rpos[i].x,rpos[i].y,8,8,color[0],color[1],color[2],255);
         
+          //Draw links
+          for(int u=0;u<RR_MAXLINKS;u++) if(rlink[i][u]>-1){
+            if(rowner[rlink[i][u]]==rowner[i]){
+              if(rlink[i][u]<i) lineRGBA(
+                win,
+                rpos[i].x,
+                rpos[i].y,
+                rpos[rlink[i][u]].x,
+                rpos[rlink[i][u]].y,
+                color[0],
+                color[1],
+                color[2],
+                100
+              );
+            }else lineRGBA(
+              win,
+              rpos[i].x,
+              rpos[i].y,
+              rpos[rlink[i][u]].x,
+              rpos[rlink[i][u]].y,
+              100,
+              100,
+              100,
+              50
+            );
+          }
+        }
+        /*
         //Draw links
         for(int u=0;u<RR_MAXLINKS;u++) if(rlink[i][u]>-1 && rlink[i][u]<i) lineRGBA(
           win,
@@ -133,26 +170,14 @@ class RR_roidmap{
           100,
           50
         );
-        
+        */
         //Check if roid is nearest so far
         tmpdis=sqrt((rpos[i].x-mpos[0])*(rpos[i].x-mpos[0])+(rpos[i].y-mpos[1])*(rpos[i].y-mpos[1]));
         if(tmpdis<dis){
           dis=tmpdis;
           nearest=i;
         }
-      
-      //Draw removed roid
-      }else ellipseRGBA(
-        win,
-        rpos[i].x,
-        rpos[i].y,
-        5,
-        5,
-        255,
-        0,
-        0,
-        50
-      );
+      }
       
       //Mark nearest roid
       filledEllipseRGBA(
@@ -168,7 +193,7 @@ class RR_roidmap{
       );
         
       //Draw links
-      for(int u=0;u<RR_MAXLINKS;u++) if(rlink[nearest][u]>-1) lineRGBA(
+      /*for(int u=0;u<RR_MAXLINKS;u++) if(rlink[nearest][u]>-1) lineRGBA(
         win,
         rpos[nearest].x,
         rpos[nearest].y,
@@ -178,7 +203,7 @@ class RR_roidmap{
         0,
         0,
         100
-      );
+      );*/
     }
 };
 
