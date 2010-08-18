@@ -21,6 +21,8 @@ int main(int argc,char* args[]){
       if(event.type==SDL_QUIT) inloop=false;
     }
     
+    lineRGBA(win,rand()%800,rand()%600,rand()%800,rand()%600,rand()%256,rand()%256,rand()%256,255);
+    
     //Swap double buffer
     SDL_Flip(win);
   }

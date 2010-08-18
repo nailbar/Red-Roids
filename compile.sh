@@ -7,7 +7,7 @@
 rm redroids
 
 # Compile main.cpp into bin.out
-g++ -Wall -o redroids main.cpp -lSDL
+g++ -Wall -o redroids main.cpp -lSDL -lSDL_gfx
 
 # Run the resulting program
 ./redroids
