@@ -3,6 +3,7 @@
 #include <cmath>
 
 #include "roidmap.h"
+#include "battlefield.h"
 
 int main(int argc,char* args[]){
   
@@ -34,6 +35,9 @@ int main(int argc,char* args[]){
   //Roid map
   srand(time1);
   RR_roidmap rmap;
+  
+  //Battlefield
+  RR_battlefield battlefield;
   
   //Game loop
   while(inloop){
@@ -104,7 +108,8 @@ int main(int argc,char* args[]){
     );*/
     
     //Display the roidmap
-    rmap.display(win,mpos);
+    //rmap.display(win,mpos);
+    battlefield.display(win,mpos);
     
     //Swap double buffer
     SDL_Flip(win);
