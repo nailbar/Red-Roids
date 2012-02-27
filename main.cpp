@@ -17,6 +17,9 @@ int main(int argc, char* args[]) {
     // Set the window title
     SDL_WM_SetCaption("Red Roids", NULL);
     
+    // No cursor
+    SDL_ShowCursor(SDL_DISABLE);
+    
     // Variables for game loop
     SDL_Event event;
     bool inloop = true;
@@ -38,6 +41,8 @@ int main(int argc, char* args[]) {
     // Unit test
     RR_unit a;
     float arot = 0.0;
+    RR_unit_part cursor = RR_unit_part(1, RR_vec2(20, 20));
+    RR_vec2 cursor_dir = RR_vec2(0);
     
     //Game loop
     while(inloop){
@@ -113,6 +118,11 @@ int main(int argc, char* args[]) {
         // Sample unit
         arot += fspd;
         a.draw(win, RR_vec2(400, 300), RR_vec2(arot), 2.0);
+        
+        // Draw cursor
+        cursor_dir = cursor_dir.normal(cursor.pos, RR_vec2(mpos[0], mpos[1]));
+        cursor.pos = RR_vec2(mpos[0], mpos[1]) - cursor_dir * 13.0;
+        cursor.draw(win, cursor.pos, cursor_dir, 0.5, 1, 0);
         
         //Swap double buffer
         SDL_Flip(win);

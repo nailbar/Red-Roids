@@ -59,6 +59,14 @@ public:
         return RR_vec2(y, -x);
     }
     
+    // Return the normal from one vector to another
+    RR_vec2 normal(RR_vec2 from, RR_vec2 to) {
+        RR_vec2 v1 = to - from;
+        double d1 = sqrt(v1.x * v1.x + v1.y * v1.y);
+        if(d1 > 0.0) return v1 / d1;
+        return RR_vec2(1.0, 0.0);
+    }
+    
     // Draw a translated, rotated, scaled and tilted polygon
     void draw_polygon(
         SDL_Surface* win, RR_vec2* vec, unsigned char n,

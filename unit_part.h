@@ -48,13 +48,13 @@ public:
             vec[0] = RR_vec2(27, 0);
             vec[1] = RR_vec2(-13, 0);
             vec[2] = RR_vec2(-3, 12);
-            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.1), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
+            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.1), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
             
             // Right side
             vec[0] = RR_vec2(27, 0);
             vec[1] = RR_vec2(-13, 0);
             vec[2] = RR_vec2(-3, -12);
-            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.1), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
+            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.1), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
             break;
         case 2: // Cockpit
             
