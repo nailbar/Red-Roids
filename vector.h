@@ -1,54 +1,54 @@
-#ifndef RR_VECTOR_H
-#define RR_VECTOR_H 1
+#ifndef RR_VEC2_H
+#define RR_VEC2_H 1
 
-class RR_vector {
+class RR_vec2 {
 public:
     double x, y;
     
     // Constructors
-    RR_vector() {
+    RR_vec2() {
         x = 0;
         y = 0;
     }
-    RR_vector(double newx, double newy) {
+    RR_vec2(double newx, double newy) {
         x = newx;
         y = newy;
     }
-    RR_vector(double radians) {
+    RR_vec2(double radians) {
         x = cos(radians);
         y = sin(radians);
     }
-    RR_vector operator+(RR_vector v) {
-        return RR_vector(x + v.x, y + v.y);
+    RR_vec2 operator+(RR_vec2 v) {
+        return RR_vec2(x + v.x, y + v.y);
     }
-    RR_vector operator-(RR_vector v) {
-        return RR_vector(x - v.x, y - v.y);
+    RR_vec2 operator-(RR_vec2 v) {
+        return RR_vec2(x - v.x, y - v.y);
     }
-    RR_vector operator*(double n) {
-        return RR_vector(x * n, y * n);
+    RR_vec2 operator*(double n) {
+        return RR_vec2(x * n, y * n);
     }
-    RR_vector operator/(double n) {
-        return RR_vector(x / n, y / n);
+    RR_vec2 operator/(double n) {
+        return RR_vec2(x / n, y / n);
     }
     
     // Return the light value
     //  * Assume this and light_dir are both normalized
-    double light_value(RR_vector light_dir) {
+    double light_value(RR_vec2 light_dir) {
         double val = dot(light_dir) * 0.5 + 0.5;
         return val;
     }
     
     // Calculate the dot value for two vectors
-    double dot(RR_vector vec2) {
+    double dot(RR_vec2 vec2) {
         return x * vec2.x + y * vec2.y;
     }
-    double dot(RR_vector vec1, RR_vector vec2) {
+    double dot(RR_vec2 vec1, RR_vec2 vec2) {
         return vec1.x * vec2.x + vec1.y * vec2.y;
     }
     
     // Return a vector rotated by another vector
-    RR_vector rotate(RR_vector vec1, RR_vector vec2) {
-        return RR_vector(
+    RR_vec2 rotate(RR_vec2 vec1, RR_vec2 vec2) {
+        return RR_vec2(
             vec2.x * vec1.x + vec2.y * vec1.y,
             vec2.y * vec1.x - vec2.x * vec1.y
         );
@@ -56,15 +56,15 @@ public:
     
     // Draw a translated, rotated, scaled and tilted polygon
     void draw_polygon(
-        SDL_Surface* win, RR_vector* vec, unsigned char n,
-        RR_vector translate, RR_vector rotate,
-        RR_vector tilt_dir, RR_vector light_dir,
+        SDL_Surface* win, RR_vec2* vec, unsigned char n,
+        RR_vec2 translate, RR_vec2 rotate,
+        RR_vec2 tilt_dir, RR_vec2 light_dir,
         double scale, float r, float g, float b,
         float ambient, float phong)
     {
         short x[n];
         short y[n];
-        RR_vector v;
+        RR_vec2 v;
         double light;
         
         // Process the vectors
@@ -92,4 +92,4 @@ public:
     }
 };
 
-#endif // RR_VECTOR_H
+#endif // RR_VEC2_H

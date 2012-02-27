@@ -21,7 +21,7 @@
 
 class RR_roidmap{
   public:
-    RR_vector rpos[RR_MAXROIDS];
+    RR_vec2 rpos[RR_MAXROIDS];
     int rlink[RR_MAXROIDS][RR_MAXLINKS];
     bool rused[RR_MAXROIDS];
     int rowner[RR_MAXROIDS];
@@ -32,7 +32,7 @@ class RR_roidmap{
       
       //Randomly place roids
       for(int i=0;i<RR_MAXROIDS;i++){
-        rpos[i]=RR_vector(rand()%800,rand()%600);
+        rpos[i]=RR_vec2(rand()%800,rand()%600);
         rused[i]=true;
         rowner[i]=0;
         for(int u=0;u<RR_MAXLINKS;u++) rlink[i][u]=-1;
@@ -47,7 +47,7 @@ class RR_roidmap{
       }
       
       //Calculate links
-      RR_vector cnt;
+      RR_vec2 cnt;
       double dis,tmpdis;
       bool makelink;
       for(int i=0;i<RR_MAXROIDS;i++) if(rused[i]){

@@ -112,7 +112,7 @@ int main(int argc, char* args[]) {
         
         // Sample unit
         arot += fspd;
-        a.draw(win, RR_vector(400, 300), RR_vector(arot), 2.0);
+        a.draw(win, RR_vec2(400, 300), RR_vec2(arot), 2.0);
         
         //Swap double buffer
         SDL_Flip(win);
