@@ -1,78 +1,32 @@
 #ifndef RR_UNIT_H
 
 #include "vector.h"
+#include "unit_part.h"
+
+#ifndef RR_MAX_UNIT_PARTS
+#define RR_MAX_UNIT_PARTS 10
+#endif
 
 class RR_unit {
 public:
+    RR_unit_part p[RR_MAX_UNIT_PARTS];
+    
+    // Constructor
+    RR_unit() {
+        p[0] = RR_unit_part(2, RR_vec2(0, 0)); // Cockpit
+        p[1] = RR_unit_part(1, RR_vec2(0, 0)); // Hull
+        p[2] = RR_unit_part(0, RR_vec2(-11, 0)); // Engine
+    }
     
     // Draw the unit on screen
     void draw(SDL_Surface* win, RR_vec2 position, RR_vec2 normal, float scale) {
         
-        // Polygon vectors
-        RR_vec2 vec[5];
-        
-        draw_part(win, position - normal * 11.0 * scale, normal, scale, 0, 0); // Engine
-        draw_part(win, position, normal, scale, 1, 0); // Hull
-        draw_part(win, position, normal, scale, 2, 0); // Cockpit
-    }
-    
-    // Draw a part
-    void draw_part(
-        SDL_Surface* win, RR_vec2 position, RR_vec2 normal,
-        float scale, unsigned char partid, unsigned char action
-    ) {
-        RR_vec2 vec[5];
-        switch(partid) {
-        case 0: // Engine
-            vec[0] = RR_vec2(-4, -5);
-            vec[1] = RR_vec2(4, -7);
-            vec[2] = RR_vec2(4, 7);
-            vec[3] = RR_vec2(-4, 5);
-            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), RR_vec2(0, -1), scale, 100, 110, 130, 0.2, 0.3);
+        // Loop through all parts
+        for(int i = RR_MAX_UNIT_PARTS - 1; i >= 0; i--) if(p[i].flags & 1) {
             
-            // Action 1: engine burn
-            if(action & 1) {
-                vec[0] = RR_vec2(-4, -5);
-                vec[1] = RR_vec2(-7 - (rand() % 7), -4);
-                vec[2] = RR_vec2(-7 - (rand() % 7), 0);
-                vec[3] = RR_vec2(-7 - (rand() % 7), 4);
-                vec[4] = RR_vec2(-4, 5);
-                position.draw_polygon(win, vec, 5, position, normal, RR_vec2(rand() % 1000), RR_vec2(0, -1), scale, 255, rand() % 255, 0, 0.2, 0.2);
-            }
-            break;
-        case 1: // Hull
-            
-            // Left side
-            vec[0] = RR_vec2(27, 0);
-            vec[1] = RR_vec2(-13, 0);
-            vec[2] = RR_vec2(-3, 12);
-            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.1), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
-            
-            // Right side
-            vec[0] = RR_vec2(27, 0);
-            vec[1] = RR_vec2(-13, 0);
-            vec[2] = RR_vec2(-3, -12);
-            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.1), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
-            break;
-        case 2: // Cockpit
-            
-            // Cockpit rear
-            vec[0] = RR_vec2(-7, -2);
-            vec[1] = RR_vec2(-3, -4);
-            vec[2] = RR_vec2(-3, 4);
-            vec[3] = RR_vec2(-7, 2);
-            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 0.5);
-            
-            // Cockpit front
-            vec[0] = RR_vec2(7, -3);
-            vec[1] = RR_vec2(-3, -4);
-            vec[2] = RR_vec2(-3, 4);
-            vec[3] = RR_vec2(7, 3);
-            vec[4] = RR_vec2(10, 0);
-            position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), RR_vec2(0, -1), scale, 255, 0, 0, 0.2, 0.2);
-            break;
+            // Draw any part that exists
+            p[i].draw(win, position + (normal * p[i].pos.x + normal.extrude() * p[i].pos.y) * scale, normal, scale, p[i].type, 0);
         }
-//         pixelRGBA(win, position.x, position.y, 255, 255, 255, 255); // Debug position
     }
 };
 

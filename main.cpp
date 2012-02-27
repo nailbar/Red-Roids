@@ -85,7 +85,7 @@ int main(int argc, char* args[]) {
             );
         }
         
-        //Moving object
+        Moving object
         odis=sqrt((mpos[0]-opos[0])*(mpos[0]-opos[0])+(mpos[1]-opos[1])*(mpos[1]-opos[1]));
         if(odis>0){
             odir[0]=(mpos[0]-opos[0])/odis;
@@ -94,7 +94,7 @@ int main(int argc, char* args[]) {
         opos[0]+=odir[0]*fspd*50.0;
         opos[1]+=odir[1]*fspd*50.0;
         
-        //Draw the object trail too
+        Draw the object trail too
         lineRGBA(
             win,
             opos[0]+rand()%9-4,

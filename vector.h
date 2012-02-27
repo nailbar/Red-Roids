@@ -54,6 +54,11 @@ public:
         );
     }
     
+    // Return the extruded vector
+    RR_vec2 extrude() {
+        return RR_vec2(y, -x);
+    }
+    
     // Draw a translated, rotated, scaled and tilted polygon
     void draw_polygon(
         SDL_Surface* win, RR_vec2* vec, unsigned char n,
