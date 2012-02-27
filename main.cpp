@@ -39,10 +39,12 @@ int main(int argc, char* args[]) {
 //     RR_roidmap rmap;
     
     // Unit test
-    RR_unit a;
+    RR_unit a[5];
+    for(int i = 0; i < 5; i++) a[i] = RR_unit(0, RR_vec2(20, 20 + i * 40));
     float arot = 0.0;
     RR_unit_part cursor = RR_unit_part(1, RR_vec2(20, 20));
     RR_vec2 cursor_dir = RR_vec2(0);
+    RR_vec2 vec;
     
     //Game loop
     while(inloop){
@@ -63,8 +65,11 @@ int main(int argc, char* args[]) {
         if(time2){
             fspd=float(time1-time2)/1000.0;
             
-            //Limit framerate to fpslimit
+            //Limit to max framerate
             if(1.0/fspd>60) SDL_Delay(int((1.0/60-fspd)*1000.0));
+            
+            // Limit to min framerate
+            if(fspd > 0.1) fspd = 0.1;
         }
         time2=time1;
         
@@ -72,7 +77,7 @@ int main(int argc, char* args[]) {
         mkeys=SDL_GetMouseState(NULL,NULL);
         
         //Clear screen
-        boxRGBA(win,-5,-5,805,605,0,0,0,255);
+        boxRGBA(win, -5, -5, 805, 605, 0, 0, 0, 255);
         
         //If LMB is pressed, draw something at cursor
         /*
@@ -115,9 +120,25 @@ int main(int argc, char* args[]) {
         //Display the roidmap
 //         rmap.display(win,mpos);
         
-        // Sample unit
+        // Background units
         arot += fspd;
-        a.draw(win, RR_vec2(400, 300), RR_vec2(arot), 2.0);
+        for(int i = 0; i < 5; i++) {
+            a[i].follow(RR_vec2(mpos[0], mpos[1]));
+            
+            // Some bouncing
+            for(int u = i + 1; u < 5; u++) {
+                vec = vec.normal(a[i].pos, a[u].pos);
+                if(vec.dot(vec, a[u].pos - a[i].pos) < 20) {
+                    a[i].spd = a[i].spd - vec * 50.0;
+                    a[u].spd = a[u].spd + vec * 50.0;
+                }
+            }
+            a[i].move(fspd);
+            a[i].draw(win, a[i].pos, a[i].nrm, 1.0);
+        }
+        
+        // Viel
+        boxRGBA(win, 0, 0, 800, 600, 0, 0, 0, 200);
         
         // Draw cursor
         cursor_dir = cursor_dir.normal(cursor.pos, RR_vec2(mpos[0], mpos[1]));
