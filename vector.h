@@ -16,7 +16,7 @@ public:
     }
     RR_vector(double radians) {
         x = cos(radians);
-        y = -sin(radians);
+        y = sin(radians);
     }
     RR_vector operator+(RR_vector v) {
         return RR_vector(x + v.x, y + v.y);
@@ -59,7 +59,8 @@ public:
         SDL_Surface* win, RR_vector* vec, unsigned char n,
         RR_vector translate, RR_vector rotate,
         RR_vector tilt_dir, RR_vector light_dir,
-        double scale, float r, float g, float b, float phong)
+        double scale, float r, float g, float b,
+        float ambient, float phong)
     {
         short x[n];
         short y[n];
@@ -75,7 +76,7 @@ public:
         
         // Calculate the light
         v = v.rotate(tilt_dir, rotate);
-        light = v.light_value(light_dir) * 0.8 + 0.2; // 0.2 ambient value
+        light = v.light_value(light_dir) * (1.0 - ambient) + ambient; // 0.2 ambient value
         
         // Add phong effect
         if(light > 0.95) {
@@ -83,10 +84,11 @@ public:
             g = g + (255.0 - g) * (light - 0.95) * 20.0 * phong;
             b = b + (255.0 - b) * (light - 0.95) * 20.0 * phong;
         }
-        // lineRGBA(win, translate.x, translate.y, translate.x + v.x * 40, translate.y + v.y * 40, 0, 255, 0, 255); // Debug tilt_dir
+//         lineRGBA(win, translate.x, translate.y, translate.x + v.x * 40, translate.y + v.y * 40, 0, 255, 0, 255); // Debug tilt_dir
         
         // Draw the polygon
         filledPolygonRGBA(win, x, y, n, r * light, g * light, b * light, 255);
+//         polygonRGBA(win, x, y, n, 255, 0, 0, 55); // Debug polygon
     }
 };
 

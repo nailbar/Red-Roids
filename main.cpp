@@ -3,7 +3,7 @@
 #include <cmath>
 
 // Include classes
-#include "roidmap.h"
+// #include "roidmap.h"
 #include "unit.h"
 
 int main(int argc, char* args[]) {
@@ -33,7 +33,7 @@ int main(int argc, char* args[]) {
     
     //Roid map
     srand(time1);
-    RR_roidmap rmap;
+//     RR_roidmap rmap;
     
     // Unit test
     RR_unit a;
@@ -108,11 +108,11 @@ int main(int argc, char* args[]) {
         );*/
         
         //Display the roidmap
-        rmap.display(win,mpos);
+//         rmap.display(win,mpos);
         
         // Sample unit
         arot += fspd;
-        a.draw(win, RR_vector(50, 50), RR_vector(cos(arot), sin(arot)), 1.0);
+        a.draw(win, RR_vector(400, 300), RR_vector(arot), 2.0);
         
         //Swap double buffer
         SDL_Flip(win);
