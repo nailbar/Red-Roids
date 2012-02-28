@@ -69,7 +69,7 @@ int main(int argc, char* args[]) {
             if(1.0/fspd>60) SDL_Delay(int((1.0/60-fspd)*1000.0));
             
             // Limit to min framerate
-            if(fspd > 0.1) fspd = 0.1;
+//             if(fspd > 0.1) fspd = 0.1;
         }
         time2=time1;
         
@@ -120,8 +120,7 @@ int main(int argc, char* args[]) {
         //Display the roidmap
 //         rmap.display(win,mpos);
         
-        // Background units
-        arot += fspd;
+//         // Background units
         for(int i = 0; i < 5; i++) {
             a[i].follow(RR_vec2(mpos[0], mpos[1]));
             

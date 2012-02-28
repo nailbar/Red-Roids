@@ -47,16 +47,16 @@ public:
     }
     
     // Return a vector rotated by another vector
-    RR_vec2 rotate(RR_vec2 vec1, RR_vec2 vec2) {
+    RR_vec2 rotate(RR_vec2 nrm, RR_vec2 rot) {
         return RR_vec2(
-            vec2.x * vec1.x + vec2.y * vec1.y,
-            vec2.y * vec1.x - vec2.x * vec1.y
+            nrm.x * rot.x - nrm.y * rot.y,
+            nrm.y * rot.x + nrm.x * rot.y
         );
     }
     
     // Return the extruded vector
     RR_vec2 extrude() {
-        return RR_vec2(y, -x);
+        return RR_vec2(-y, x);
     }
     
     // Return the normal from one vector to another
