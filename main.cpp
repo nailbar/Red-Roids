@@ -110,6 +110,9 @@ int main(int argc, char* args[]) {
             50
         );*/
         
+        // Tell menu about clicks
+        menu.set_clicks(mkeys & SDL_BUTTON(1), mpos);
+        
         // Menu background effects
         menu.handle_background(win, mpos, fspd);
         

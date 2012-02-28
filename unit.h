@@ -84,6 +84,15 @@ public:
             p[i].draw(win, position + (normal * p[i].pos.x + normal.extrude() * p[i].pos.y) * scale, normal, scale, p[i].type, burn_eng);
         }
     }
+    
+    // Check if another unit is too close and bounce on it
+    void bounce(RR_unit &other) {
+        RR_vec2 vec = vec.normal(pos, other.pos);
+        if(vec.dot(vec, other.pos - pos) < 20) {
+            spd = spd - vec * 50.0;
+            other.spd = other.spd + vec * 50.0;
+        }
+    }
 };
 
 #endif // RR_UNIT_H
