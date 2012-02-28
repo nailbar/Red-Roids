@@ -34,8 +34,14 @@ public:
     // Follow target
     void follow(RR_vec2 target) {
         
+        // Take own speed and distance into account
+        double distance = nrm.distance(pos, target);
+        if(distance > 400) distance = 400;
+        distance = distance / 600.0 + 0.25;
+        RR_vec2 target_fix = target - spd * distance;
+        
         // Get relative direction to target
-        RR_vec2 t_nrm = nrm.normal(pos, target);
+        RR_vec2 t_nrm = nrm.normal(pos, target_fix);
         double t_dot = t_nrm.dot(t_nrm, nrm); // How much in front of unit
         double e_dot = t_nrm.dot(t_nrm, nrm.extrude()); // How much beside unit
         

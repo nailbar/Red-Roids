@@ -69,6 +69,12 @@ public:
         return RR_vec2(1.0, 0.0);
     }
     
+    // Return the distance between two vectors
+    double distance(RR_vec2 from, RR_vec2 to) {
+        RR_vec2 v1 = to - from;
+        return sqrt(v1.x * v1.x + v1.y * v1.y);
+    }
+    
     // Draw a translated, rotated, scaled and tilted polygon
     void draw_polygon(
         SDL_Surface* win, RR_vec2* vec, unsigned char n,
