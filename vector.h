@@ -1,6 +1,8 @@
 #ifndef RR_VEC2_H
 #define RR_VEC2_H 1
 
+#include <cmath>
+
 class RR_vec2 {
 public:
     double x, y;

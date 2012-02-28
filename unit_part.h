@@ -1,4 +1,5 @@
 #ifndef RR_UNIT_PART_H
+#define RR_UNIT_PART_H 1
 
 #include "vector.h"
 

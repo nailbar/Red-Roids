@@ -1,4 +1,5 @@
 #ifndef RR_UNIT_H
+#define RR_UNIT_H 1
 
 #include "vector.h"
 #include "unit_part.h"
@@ -58,7 +59,7 @@ public:
         
         // Acceleration
         //  * High acceleration value lowered a lot by friction
-        if(burn_eng) spd = spd + nrm * 230.0 * fspd;
+        if(burn_eng) spd = spd + nrm * 500.0 * fspd;
         
         // Friction in space
         spd = spd - spd * 0.5 * fspd;

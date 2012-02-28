@@ -5,6 +5,7 @@
 // Include classes
 // #include "roidmap.h"
 #include "unit.h"
+#include "menu.h"
 
 int main(int argc, char* args[]) {
     
@@ -25,7 +26,7 @@ int main(int argc, char* args[]) {
     bool inloop = true;
     Uint8* keys; // Keyboard input
     keys = SDL_GetKeyState(NULL);
-    int mpos[2] = {320, 200}; // Mouse coordinates
+    int mpos[2] = {400, 300}; // Mouse coordinates
     Uint8 mkeys; // Mouse keys
     
     // Framerate
@@ -33,18 +34,10 @@ int main(int argc, char* args[]) {
     Uint32 time2 = 0;
     float fspd;
     fspd = 1.0;
-    
-    //Roid map
     srand(time1);
-//     RR_roidmap rmap;
     
-    // Unit test
-    RR_unit a[5];
-    for(int i = 0; i < 5; i++) a[i] = RR_unit(0, RR_vec2(20, 20 + i * 40));
-    float arot = 0.0;
-    RR_unit_part cursor = RR_unit_part(1, RR_vec2(20, 20));
-    RR_vec2 cursor_dir = RR_vec2(0);
-    RR_vec2 vec;
+    // Menu
+    RR_menu menu;
     
     //Game loop
     while(inloop){
@@ -69,7 +62,7 @@ int main(int argc, char* args[]) {
             if(1.0/fspd>60) SDL_Delay(int((1.0/60-fspd)*1000.0));
             
             // Limit to min framerate
-//             if(fspd > 0.1) fspd = 0.1;
+            if(fspd > 0.1) fspd = 0.1;
         }
         time2=time1;
         
@@ -117,32 +110,11 @@ int main(int argc, char* args[]) {
             50
         );*/
         
-        //Display the roidmap
-//         rmap.display(win,mpos);
-        
-//         // Background units
-        for(int i = 0; i < 5; i++) {
-            a[i].follow(RR_vec2(mpos[0], mpos[1]));
-            
-            // Some bouncing
-            for(int u = i + 1; u < 5; u++) {
-                vec = vec.normal(a[i].pos, a[u].pos);
-                if(vec.dot(vec, a[u].pos - a[i].pos) < 20) {
-                    a[i].spd = a[i].spd - vec * 50.0;
-                    a[u].spd = a[u].spd + vec * 50.0;
-                }
-            }
-            a[i].move(fspd);
-            a[i].draw(win, a[i].pos, a[i].nrm, 1.0);
-        }
-        
-        // Viel
-        boxRGBA(win, 0, 0, 800, 600, 0, 0, 0, 200);
+        // Menu background effects
+        menu.handle_background(win, mpos, fspd);
         
         // Draw cursor
-        cursor_dir = cursor_dir.normal(cursor.pos, RR_vec2(mpos[0], mpos[1]));
-        cursor.pos = RR_vec2(mpos[0], mpos[1]) - cursor_dir * 13.0;
-        cursor.draw(win, cursor.pos, cursor_dir, 0.5, 1, 0);
+        menu.handle_cursor(win, mpos);
         
         //Swap double buffer
         SDL_Flip(win);
