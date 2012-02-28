@@ -116,6 +116,11 @@ int main(int argc, char* args[]) {
         // Menu background effects
         menu.handle_background(win, mpos, fspd);
         
+        // Draw menu items
+        switch(menu.handle_menu(win, mpos)) {
+        case 4: inloop = false; break;
+        }
+        
         // Draw cursor
         menu.handle_cursor(win, mpos);
         

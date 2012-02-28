@@ -41,12 +41,11 @@ public:
         double dis;
         for(int i = 0; i < RR_MENU_UNITS; i++) {
             
-            // A click
+            // A click forces ships away from cursor
             if(click == 1) {
-                vec = RR_vec2(mpos[0], mpos[1]);
-                dis = vec.distance(a[i].pos, vec);
+                dis = vec.distance(a[i].pos, click_pos);
                 if(dis < 400) {
-                    vec = vec.normal(vec, a[i].pos);
+                    vec = vec.normal(click_pos, a[i].pos);
                     a[i].spd = a[i].spd + vec * (400.0 - dis);
                 }
             }
@@ -70,6 +69,31 @@ public:
         boxRGBA(win, 0, 0, 800, 600, 0, 0, 0, 200);
     }
     
+    // Handle the menu items
+    char handle_menu(SDL_Surface* win, int* mpos) {
+        char button_clicked;
+        char return_value = 0;
+        
+        // Instant battle button
+        button_clicked = draw_button(win, mpos, RR_vec2(150, 150));
+        if(button_clicked) return_value = 1;
+        
+        // Undefined button
+        button_clicked = draw_button(win, mpos, RR_vec2(650, 150));
+        if(button_clicked) return_value = 2;
+        
+        // Undefined button
+        button_clicked = draw_button(win, mpos, RR_vec2(650, 400));
+        if(button_clicked) return_value = 3;
+        
+        // Exit button
+        button_clicked = draw_button(win, mpos, RR_vec2(150, 400));
+        if(button_clicked) return_value = 4;
+        
+        // Tell caller if user clicked anything
+        return return_value;
+    }
+    
     // Handle the cursor
     void handle_cursor(SDL_Surface* win, int* mpos) {
         
@@ -79,6 +103,74 @@ public:
         
         // Draw cursor
         cursor.draw(win, cursor.pos, cursor_dir, 0.5, 1, 0);
+    }
+    
+    // Handle the menu items
+    bool draw_button(SDL_Surface* win, int* mpos, RR_vec2 position) {
+        RR_vec2 vec[4];
+        
+        // Check for hovering
+        bool hover = true;
+        bool is_clicked = false;
+        if(mpos[0] < position.x - 100) hover = false;
+        if(mpos[0] > position.x + 100) hover = false;
+        if(mpos[1] < position.y - 100) hover = false;
+        if(mpos[1] > position.y + 100) hover = false;
+        
+        // Center
+        vec[0] = RR_vec2(-90, -90);
+        vec[1] = RR_vec2(90, -90);
+        vec[2] = RR_vec2(90, 90);
+        vec[3] = RR_vec2(-90, 90);
+        
+        // Hover effect
+        if(hover) {
+            vec[0].draw_polygon(win, vec, 4, position, 200, 0, 0);
+            vec[0] = RR_vec2(-85, -85);
+            vec[1] = RR_vec2(85, -85);
+            vec[2] = RR_vec2(85, 85);
+            vec[3] = RR_vec2(-85, 85);
+            
+            // Clicked
+            if(
+                click == 3 && click_pos.x > position.x - 100
+                && click_pos.x < position.x + 100
+                && click_pos.y > position.y - 100
+                && click_pos.y < position.y + 100
+            ) is_clicked = true;
+        }
+        vec[0].draw_polygon(win, vec, 4, position, 50, 50, 50);
+        
+        // Top
+        vec[0] = RR_vec2(-100, -100);
+        vec[1] = RR_vec2(-90, -90);
+        vec[2] = RR_vec2(90, -90);
+        vec[3] = RR_vec2(100, -100);
+        vec[0].draw_polygon(win, vec, 4, position, 200, 200, 200);
+        
+        // Bottom
+        vec[0] = RR_vec2(-100, 100);
+        vec[1] = RR_vec2(-90, 90);
+        vec[2] = RR_vec2(90, 90);
+        vec[3] = RR_vec2(100, 100);
+        vec[0].draw_polygon(win, vec, 4, position, 20, 20, 20);
+        
+        // Left
+        vec[0] = RR_vec2(-100, -100);
+        vec[1] = RR_vec2(-90, -90);
+        vec[2] = RR_vec2(-90, 90);
+        vec[3] = RR_vec2(-100, 100);
+        vec[0].draw_polygon(win, vec, 4, position, 80, 80, 80);
+        
+        // Right
+        vec[0] = RR_vec2(100, -100);
+        vec[1] = RR_vec2(90, -90);
+        vec[2] = RR_vec2(90, 90);
+        vec[3] = RR_vec2(100, 100);
+        vec[0].draw_polygon(win, vec, 4, position, 80, 80, 80);
+        
+        // Tell caller about hover status
+        return is_clicked;
     }
 };
 

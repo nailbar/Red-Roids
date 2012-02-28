@@ -75,6 +75,24 @@ public:
         return sqrt(v1.x * v1.x + v1.y * v1.y);
     }
     
+    // Draw a translated polygon
+    void draw_polygon(
+        SDL_Surface* win, RR_vec2* vec, unsigned char n,
+        RR_vec2 translate, float r, float g, float b)
+    {
+        short x[n];
+        short y[n];
+        
+        // Process the vectors
+        for(int i = 0; i < n; i++) {
+            x[i] = vec[i].x + translate.x;
+            y[i] = vec[i].y + translate.y;
+        }
+        
+        // Draw the polygon
+        filledPolygonRGBA(win, x, y, n, r, g, b, 255);
+    }
+    
     // Draw a translated, rotated, scaled and tilted polygon
     void draw_polygon(
         SDL_Surface* win, RR_vec2* vec, unsigned char n,
