@@ -33,6 +33,14 @@ public:
         return RR_vec2(x / n, y / n);
     }
     
+    // Return a random vector (box -1.0 to 1.0)
+    RR_vec2 box_random() {
+        return RR_vec2(
+            (rand() % 8000) / 4000.0 - 1.0,
+            (rand() % 8000) / 4000.0 - 1.0
+        );
+    }
+    
     // Return the light value
     //  * Assume this and light_dir are both normalized
     double light_value(RR_vec2 light_dir) {
@@ -129,6 +137,6 @@ public:
         filledPolygonRGBA(win, x, y, n, r * light, g * light, b * light, 255);
 //         polygonRGBA(win, x, y, n, 255, 0, 0, 55); // Debug polygon
     }
-};
+} RR_g_vec2;
 
 #endif // RR_VEC2_H

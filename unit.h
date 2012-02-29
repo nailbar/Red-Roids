@@ -14,6 +14,7 @@ public:
     RR_unit_part p[RR_MAX_UNIT_PARTS];
     bool in_use, burn_eng;
     float trn;
+    int trg;
     
     // Constructor
     RR_unit() {
@@ -23,15 +24,39 @@ public:
         in_use = 1; // In use
         burn_eng = 0;
         pos = newpos;
-        nrm = RR_vec2(0);
+        nrm = RR_g_vec2.normal(RR_vec2(), RR_g_vec2.box_random());
         spd = RR_vec2();
         trn = 0;
-        p[0] = RR_unit_part(2, RR_vec2(0, 0)); // Cockpit
-        p[1] = RR_unit_part(1, RR_vec2(0, 0)); // Hull
-        p[2] = RR_unit_part(0, RR_vec2(-11, 0)); // Engine
+        trg = -1;
+        
+        // Ship presets
+        switch(preset) {
+        default:
+            p[0] = RR_unit_part(2, RR_vec2(0, 0)); // Cockpit
+            p[1] = RR_unit_part(1, RR_vec2(0, 0)); // Hull
+            p[2] = RR_unit_part(0, RR_vec2(-11, 0)); // Engine
+        }
     }
     
-    // Follow target
+    // Follow target unit
+    void follow_target(RR_unit* a, int n, int i) {
+        burn_eng = 0;
+        trn = 0;
+        
+        // Make sure target is within bounds
+        if(trg < 0 || trg >= n) trg = rand() % n;
+        
+        // Make sure target is in use
+        else if(!a[trg].in_use) trg = rand() % n;
+        
+        // Make sure target is not self
+        else if(trg == i) trg = rand() % n;
+        
+        // Follow target
+        else follow(a[trg].pos);
+    }
+    
+    // Follow target coords
     void follow(RR_vec2 target) {
         
         // Take own speed and distance into account

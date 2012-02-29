@@ -83,11 +83,11 @@ public:
         if(button_clicked) return_value = 2;
         
         // Undefined button
-        button_clicked = draw_button(win, mpos, RR_vec2(650, 400));
+        button_clicked = draw_button(win, mpos, RR_vec2(150, 400));
         if(button_clicked) return_value = 3;
         
         // Exit button
-        button_clicked = draw_button(win, mpos, RR_vec2(150, 400));
+        button_clicked = draw_button(win, mpos, RR_vec2(650, 400));
         if(button_clicked) return_value = 4;
         
         // Tell caller if user clicked anything

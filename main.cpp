@@ -6,6 +6,7 @@
 // #include "roidmap.h"
 #include "unit.h"
 #include "menu.h"
+#include "battle.h"
 
 int main(int argc, char* args[]) {
     
@@ -28,6 +29,7 @@ int main(int argc, char* args[]) {
     keys = SDL_GetKeyState(NULL);
     int mpos[2] = {400, 300}; // Mouse coordinates
     Uint8 mkeys; // Mouse keys
+    char gamemode = 2;//1; // 1 = menu, 2 = battle
     
     // Framerate
     Uint32 time1 = SDL_GetTicks();
@@ -36,20 +38,29 @@ int main(int argc, char* args[]) {
     fspd = 1.0;
     srand(time1);
     
-    // Menu
+    // Game models
     RR_menu menu;
+    RR_battle battle;
     
     //Game loop
     while(inloop){
         while(SDL_PollEvent(&event)){
             switch(event.type){
-                case SDL_QUIT: inloop=false; break;
-                
-                //Mouse moved
-                case SDL_MOUSEMOTION:
-                    mpos[0]=event.motion.x;
-                    mpos[1]=event.motion.y;
-                    break;
+            case SDL_QUIT: inloop=false; break;
+            
+            //Mouse moved
+            case SDL_MOUSEMOTION:
+                mpos[0]=event.motion.x;
+                mpos[1]=event.motion.y;
+                break;
+            
+            // Check for ESC key
+            case SDL_KEYDOWN:
+                if(event.key.keysym.sym == SDLK_ESCAPE) {
+                    if(gamemode == 1) inloop = false;
+                    else gamemode = 1;
+                }
+                break;
             }
         }
         
@@ -67,68 +78,43 @@ int main(int argc, char* args[]) {
         time2=time1;
         
         //Mouse keys
-        mkeys=SDL_GetMouseState(NULL,NULL);
+        mkeys = SDL_GetMouseState(NULL, NULL);
         
         //Clear screen
         boxRGBA(win, -5, -5, 805, 605, 0, 0, 0, 255);
         
-        //If LMB is pressed, draw something at cursor
-        /*
-        if(mkeys & SDL_BUTTON(1)){
-            lineRGBA(
-                win,
-                mpos[0]+rand()%9-4,
-                mpos[1]+rand()%9-4,
-                mpos[0]+rand()%9-4,
-                mpos[1]+rand()%9-4,
-                rand()%256,
-                rand()%256,
-                rand()%256,
-                255
-            );
+        // Select game mode
+        switch(gamemode) {
+            
+        // Menu
+        case 1:
+            
+            // Tell menu about clicks
+            menu.set_clicks(mkeys & SDL_BUTTON(1), mpos);
+            
+            // Menu background effects
+            menu.handle_background(win, mpos, fspd);
+            
+            // Draw menu items
+            switch(menu.handle_menu(win, mpos)) {
+            case 1: gamemode = 2; break; // Instant battle
+            case 4: inloop = false; break; // Exit button
+            }
+            
+            // Draw cursor
+            menu.handle_cursor(win, mpos);
+            break;
+        
+        // Battle
+        case 2:
+            battle.main(win, fspd, keys);
+            break;
+        default: // Unknown (error?)
+            inloop = false;
         }
-        
-        Moving object
-        odis=sqrt((mpos[0]-opos[0])*(mpos[0]-opos[0])+(mpos[1]-opos[1])*(mpos[1]-opos[1]));
-        if(odis>0){
-            odir[0]=(mpos[0]-opos[0])/odis;
-            odir[1]=(mpos[1]-opos[1])/odis;
-        }
-        opos[0]+=odir[0]*fspd*50.0;
-        opos[1]+=odir[1]*fspd*50.0;
-        
-        Draw the object trail too
-        lineRGBA(
-            win,
-            opos[0]+rand()%9-4,
-            opos[1]+rand()%9-4,
-            opos[0]+rand()%9-4,
-            opos[1]+rand()%9-4,
-            rand()%256,
-            0,
-            0,
-            50
-        );*/
-        
-        // Tell menu about clicks
-        menu.set_clicks(mkeys & SDL_BUTTON(1), mpos);
-        
-        // Menu background effects
-        menu.handle_background(win, mpos, fspd);
-        
-        // Draw menu items
-        switch(menu.handle_menu(win, mpos)) {
-        case 4: inloop = false; break;
-        }
-        
-        // Draw cursor
-        menu.handle_cursor(win, mpos);
         
         //Swap double buffer
         SDL_Flip(win);
-        
-        //Close on Escape
-        if(keys[SDLK_ESCAPE]) inloop=false;
     }
     
     
