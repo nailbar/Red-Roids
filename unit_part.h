@@ -152,7 +152,7 @@ public:
             position.draw_polygon(win, vec, 4, position, normal, RR_vec2(-1.57), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
             break;
         }
-//         pixelRGBA(win, position.x, position.y, 255, 255, 255, 255); // Debug position
+        if(RR_g.debugmode == 1) pixelRGBA(win, position.x, position.y, 255, 255, 255, 255); // Debug position
     }
 };
 

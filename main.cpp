@@ -2,6 +2,21 @@
 #include "SDL/SDL_gfxPrimitives.h"
 #include <cmath>
 
+// Practical globals
+struct RR_practical_globals {
+    
+    // Debug modes:
+    //  * 0 = Off
+    //  * 1 = Wireframe + centers
+    //  * 2 = Tilt normals
+    char debugmode;
+    
+    // Constructor
+    RR_practical_globals() {
+        debugmode = 0; // Off
+    }
+} RR_g;
+
 // Include classes
 // #include "roidmap.h"
 #include "unit.h"
@@ -59,6 +74,9 @@ int main(int argc, char* args[]) {
                 if(event.key.keysym.sym == SDLK_ESCAPE) {
                     if(gamemode == 1) inloop = false;
                     else gamemode = 1;
+                } else if(event.key.keysym.sym == SDLK_F1) {
+                    RR_g.debugmode++;
+                    if(RR_g.debugmode > 2) RR_g.debugmode = 0;
                 }
                 break;
             }
@@ -66,14 +84,17 @@ int main(int argc, char* args[]) {
         
         //Get framerate
         time1=SDL_GetTicks();
-        if(time2){
-            fspd=float(time1-time2)/1000.0;
+        if(time2) {
+            fspd = float(time1 - time2) / 1000.0;
             
             //Limit to max framerate
-            if(1.0/fspd>60) SDL_Delay(int((1.0/60-fspd)*1000.0));
+            if(1.0 / fspd > 60) SDL_Delay(int((1.0 / 60 - fspd) * 1000.0));
             
             // Limit to min framerate
             if(fspd > 0.1) fspd = 0.1;
+            
+            // Slow motion in debug mode
+            if(RR_g.debugmode) fspd = fspd * 0.1;
         }
         time2=time1;
         

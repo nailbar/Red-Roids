@@ -98,7 +98,8 @@ public:
         }
         
         // Draw the polygon
-        filledPolygonRGBA(win, x, y, n, r, g, b, 255);
+        if(RR_g.debugmode == 1) polygonRGBA(win, x, y, n, r, g, b, 55); // Wire frame
+        else filledPolygonRGBA(win, x, y, n, r, g, b, 255);
     }
     
     // Draw a translated, rotated, scaled and tilted polygon
@@ -131,11 +132,13 @@ public:
             g = g + (255.0 - g) * (light - 0.95) * 20.0 * phong;
             b = b + (255.0 - b) * (light - 0.95) * 20.0 * phong;
         }
-//         lineRGBA(win, translate.x, translate.y, translate.x + v.x * 40, translate.y + v.y * 40, 0, 255, 0, 255); // Debug tilt_dir
+        
+        // Debug tilt normals
+        if(RR_g.debugmode == 2) lineRGBA(win, translate.x, translate.y, translate.x + v.x * 40, translate.y + v.y * 40, 0, 255, 0, 255);
         
         // Draw the polygon
-        filledPolygonRGBA(win, x, y, n, r * light, g * light, b * light, 255);
-//         polygonRGBA(win, x, y, n, r * light, g * light, b * light, 55); // Debug polygon
+        if(RR_g.debugmode == 1) polygonRGBA(win, x, y, n, r * light, g * light, b * light, 55); // Wire frame
+        else filledPolygonRGBA(win, x, y, n, r * light, g * light, b * light, 255);
     }
 } RR_g_vec2;
 
