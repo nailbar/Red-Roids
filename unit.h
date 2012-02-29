@@ -59,9 +59,10 @@ public:
             team = 1;
             break;
         case 2: // Raptor light fighter
-            p[0] = RR_unit_part(4, RR_vec2(0, 0)); // Blue small cockpit
-            p[1] = RR_unit_part(1, RR_vec2(0, 0)); // Hull
-            p[2] = RR_unit_part(0, RR_vec2(-11, 0)); // Engine
+            p[0] = RR_unit_part(4, RR_vec2(-5, 0)); // Blue small cockpit
+            p[1] = RR_unit_part(7, RR_vec2(0, 9)); // Hull right
+            p[2] = RR_unit_part(8, RR_vec2(0, -9)); // Hull left
+            p[3] = RR_unit_part(0, RR_vec2(-11, 0)); // Engine
             team = 2;
             break;
         default: // Pod

@@ -45,13 +45,13 @@ public:
             break;
         case 1: // Hull
             
-            // Left side
+            // Right side
             vec[0] = RR_vec2(27, 0);
             vec[1] = RR_vec2(-13, 0);
             vec[2] = RR_vec2(-3, 12);
             position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.1), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
             
-            // Right side
+            // Left side
             vec[0] = RR_vec2(27, 0);
             vec[1] = RR_vec2(-13, 0);
             vec[2] = RR_vec2(-3, -12);
@@ -116,13 +116,13 @@ public:
             vec[2] = RR_vec2(21, -4);
             position.draw_polygon(win, vec, 3, position, normal, RR_vec2(0), RR_vec2(0, -1), scale, 180, 180, 200, 0.4, 1.0);
             
-            // Left side
+            // Right side
             vec[0] = RR_vec2(21, 4);
             vec[1] = RR_vec2(-13, 0);
             vec[2] = RR_vec2(-9, 9);
             position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.4), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
             
-            // Right side
+            // Left side
             vec[0] = RR_vec2(21, -4);
             vec[1] = RR_vec2(-13, 0);
             vec[2] = RR_vec2(-9, -9);
@@ -137,19 +137,37 @@ public:
             vec[3] = RR_vec2(-10, 4);
             position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), RR_vec2(0, -1), scale, 180, 180, 200, 0.6, 1.0);
             
-            // Left side
+            // Right side
             vec[0] = RR_vec2(10, 4);
             vec[1] = RR_vec2(-10, 4);
             vec[2] = RR_vec2(-6, 12);
             vec[3] = RR_vec2(6, 12);
             position.draw_polygon(win, vec, 4, position, normal, RR_vec2(1.57), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
             
-            // Right side
+            // Left side
             vec[0] = RR_vec2(10, -4);
             vec[1] = RR_vec2(-10, -4);
             vec[2] = RR_vec2(-6, -12);
             vec[3] = RR_vec2(6, -12);
             position.draw_polygon(win, vec, 4, position, normal, RR_vec2(-1.57), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
+            break;
+        case 7: // Hull right
+            
+            // Right side
+            vec[0] = RR_vec2(27, -3);
+            vec[1] = RR_vec2(-13, -3);
+            vec[2] = RR_vec2(-7, 6);
+            vec[3] = RR_vec2(0, 6);
+            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(1.4), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
+            break;
+        case 8: // Hull right
+            
+            // Right side
+            vec[0] = RR_vec2(27, 3);
+            vec[1] = RR_vec2(-13, 3);
+            vec[2] = RR_vec2(-7, -6);
+            vec[3] = RR_vec2(0, -6);
+            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(-1.4), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
             break;
         }
         if(RR_g.debugmode == 1) pixelRGBA(win, position.x, position.y, 255, 255, 255, 255); // Debug position
