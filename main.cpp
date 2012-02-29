@@ -10,11 +10,14 @@ struct RR_practical_globals {
     //  * 1 = Wireframe + centers
     //  * 2 = Tilt normals
     //  * 3 = Part sizes
+    //  * 4 = Maximum speed
     char debugmode;
+    char maxdebugmode;
     
     // Constructor
     RR_practical_globals() {
         debugmode = 0; // Off
+        maxdebugmode = 4;
     }
 } RR_g;
 
@@ -77,7 +80,7 @@ int main(int argc, char* args[]) {
                     else gamemode = 1;
                 } else if(event.key.keysym.sym == SDLK_F1) {
                     RR_g.debugmode++;
-                    if(RR_g.debugmode > 3) RR_g.debugmode = 0;
+                    if(RR_g.debugmode > RR_g.maxdebugmode) RR_g.debugmode = 0;
                 }
                 break;
             }
@@ -95,7 +98,8 @@ int main(int argc, char* args[]) {
             if(fspd > 0.1) fspd = 0.1;
             
             // Slow motion in debug mode
-            if(RR_g.debugmode) fspd = fspd * 0.1;
+            if(RR_g.debugmode == 4) fspd = 0.1;
+            else if(RR_g.debugmode) fspd = fspd * 0.1;
         }
         time2=time1;
         
@@ -119,7 +123,8 @@ int main(int argc, char* args[]) {
             
             // Draw menu items
             switch(menu.handle_menu(win, mpos)) {
-            case 1: gamemode = 2; break; // Instant battle
+            case 1: battle = RR_battle(); gamemode = 2; break; // New instant battle
+            case 2: gamemode = 2; break; // Resume instant battle
             case 4: inloop = false; break; // Exit button
             }
             
