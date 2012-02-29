@@ -13,7 +13,7 @@ public:
     RR_vec2 pos, nrm, spd;
     RR_unit_part p[RR_MAX_UNIT_PARTS];
     bool in_use, burn_eng;
-    float trn;
+    float trn, size;
     int trg;
     char team, type;
     
@@ -31,6 +31,7 @@ public:
         trg = -1;
         team = -1;
         type = -1;
+        size = 1.0;
         
         // Ship presets
         from_preset(preset);
@@ -47,7 +48,7 @@ public:
         switch(preset) {
         case 0: // Arrow light fighter
             p[0] = RR_unit_part(2, RR_vec2(0, 0)); // Red small cockpit
-            p[1] = RR_unit_part(1, RR_vec2(0, 0)); // Hull
+            p[1] = RR_unit_part(1, RR_vec2(3, 0)); // Hull
             p[2] = RR_unit_part(0, RR_vec2(-11, 0)); // Engine
             team = 0;
             break;
@@ -60,8 +61,8 @@ public:
             break;
         case 2: // Raptor light fighter
             p[0] = RR_unit_part(4, RR_vec2(-5, 0)); // Blue small cockpit
-            p[1] = RR_unit_part(7, RR_vec2(0, 9)); // Hull right
-            p[2] = RR_unit_part(8, RR_vec2(0, -9)); // Hull left
+            p[1] = RR_unit_part(7, RR_vec2(0, 10)); // Hull right
+            p[2] = RR_unit_part(8, RR_vec2(0, -10)); // Hull left
             p[3] = RR_unit_part(0, RR_vec2(-11, 0)); // Engine
             team = 2;
             break;
@@ -69,6 +70,43 @@ public:
             p[0] = RR_unit_part(2, RR_vec2(0, 0)); // Red small cockpit
             team = -1;
             type = -1;
+        }
+        
+        // Recalculate size
+        recalculate();
+    }
+    
+    // Calculate ships size based on part size and position
+    void recalculate() {
+        int parts = 0;
+        RR_vec2 nose_right = RR_vec2();
+        RR_vec2 aft_left = RR_vec2();
+        RR_vec2 offset = RR_vec2();
+        size = 0;
+        float this_distance = 0;
+        
+        // Check for center
+        for(int i = RR_MAX_UNIT_PARTS - 1; i >= 0; i--) if(p[i].in_use) {
+            if(parts == 0) {
+                nose_right.x = p[i].pos.x + p[i].size();
+                nose_right.y = p[i].pos.y + p[i].size();
+                aft_left.x = p[i].pos.x - p[i].size();
+                aft_left.y = p[i].pos.y - p[i].size();
+            } else {
+                if(p[i].pos.x + p[i].size() > nose_right.x) nose_right.x = p[i].pos.x + p[i].size();
+                if(p[i].pos.y + p[i].size() > nose_right.y) nose_right.y = p[i].pos.y + p[i].size();
+                if(p[i].pos.x - p[i].size() < aft_left.x) aft_left.x = p[i].pos.x - p[i].size();
+                if(p[i].pos.y - p[i].size() < aft_left.y) aft_left.y = p[i].pos.y - p[i].size();
+            }
+            parts++;
+        }
+        
+        // Recenter ship and calculate size
+        offset = (nose_right + aft_left) / 2.0;
+        for(int i = RR_MAX_UNIT_PARTS - 1; i >= 0; i--) if(p[i].in_use) {
+            p[i].pos = p[i].pos - offset;
+            this_distance = RR_g_vec2.distance(RR_vec2(), p[i].pos) + p[i].size();
+            if(this_distance > size) size = this_distance;
         }
     }
     
@@ -150,17 +188,18 @@ public:
     void draw(SDL_Surface* win, RR_vec2 position, RR_vec2 normal, float scale) {
         
         // Loop through all parts
-        if(in_use) for(int i = RR_MAX_UNIT_PARTS - 1; i >= 0; i--) if(p[i].flags & 1) {
+        if(in_use) for(int i = RR_MAX_UNIT_PARTS - 1; i >= 0; i--) if(p[i].in_use) {
             
             // Draw any part that exists
             p[i].draw(win, position + (normal * p[i].pos.x + normal.extrude() * p[i].pos.y) * scale, normal, scale, p[i].type, burn_eng);
         }
+        if(RR_g.debugmode == 3) ellipseRGBA(win, position.x, position.y, size * scale, size * scale, 255, 0, 0, 200); // Show ship size
     }
     
     // Check if another unit is too close and bounce on it
     bool bounce(RR_unit &other) {
         RR_vec2 vec = vec.normal(pos, other.pos);
-        if(vec.dot(vec, other.pos - pos) < 20) {
+        if(vec.dot(vec, other.pos - pos) < size + other.size) {
             spd = spd - vec * 50.0;
             other.spd = other.spd + vec * 50.0;
             return true;

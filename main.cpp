@@ -9,6 +9,7 @@ struct RR_practical_globals {
     //  * 0 = Off
     //  * 1 = Wireframe + centers
     //  * 2 = Tilt normals
+    //  * 3 = Part sizes
     char debugmode;
     
     // Constructor
@@ -76,7 +77,7 @@ int main(int argc, char* args[]) {
                     else gamemode = 1;
                 } else if(event.key.keysym.sym == SDLK_F1) {
                     RR_g.debugmode++;
-                    if(RR_g.debugmode > 2) RR_g.debugmode = 0;
+                    if(RR_g.debugmode > 3) RR_g.debugmode = 0;
                 }
                 break;
             }

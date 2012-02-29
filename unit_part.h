@@ -7,16 +7,16 @@ class RR_unit_part {
 public:
     unsigned char type;
     RR_vec2 pos;
-    unsigned char flags;
+    bool in_use;
     
     // Constructor
     RR_unit_part() {
-        flags = 0; // Not in use
+        in_use = false; // Not in use
     }
     RR_unit_part(unsigned char newtype, RR_vec2 newpos) {
         type = newtype;
         pos = newpos;
-        flags = 1; // In use
+        in_use = true; // In use
     }
     
     // Draw the part on screen
@@ -46,15 +46,15 @@ public:
         case 1: // Hull
             
             // Right side
-            vec[0] = RR_vec2(27, 0);
-            vec[1] = RR_vec2(-13, 0);
-            vec[2] = RR_vec2(-3, 12);
+            vec[0] = RR_vec2(24, 0);
+            vec[1] = RR_vec2(-16, 0);
+            vec[2] = RR_vec2(-6, 12);
             position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.1), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
             
             // Left side
-            vec[0] = RR_vec2(27, 0);
-            vec[1] = RR_vec2(-13, 0);
-            vec[2] = RR_vec2(-3, -12);
+            vec[0] = RR_vec2(24, 0);
+            vec[1] = RR_vec2(-16, 0);
+            vec[2] = RR_vec2(-6, -12);
             position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.1), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
             break;
         case 2: // Red small cockpit
@@ -152,25 +152,41 @@ public:
             position.draw_polygon(win, vec, 4, position, normal, RR_vec2(-1.57), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
             break;
         case 7: // Hull right
-            
-            // Right side
-            vec[0] = RR_vec2(27, -3);
-            vec[1] = RR_vec2(-13, -3);
-            vec[2] = RR_vec2(-7, 6);
-            vec[3] = RR_vec2(0, 6);
+            vec[0] = RR_vec2(27, -4);
+            vec[1] = RR_vec2(-13, -4);
+            vec[2] = RR_vec2(-7, 5);
+            vec[3] = RR_vec2(0, 5);
             position.draw_polygon(win, vec, 4, position, normal, RR_vec2(1.4), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
             break;
         case 8: // Hull right
-            
-            // Right side
-            vec[0] = RR_vec2(27, 3);
-            vec[1] = RR_vec2(-13, 3);
-            vec[2] = RR_vec2(-7, -6);
-            vec[3] = RR_vec2(0, -6);
+            vec[0] = RR_vec2(27, 4);
+            vec[1] = RR_vec2(-13, 4);
+            vec[2] = RR_vec2(-7, -5);
+            vec[3] = RR_vec2(0, -5);
             position.draw_polygon(win, vec, 4, position, normal, RR_vec2(-1.4), RR_vec2(0, -1), scale, 180, 180, 200, 0.2, 1.0);
             break;
         }
         if(RR_g.debugmode == 1) pixelRGBA(win, position.x, position.y, 255, 255, 255, 255); // Debug position
+        if(RR_g.debugmode == 3) ellipseRGBA(win, position.x, position.y, size(partid) * scale, size(partid) * scale, 255, 255, 0, 200); // Show part size
+    }
+    
+    // Get size of a part
+    float size(int partid) {
+        switch(partid) {
+        case 0: return 5.0; // Engine
+        case 1: return 11.0; // Hull
+        case 2: return 6.0; // Red small cockpit
+        case 3: return 6.0; // Green small cockpit
+        case 4: return 6.0; // Blue small cockpit
+        case 5: return 9.0; // Hull
+        case 6: return 12.0; // Hull
+        case 7: return 7.0; // Hull right
+        case 8: return 7.0; // Hull right
+        default: return 1.0;
+        }
+    }
+    float size() {
+        return size(type);
     }
 };
 
