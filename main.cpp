@@ -138,7 +138,6 @@ int main(int argc, char* args[]) {
         SDL_Flip(win);
     }
     
-    
     //Clean up
     SDL_Quit();
     
