@@ -135,7 +135,7 @@ public:
         
         // Draw the polygon
         filledPolygonRGBA(win, x, y, n, r * light, g * light, b * light, 255);
-//         polygonRGBA(win, x, y, n, 255, 0, 0, 55); // Debug polygon
+//         polygonRGBA(win, x, y, n, r * light, g * light, b * light, 55); // Debug polygon
     }
 } RR_g_vec2;
 

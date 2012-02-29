@@ -15,6 +15,7 @@ public:
     bool in_use, burn_eng;
     float trn;
     int trg;
+    char team, type;
     
     // Constructor
     RR_unit() {
@@ -28,14 +29,65 @@ public:
         spd = RR_vec2();
         trn = 0;
         trg = -1;
+        team = -1;
+        type = -1;
         
         // Ship presets
+        from_preset(preset);
+    }
+    
+    // Generate from preset
+    void from_preset(unsigned char preset) {
+        
+        // Reset parts
+        for(int i = 0; i < RR_MAX_UNIT_PARTS; i++) p[i] = RR_unit_part();
+        
+        // Construct unit
+        type = preset;
         switch(preset) {
-        default:
-            p[0] = RR_unit_part(2, RR_vec2(0, 0)); // Cockpit
+        case 0: // Arrow light fighter
+            p[0] = RR_unit_part(2, RR_vec2(0, 0)); // Red small cockpit
             p[1] = RR_unit_part(1, RR_vec2(0, 0)); // Hull
             p[2] = RR_unit_part(0, RR_vec2(-11, 0)); // Engine
+            team = 0;
+            break;
+        case 1: // Bullet light fighter
+            p[0] = RR_unit_part(3, RR_vec2(-5, 0)); // Green small cockpit
+            p[1] = RR_unit_part(5, RR_vec2(0, 0)); // Hull
+            p[2] = RR_unit_part(6, RR_vec2(-15, 0)); // Hull
+            p[3] = RR_unit_part(0, RR_vec2(-27, 0)); // Engine
+            team = 1;
+            break;
+        case 2: // Raptor light fighter
+            p[0] = RR_unit_part(4, RR_vec2(0, 0)); // Blue small cockpit
+            p[1] = RR_unit_part(1, RR_vec2(0, 0)); // Hull
+            p[2] = RR_unit_part(0, RR_vec2(-11, 0)); // Engine
+            team = 2;
+            break;
+        default: // Pod
+            p[0] = RR_unit_part(2, RR_vec2(0, 0)); // Red small cockpit
+            team = -1;
+            type = -1;
         }
+    }
+    
+    // Check if unit has a valid target
+    bool has_valid_target(RR_unit* a, int n, int i) {
+        
+        // Make sure target is within bounds
+        if(trg < 0 || trg >= n) return false;
+        
+        // Make sure target is in use
+        if(!a[trg].in_use) return false;
+        
+        // Make sure target is not self
+        if(trg == i) return false;
+        
+        // Make sure target is not on same team
+        if(team == a[trg].team) return false;
+        
+        // Target is valid
+        return true;
     }
     
     // Follow target unit
@@ -43,14 +95,8 @@ public:
         burn_eng = 0;
         trn = 0;
         
-        // Make sure target is within bounds
-        if(trg < 0 || trg >= n) trg = rand() % n;
-        
-        // Make sure target is in use
-        else if(!a[trg].in_use) trg = rand() % n;
-        
-        // Make sure target is not self
-        else if(trg == i) trg = rand() % n;
+        // Check target validity
+        if(!has_valid_target(a, n, i)) trg = rand() % n;
         
         // Follow target
         else follow(a[trg].pos);
@@ -111,12 +157,13 @@ public:
     }
     
     // Check if another unit is too close and bounce on it
-    void bounce(RR_unit &other) {
+    bool bounce(RR_unit &other) {
         RR_vec2 vec = vec.normal(pos, other.pos);
         if(vec.dot(vec, other.pos - pos) < 20) {
             spd = spd - vec * 50.0;
             other.spd = other.spd + vec * 50.0;
-        }
+            return true;
+        } else return false;
     }
 };
 
