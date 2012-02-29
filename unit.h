@@ -198,12 +198,28 @@ public:
     
     // Check if another unit is too close and bounce on it
     bool bounce(RR_unit &other) {
-        RR_vec2 vec = vec.normal(pos, other.pos);
-        if(vec.dot(vec, other.pos - pos) < size + other.size) {
-            spd = spd - vec * 50.0;
-            other.spd = other.spd + vec * 50.0;
-            return true;
-        } else return false;
+        RR_vec2 p1, p2, n;
+        
+        // Quick box-fit test first
+        if(RR_g_vec2.box_distance(pos, other.pos) < size + other.size) {
+            
+            // Check if any part is actually touching
+            for(int i = 0; i < RR_MAX_UNIT_PARTS; i++) if(p[i].in_use) {
+                p1 = pos + nrm * p[i].pos.x + nrm.extrude() * p[i].pos.y; // Real position of part
+                for(int u = 0; u < RR_MAX_UNIT_PARTS; u++) if(other.p[u].in_use) {
+                    p2 = other.pos + other.nrm * other.p[u].pos.x + other.nrm.extrude() * other.p[u].pos.y; // Real pos
+                    n = RR_g_vec2.normal(p1, p2); // Bounce direction
+                    if(RR_g_vec2.dot(n, p2 - p1) < p[i].size() + other.p[u].size()) {
+                        spd = spd - n * 50.0;
+                        other.spd = other.spd + n * 50.0;
+                        return true;
+                    }
+                }
+            }
+        }
+        
+        // No hit
+        return false;
     }
 };
 

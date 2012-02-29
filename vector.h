@@ -77,6 +77,15 @@ public:
         return RR_vec2(1.0, 0.0);
     }
     
+    // Return the distance between two vectors using box-fit (quickest)
+    double box_distance(RR_vec2 from, RR_vec2 to) {
+        RR_vec2 v1 = to - from;
+        if(v1.x < 0.0) v1.x = 0.0 - v1.x;
+        if(v1.y < 0.0) v1.y = 0.0 - v1.y;
+        if(v1.x > v1.y) return v1.x;
+        return v1.y;
+    }
+    
     // Return the distance between two vectors
     double distance(RR_vec2 from, RR_vec2 to) {
         RR_vec2 v1 = to - from;
