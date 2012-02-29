@@ -188,7 +188,7 @@ public:
     void draw(SDL_Surface* win, RR_vec2 position, RR_vec2 normal, float scale) {
         
         // Loop through all parts
-        if(in_use) for(int i = RR_MAX_UNIT_PARTS - 1; i >= 0; i--) if(p[i].in_use) {
+        for(int i = RR_MAX_UNIT_PARTS - 1; i >= 0; i--) if(p[i].in_use) {
             
             // Draw any part that exists
             p[i].draw(win, position + (normal * p[i].pos.x + normal.extrude() * p[i].pos.y) * scale, normal, scale, p[i].type, burn_eng);

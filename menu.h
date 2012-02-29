@@ -39,6 +39,7 @@ public:
     void handle_background(SDL_Surface* win, int* mpos, float fspd) {
         RR_vec2 vec;
         double dis;
+        int rnd = rand() % 3;
         for(int i = 0; i < RR_MENU_UNITS; i++) {
             
             // A click forces ships away from cursor
@@ -48,6 +49,7 @@ public:
                     vec = vec.normal(click_pos, a[i].pos);
                     a[i].spd = a[i].spd + vec * (400.0 - dis);
                 }
+                a[i].from_preset(rnd);
             }
             
             // Ships follow cursor
@@ -89,6 +91,23 @@ public:
         // Exit button
         button_clicked = draw_button(win, mpos, RR_vec2(650, 400));
         if(button_clicked) return_value = 4;
+        
+        // Button graphics (quick and dirty)
+        RR_unit unit = RR_unit(0, RR_vec2());
+        unit.draw(win, RR_vec2(100, 120), RR_vec2(1, 0), 1.0);
+        unit.draw(win, RR_vec2(100, 180), RR_vec2(1, 0), 1.0);
+        unit.draw(win, RR_vec2(600, 180), RR_vec2(2), 1.0);
+        unit.from_preset(2);
+        unit.draw(win, RR_vec2(200, 120), RR_vec2(-1, 0), 1.0);
+        unit.draw(win, RR_vec2(200, 180), RR_vec2(-1, 0), 1.0);
+        unit.draw(win, RR_vec2(650, 100), RR_vec2(1.7), 1.0);
+        unit.draw(win, RR_vec2(700, 140), RR_vec2(2.4), 1.0);
+        RR_unit_part part;
+        part.draw(win, RR_vec2(640, 400), RR_vec2(0.5), 1, 4, 0);
+        part.draw(win, RR_vec2(620, 430), RR_vec2(0.4), 1, 7, 0);
+        part.draw(win, RR_vec2(660, 380), RR_vec2(0.4), 1, 8, 0);
+        part.draw(win, RR_vec2(620, 380), RR_vec2(0.5), 1, 0, 0);
+        
         
         // Tell caller if user clicked anything
         return return_value;
