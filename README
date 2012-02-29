@@ -1,1 +1,16 @@
-apt-get install build-essential libsdl-gfx1.2-dev git
+RED ROIDS
+A simple 2D vector space shooter
+
+To build on Ubuntu 11.10:
+sudo apt-get install build-essential libsdl-gfx1.2-dev
+./compile.sh
+
+Key    Action
+=====================================================
+ESC    Exits (First to Main menu, then completely)
+F1     Loops through debug modes
+
+Credits:
+Martin Wikström
+marrewikstro@gmail.com
+http://www.waxjism.org/nail/
