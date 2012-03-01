@@ -16,8 +16,8 @@ public:
     
     // Constructor
     RR_menu() {
-        for(int i = 0; i < RR_MENU_UNITS; i++) a[i] = RR_unit(0, RR_vec2(rand() % 800, rand() % 600));
-        cursor = RR_unit_part(1, RR_vec2(400, 300));
+        for(int i = 0; i < RR_MENU_UNITS; i++) a[i] = RR_unit(0, RR_vec2(rand() % RR_g.wid, rand() % RR_g.hgt));
+        cursor = RR_unit_part(1, RR_vec2(RR_g.cntx, RR_g.cnty));
         cursor_dir = RR_vec2(0);
         click = 0;
     }
@@ -68,7 +68,7 @@ public:
         }
         
         // Darken background
-        boxRGBA(win, 0, 0, 800, 600, 0, 0, 0, 200);
+        boxRGBA(win, 0, 0, RR_g.wid, RR_g.hgt, 0, 0, 0, 200);
     }
     
     // Handle the menu items
@@ -81,7 +81,7 @@ public:
         if(button_clicked) return_value = 1;
         
         // Undefined button
-        button_clicked = draw_button(win, mpos, RR_vec2(650, 150));
+        button_clicked = draw_button(win, mpos, RR_vec2(RR_g.wid - 150, 150));
         if(button_clicked) return_value = 2;
         
         // Undefined button
@@ -89,24 +89,24 @@ public:
         if(button_clicked) return_value = 3;
         
         // Exit button
-        button_clicked = draw_button(win, mpos, RR_vec2(650, 400));
+        button_clicked = draw_button(win, mpos, RR_vec2(RR_g.wid - 150, 400));
         if(button_clicked) return_value = 4;
         
         // Button graphics (quick and dirty)
         RR_unit unit = RR_unit(0, RR_vec2());
         unit.draw(win, RR_vec2(100, 120), RR_vec2(1, 0), 1.0);
         unit.draw(win, RR_vec2(100, 180), RR_vec2(1, 0), 1.0);
-        unit.draw(win, RR_vec2(600, 180), RR_vec2(2), 1.0);
+        unit.draw(win, RR_vec2(RR_g.wid - 200, 180), RR_vec2(2), 1.0);
         unit.from_preset(2);
         unit.draw(win, RR_vec2(200, 120), RR_vec2(-1, 0), 1.0);
         unit.draw(win, RR_vec2(200, 180), RR_vec2(-1, 0), 1.0);
-        unit.draw(win, RR_vec2(650, 100), RR_vec2(1.7), 1.0);
-        unit.draw(win, RR_vec2(700, 140), RR_vec2(2.4), 1.0);
+        unit.draw(win, RR_vec2(RR_g.wid - 150, 100), RR_vec2(1.7), 1.0);
+        unit.draw(win, RR_vec2(RR_g.wid - 100, 140), RR_vec2(2.4), 1.0);
         RR_unit_part part;
-        part.draw(win, RR_vec2(640, 400), RR_vec2(0.5), 1, 4, 0);
-        part.draw(win, RR_vec2(620, 430), RR_vec2(0.4), 1, 7, 0);
-        part.draw(win, RR_vec2(660, 380), RR_vec2(0.4), 1, 8, 0);
-        part.draw(win, RR_vec2(620, 380), RR_vec2(0.5), 1, 0, 0);
+        part.draw(win, RR_vec2(RR_g.wid - 160, 400), RR_vec2(0.5), 1, 4, 0);
+        part.draw(win, RR_vec2(RR_g.wid - 180, 430), RR_vec2(0.4), 1, 7, 0);
+        part.draw(win, RR_vec2(RR_g.wid - 140, 380), RR_vec2(0.4), 1, 8, 0);
+        part.draw(win, RR_vec2(RR_g.wid - 180, 380), RR_vec2(0.5), 1, 0, 0);
         
         
         // Tell caller if user clicked anything

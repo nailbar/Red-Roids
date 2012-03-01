@@ -37,7 +37,7 @@ public:
             a[i].move(fspd);
             
             // Display ships
-            a[i].draw(win, a[i].pos - cam + RR_vec2(400, 300), a[i].nrm, 1.0);
+            a[i].draw(win, a[i].pos - cam + RR_vec2(RR_g.cntx, RR_g.cnty), a[i].nrm, 1.0);
             
             // Center camera
             cam_fix = cam_fix + a[i].pos;

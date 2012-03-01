@@ -32,7 +32,7 @@ class RR_roidmap{
       
       //Randomly place roids
       for(int i=0;i<RR_MAXROIDS;i++){
-        rpos[i]=RR_vec2(rand()%800,rand()%600);
+        rpos[i]=RR_vec2(rand()%RR_g.wid,rand()%RR_g.hgt);
         rused[i]=true;
         rowner[i]=0;
         for(int u=0;u<RR_MAXLINKS;u++) rlink[i][u]=-1;

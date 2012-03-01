@@ -4,6 +4,7 @@
 
 // Practical globals
 struct RR_practical_globals {
+    short wid, hgt, cntx, cnty;
     
     // Debug modes:
     //  * 0 = Off
@@ -16,6 +17,10 @@ struct RR_practical_globals {
     
     // Constructor
     RR_practical_globals() {
+        wid = 800;
+        hgt = 600;
+        cntx = wid / 2;
+        cnty = hgt / 2;
         debugmode = 0; // Off
         maxdebugmode = 4;
     }
@@ -33,7 +38,7 @@ int main(int argc, char* args[]) {
     SDL_Init(SDL_INIT_VIDEO);
     
     // This is the windows
-    SDL_Surface* win = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
+    SDL_Surface* win = SDL_SetVideoMode(RR_g.wid, RR_g.hgt, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
     
     // Set the window title
     SDL_WM_SetCaption("Red Roids", NULL);
@@ -46,7 +51,7 @@ int main(int argc, char* args[]) {
     bool inloop = true;
     Uint8* keys; // Keyboard input
     keys = SDL_GetKeyState(NULL);
-    int mpos[2] = {400, 300}; // Mouse coordinates
+    int mpos[2] = {RR_g.cntx, RR_g.cnty}; // Mouse coordinates
     Uint8 mkeys; // Mouse keys
     char gamemode = 2;//1; // 1 = menu, 2 = battle
     
@@ -107,7 +112,7 @@ int main(int argc, char* args[]) {
         mkeys = SDL_GetMouseState(NULL, NULL);
         
         //Clear screen
-        boxRGBA(win, -5, -5, 805, 605, 0, 0, 0, 255);
+        boxRGBA(win, -5, -5, RR_g.wid + 5, RR_g.hgt + 5, 0, 0, 0, 255);
         
         // Select game mode
         switch(gamemode) {
