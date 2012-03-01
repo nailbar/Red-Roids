@@ -166,6 +166,26 @@ public:
             vec[3] = RR_vec2(0, -5);
             position.draw_polygon(win, vec, 4, position, normal, RR_vec2(-1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             break;
+        case 9: // Hull
+
+            // Front
+            vec[0] = RR_vec2(-19.5, 0);
+            vec[1] = RR_vec2(31.5, 6);
+            vec[2] = RR_vec2(31.5, -6);
+            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(0), sun_dir, scale, 180, 180, 200, 0.4, 1.0);
+            
+            // Right side
+            vec[0] = RR_vec2(31.5, 6);
+            vec[1] = RR_vec2(-19.5, 0);
+            vec[2] = RR_vec2(-13.5, 13.5);
+            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            
+            // Left side
+            vec[0] = RR_vec2(31.5, -6);
+            vec[1] = RR_vec2(-19.5, 0);
+            vec[2] = RR_vec2(-13.5, -13.5);
+            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            break;
         }
         if(RR_g.debugmode == 1) pixelRGBA(win, position.x, position.y, 255, 255, 255, 255); // Debug position
         if(RR_g.debugmode == 3) ellipseRGBA(win, position.x, position.y, size(partid) * scale, size(partid) * scale, 255, 255, 0, 200); // Show part size
@@ -189,6 +209,7 @@ public:
         case 6: return 12.0; // Hull
         case 7: return 7.0; // Hull right
         case 8: return 7.0; // Hull right
+        case 9: return 15.0; // Hull
         default: return 1.0;
         }
     }
@@ -208,6 +229,7 @@ public:
         case 6: return 0.0; // Hull
         case 7: return 0.0; // Hull right
         case 8: return 0.0; // Hull right
+        case 9: return 0.0; // Hull
         default: return 0.0;
         }
     }
@@ -227,6 +249,7 @@ public:
         case 6: return 12.0; // Hull
         case 7: return 7.0; // Hull right
         case 8: return 7.0; // Hull right
+        case 9: return 15.0; // Hull
         default: return 1.0;
         }
     }

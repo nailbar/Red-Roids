@@ -79,6 +79,17 @@ public:
             p[7] = RR_unit_part(0, RR_vec2(-30, -10)); // Engine
             team = 0;
             break;
+        case 4: // Bullet medium fighter
+            p[0] = RR_unit_part(3, RR_vec2(-25, 0)); // Green small cockpit
+            p[1] = RR_unit_part(9, RR_vec2(0, 0)); // Hull
+            p[2] = RR_unit_part(6, RR_vec2(-22, 0)); // Hull
+            p[3] = RR_unit_part(7, RR_vec2(-40, 9)); // Hull right
+            p[4] = RR_unit_part(8, RR_vec2(-40, -9)); // Hull left
+            p[5] = RR_unit_part(5, RR_vec2(-42, 0)); // Hull
+            p[6] = RR_unit_part(0, RR_vec2(-53, -7)); // Engine
+            p[7] = RR_unit_part(0, RR_vec2(-53, 7)); // Engine
+            team = 1;
+            break;
         default: // Pod
             p[0] = RR_unit_part(2, RR_vec2(0, 0)); // Red small cockpit
             team = -1;
