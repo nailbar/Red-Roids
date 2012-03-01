@@ -38,7 +38,7 @@ int main(int argc, char* args[]) {
     SDL_Init(SDL_INIT_VIDEO);
     
     // This is the windows
-    SDL_Surface* win = SDL_SetVideoMode(RR_g.wid, RR_g.hgt, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
+    SDL_Surface* win = SDL_SetVideoMode(RR_g.wid, RR_g.hgt, 32, SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_RESIZABLE);
     
     // Set the window title
     SDL_WM_SetCaption("Red Roids", NULL);
@@ -72,10 +72,19 @@ int main(int argc, char* args[]) {
             switch(event.type){
             case SDL_QUIT: inloop=false; break;
             
-            //Mouse moved
+            // Mouse moved
             case SDL_MOUSEMOTION:
                 mpos[0]=event.motion.x;
                 mpos[1]=event.motion.y;
+                break;
+            
+            // Resize window
+            case SDL_VIDEORESIZE:
+                RR_g.wid = event.resize.w;
+                RR_g.hgt = event.resize.h;
+                RR_g.cntx = RR_g.wid / 2;
+                RR_g.cnty = RR_g.hgt / 2;
+                win = SDL_SetVideoMode(RR_g.wid, RR_g.hgt, 32, SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_RESIZABLE);
                 break;
             
             // Check for ESC key
