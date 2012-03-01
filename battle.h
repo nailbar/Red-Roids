@@ -41,7 +41,7 @@ public:
             
             // Center camera
             cam_fix = cam_fix + a[i].pos;
-        } else a[i] = RR_unit(rand() % 5, RR_g_vec2.box_random() * 1000.0);
+        } else a[i] = RR_unit(rand() % 6, RR_g_vec2.box_random() * 1000.0);
         cam = cam_fix / double(RR_BATTLE_MAX_UNITS);
         
         // Done

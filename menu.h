@@ -41,7 +41,7 @@ public:
         sun_dir = RR_g_vec2.rotate(sun_dir, RR_vec2(M_PI * 0.03 * fspd));
         RR_vec2 vec;
         double dis;
-        int rnd = rand() % 5;
+        int rnd = rand() % 6;
         for(int i = 0; i < RR_MENU_UNITS; i++) {
             
             // A click forces ships away from cursor

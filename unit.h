@@ -90,6 +90,18 @@ public:
             p[7] = RR_unit_part(0, RR_vec2(-53, 7)); // Engine
             team = 1;
             break;
+        case 5: // Raptor medium fighter
+            p[0] = RR_unit_part(4, RR_vec2(-5, 0)); // Blue small cockpit
+            p[1] = RR_unit_part(5, RR_vec2(0, 0)); // Hull
+            p[2] = RR_unit_part(10, RR_vec2(-30, 16)); // Wing right
+            p[3] = RR_unit_part(11, RR_vec2(-30, -16)); // Wing left
+            p[4] = RR_unit_part(7, RR_vec2(-20, 16)); // Hull right
+            p[5] = RR_unit_part(8, RR_vec2(-20, -16)); // Hull left
+            p[6] = RR_unit_part(6, RR_vec2(-18, 0)); // Hull
+            p[7] = RR_unit_part(0, RR_vec2(-26, -6)); // Engine
+            p[8] = RR_unit_part(0, RR_vec2(-26, 6)); // Engine
+            team = 2;
+            break;
         default: // Pod
             p[0] = RR_unit_part(2, RR_vec2(0, 0)); // Red small cockpit
             team = -1;

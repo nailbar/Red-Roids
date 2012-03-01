@@ -159,7 +159,7 @@ public:
             vec[3] = RR_vec2(0, 5);
             position.draw_polygon(win, vec, 4, position, normal, RR_vec2(1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             break;
-        case 8: // Hull right
+        case 8: // Hull left
             vec[0] = RR_vec2(27, 4);
             vec[1] = RR_vec2(-13, 4);
             vec[2] = RR_vec2(-7, -5);
@@ -186,6 +186,36 @@ public:
             vec[2] = RR_vec2(-13.5, -13.5);
             position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             break;
+        case 10: // Wing right
+            
+            // Right side
+            vec[0] = RR_vec2(14, -3);
+            vec[1] = RR_vec2(-25, 10);
+            vec[2] = RR_vec2(-23, 12);
+            vec[3] = RR_vec2(8, 5);
+            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(1.3), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            
+            // Left side
+            vec[0] = RR_vec2(14, -3);
+            vec[1] = RR_vec2(-25, 10);
+            vec[2] = RR_vec2(0, -7);
+            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.8), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            break;
+        case 11: // Wing left
+            
+            // Right side
+            vec[0] = RR_vec2(14, 3);
+            vec[1] = RR_vec2(-25, -10);
+            vec[2] = RR_vec2(-23, -12);
+            vec[3] = RR_vec2(8, -5);
+            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(-1.3), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            
+            // Left side
+            vec[0] = RR_vec2(14, 3);
+            vec[1] = RR_vec2(-25, -10);
+            vec[2] = RR_vec2(0, 7);
+            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.8), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            break;
         }
         if(RR_g.debugmode == 1) pixelRGBA(win, position.x, position.y, 255, 255, 255, 255); // Debug position
         if(RR_g.debugmode == 3) ellipseRGBA(win, position.x, position.y, size(partid) * scale, size(partid) * scale, 255, 255, 0, 200); // Show part size
@@ -208,8 +238,10 @@ public:
         case 5: return 9.0; // Hull
         case 6: return 12.0; // Hull
         case 7: return 7.0; // Hull right
-        case 8: return 7.0; // Hull right
+        case 8: return 7.0; // Hull left
         case 9: return 15.0; // Hull
+        case 10: return 8.0; // Wing right
+        case 11: return 8.0; // Wing left
         default: return 1.0;
         }
     }
@@ -228,8 +260,10 @@ public:
         case 5: return 0.0; // Hull
         case 6: return 0.0; // Hull
         case 7: return 0.0; // Hull right
-        case 8: return 0.0; // Hull right
+        case 8: return 0.0; // Hull left
         case 9: return 0.0; // Hull
+        case 10: return 0.0; // Wing right
+        case 11: return 0.0; // Wing left
         default: return 0.0;
         }
     }
@@ -248,8 +282,10 @@ public:
         case 5: return 9.0; // Hull
         case 6: return 12.0; // Hull
         case 7: return 7.0; // Hull right
-        case 8: return 7.0; // Hull right
+        case 8: return 7.0; // Hull left
         case 9: return 15.0; // Hull
+        case 10: return 8.0; // Wing right
+        case 11: return 8.0; // Wing left
         default: return 1.0;
         }
     }
