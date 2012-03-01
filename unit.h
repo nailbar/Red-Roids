@@ -185,15 +185,18 @@ public:
     }
     
     // Draw the unit on screen
-    void draw(SDL_Surface* win, RR_vec2 position, RR_vec2 normal, float scale) {
+    void draw(SDL_Surface* win, RR_vec2 position, RR_vec2 normal, float scale, RR_vec2 sun_dir) {
         
         // Loop through all parts
         for(int i = RR_MAX_UNIT_PARTS - 1; i >= 0; i--) if(p[i].in_use) {
             
             // Draw any part that exists
-            p[i].draw(win, position + (normal * p[i].pos.x + normal.extrude() * p[i].pos.y) * scale, normal, scale, p[i].type, burn_eng);
+            p[i].draw(win, position + (normal * p[i].pos.x + normal.extrude() * p[i].pos.y) * scale, normal, scale, p[i].type, burn_eng, sun_dir);
         }
         if(RR_g.debugmode == 3) ellipseRGBA(win, position.x, position.y, size * scale, size * scale, 255, 0, 0, 200); // Show ship size
+    }
+    void draw(SDL_Surface* win, RR_vec2 position, RR_vec2 normal, float scale) {
+        draw(win, position, normal, scale, RR_vec2(0, -1));
     }
     
     // Check if another unit is too close and bounce on it
