@@ -195,6 +195,44 @@ public:
     float size() {
         return size(type);
     }
+    
+    // Get thrust of a part (only parts with thrusters return value)
+    float thrust(int partid) {
+        switch(partid) {
+        case 0: return 20.0; // Engine
+        case 1: return 0.0; // Hull
+        case 2: return 1.0; // Red small cockpit
+        case 3: return 1.0; // Green small cockpit
+        case 4: return 1.0; // Blue small cockpit
+        case 5: return 0.0; // Hull
+        case 6: return 0.0; // Hull
+        case 7: return 0.0; // Hull right
+        case 8: return 0.0; // Hull right
+        default: return 0.0;
+        }
+    }
+    float thrust() {
+        return thrust(type);
+    }
+    
+    // Get weight of a part
+    float weight(int partid) {
+        switch(partid) {
+        case 0: return 5.0; // Engine
+        case 1: return 11.0; // Hull
+        case 2: return 6.0; // Red small cockpit
+        case 3: return 6.0; // Green small cockpit
+        case 4: return 6.0; // Blue small cockpit
+        case 5: return 9.0; // Hull
+        case 6: return 12.0; // Hull
+        case 7: return 7.0; // Hull right
+        case 8: return 7.0; // Hull right
+        default: return 1.0;
+        }
+    }
+    float weight() {
+        return weight(type);
+    }
 };
 
 #endif // RR_UNIT_PART_H

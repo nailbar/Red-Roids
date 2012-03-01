@@ -13,7 +13,7 @@ public:
     RR_vec2 pos, nrm, spd;
     RR_unit_part p[RR_MAX_UNIT_PARTS];
     bool in_use, burn_eng;
-    float trn, size;
+    float trn, size, thrust, weight;
     int trg;
     char team, type;
     
@@ -32,6 +32,8 @@ public:
         team = -1;
         type = -1;
         size = 1.0;
+        thrust = 0.0;
+        weight = 1.0;
         
         // Ship presets
         from_preset(preset);
@@ -76,13 +78,15 @@ public:
         recalculate();
     }
     
-    // Calculate ships size based on part size and position
+    // Calculate ship details based on part data
     void recalculate() {
         int parts = 0;
         RR_vec2 nose_right = RR_vec2();
         RR_vec2 aft_left = RR_vec2();
         RR_vec2 offset = RR_vec2();
         size = 0;
+        thrust = 0.0;
+        weight = 0.0;
         float this_distance = 0;
         
         // Check for center
@@ -99,6 +103,10 @@ public:
                 if(p[i].pos.y - p[i].size() < aft_left.y) aft_left.y = p[i].pos.y - p[i].size();
             }
             parts++;
+            
+            // Get thrust and weight for part
+            thrust += p[i].thrust();
+            weight += p[i].weight();
         }
         
         // Recenter ship and calculate size
@@ -173,9 +181,9 @@ public:
         // Turn ship
         nrm = nrm.rotate(nrm, RR_vec2(trn * M_PI * 2.0 * fspd));
         
-        // Acceleration
+        // Acceleration (thrust and weight taken into account)
         //  * High acceleration value lowered a lot by friction
-        if(burn_eng) spd = spd + nrm * 500.0 * fspd;
+        if(burn_eng) spd = spd + nrm * (thrust / weight) * 500.0 * fspd;
         
         // Friction in space
         spd = spd - spd * 0.5 * fspd;
