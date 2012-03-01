@@ -55,7 +55,7 @@ public:
             team = 0;
             break;
         case 1: // Bullet light fighter
-            p[0] = RR_unit_part(3, RR_vec2(-5, 0)); // Green small cockpit
+            p[0] = RR_unit_part(3, RR_vec2(-6, 0)); // Green small cockpit
             p[1] = RR_unit_part(5, RR_vec2(0, 0)); // Hull
             p[2] = RR_unit_part(6, RR_vec2(-15, 0)); // Hull
             p[3] = RR_unit_part(0, RR_vec2(-27, 0)); // Engine
@@ -67,6 +67,17 @@ public:
             p[2] = RR_unit_part(8, RR_vec2(0, -10)); // Hull left
             p[3] = RR_unit_part(0, RR_vec2(-11, 0)); // Engine
             team = 2;
+            break;
+        case 3: // Arrow medium fighter
+            p[0] = RR_unit_part(2, RR_vec2(-10, 0)); // Red small cockpit
+            p[1] = RR_unit_part(1, RR_vec2(3, 0)); // Hull
+            p[2] = RR_unit_part(7, RR_vec2(-20, 12)); // Hull right
+            p[3] = RR_unit_part(8, RR_vec2(-20, -12)); // Hull left
+            p[4] = RR_unit_part(6, RR_vec2(-15, 0)); // Hull
+            p[5] = RR_unit_part(6, RR_vec2(-25, 0)); // Hull
+            p[6] = RR_unit_part(0, RR_vec2(-30, 10)); // Engine
+            p[7] = RR_unit_part(0, RR_vec2(-30, -10)); // Engine
+            team = 0;
             break;
         default: // Pod
             p[0] = RR_unit_part(2, RR_vec2(0, 0)); // Red small cockpit
