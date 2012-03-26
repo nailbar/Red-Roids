@@ -2,6 +2,10 @@
 #include "SDL/SDL_gfxPrimitives.h"
 #include <cmath>
 
+#ifndef RR_MAX_DEBUG_MODE
+#define RR_MAX_DEBUG_MODE 4
+#endif
+
 // Practical globals
 struct RR_practical_globals {
     short wid, hgt, cntx, cnty;
@@ -13,7 +17,6 @@ struct RR_practical_globals {
     //  * 3 = Part sizes
     //  * 4 = Maximum speed
     char debugmode;
-    char maxdebugmode;
     
     // Constructor
     RR_practical_globals() {
@@ -22,7 +25,6 @@ struct RR_practical_globals {
         cntx = wid / 2;
         cnty = hgt / 2;
         debugmode = 0; // Off
-        maxdebugmode = 4;
     }
 } RR_g;
 
@@ -94,7 +96,7 @@ int main(int argc, char* args[]) {
                     else gamemode = 1;
                 } else if(event.key.keysym.sym == SDLK_F1) {
                     RR_g.debugmode++;
-                    if(RR_g.debugmode > RR_g.maxdebugmode) RR_g.debugmode = 0;
+                    if(RR_g.debugmode > RR_MAX_DEBUG_MODE) RR_g.debugmode = 0;
                 }
                 break;
             }

@@ -15,10 +15,14 @@ public:
     // Main battle loop
     bool main(SDL_Surface* win, float fspd, Uint8* keys) {
         RR_vec2 cam_fix;
+        int cam_count = 0;
         for(int i = 0; i < RR_BATTLE_MAX_UNITS; i++) if(a[i].in_use) {
             
-            // Ships follow other ships
-            a[i].follow_target(a, RR_BATTLE_MAX_UNITS, i);
+            // Player controls this ship
+            if(i == 0) a[i].player_input(keys);
+            
+            // A.I. ships follow other ships
+            else a[i].follow_target(a, RR_BATTLE_MAX_UNITS, i);
             
             // Some bouncing
             for(int u = i + 1; u < RR_BATTLE_MAX_UNITS; u++) if(a[i].bounce(a[u])) {
@@ -39,10 +43,15 @@ public:
             // Display ships
             a[i].draw(win, a[i].pos - cam + RR_vec2(RR_g.cntx, RR_g.cnty), a[i].nrm, 1.0);
             
-            // Center camera
-            cam_fix = cam_fix + a[i].pos;
+            // Center camera mostly on player
+//             cam_count++;
+//             cam_fix = cam_fix + a[i].pos;
+            if(i == 0) {
+                cam_fix = cam_fix + a[i].pos * 10.0;
+                cam_count += 10;
+            }
         } else a[i] = RR_unit(rand() % 6, RR_g_vec2.box_random() * 1000.0);
-        cam = cam_fix / double(RR_BATTLE_MAX_UNITS);
+        if(cam_count) cam = cam_fix / double(cam_count);
         
         // Done
         return 0;
