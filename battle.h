@@ -5,13 +5,20 @@
 #define RR_BATTLE_MAX_UNITS 40
 #endif
 
+#ifndef RR_BATTLE_MAX_PARTICLES
+#define RR_BATTLE_MAX_PARTICLES 400
+#endif
+
 #include "unit.h"
+#include "particle.h"
 
 class RR_battle {
 public:
     RR_unit a[RR_BATTLE_MAX_UNITS]; // Units currently on battlefield
+    RR_particle b[RR_BATTLE_MAX_PARTICLES]; // Particles on battlefield
     RR_vec2 cam, cam_trg;
     double zoom, zoom_trg;
+    int next_particle;
     
     // Constructor
     RR_battle() {
@@ -19,6 +26,7 @@ public:
         cam_trg = cam;
         zoom = 0.001;
         zoom_trg = zoom;
+        next_particle = 0;
     }
     
     // Main battle loop
@@ -47,6 +55,13 @@ public:
             // Some bouncing
             for(int u = i + 1; u < RR_BATTLE_MAX_UNITS; u++) if(a[i].bounce(a[u])) {
                 
+                // Sparks from the bouncing
+                for(int k = 0; k < 10; k++) for(int j = next_particle; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
+                    b[j] = RR_particle(0, (a[i].pos + a[u].pos) / 2.0);
+                    next_particle = j + 1;
+                    break;
+                }
+                
                 // "Eat" other ship
                 if(a[i].has_valid_target(a, RR_BATTLE_MAX_UNITS, i) && a[i].trg == u) {
                     a[u].from_preset(a[i].type);
@@ -60,6 +75,17 @@ public:
             // Move ships
             a[i].move(fspd);
         } else a[i] = RR_unit(rand() % 6, RR_g_vec2.box_random() * 1000.0);
+        
+        // Loop through particles
+        next_particle = 0;
+        for(int i = 0; i < RR_BATTLE_MAX_PARTICLES; i++) if(b[i].in_use) {
+            
+            // Display particle
+            b[i].draw(win, (b[i].pos - cam) * zoom + RR_vec2(RR_g.cntx, RR_g.cnty), b[i].nrm, zoom);
+            
+            // Move particle
+            b[i].move(fspd);
+        } else if(next_particle == 0) next_particle = i;
         
         // Done
         return 0;

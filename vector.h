@@ -41,6 +41,16 @@ public:
         );
     }
     
+    // Return a random vector (radial 1.0)
+    RR_vec2 rad_random() {
+        return RR_vec2((rand() % 8000) / 4000.0 * M_PI * 2.0) * ((rand() % 8000) / 4000.0);
+    }
+    
+    // Return a random normal
+    RR_vec2 random() {
+        return RR_vec2((rand() % 8000) / 4000.0 * M_PI * 2.0);
+    }
+    
     // Return the light value
     //  * Assume this and light_dir are both normalized
     double light_value(RR_vec2 light_dir) {
@@ -95,8 +105,8 @@ public:
     // Draw a translated polygon
     void draw_polygon(
         SDL_Surface* win, RR_vec2* vec, unsigned char n,
-        RR_vec2 translate, float r, float g, float b)
-    {
+        RR_vec2 translate, float r, float g, float b
+    ) {
         short x[n];
         short y[n];
         
@@ -111,14 +121,36 @@ public:
         else filledPolygonRGBA(win, x, y, n, r, g, b, 255);
     }
     
+    // Draw a translated, rotated and scaled polygon
+    void draw_polygon(
+        SDL_Surface* win, RR_vec2* vec, unsigned char n,
+        RR_vec2 translate, RR_vec2 rotate, double scale,
+        float r, float g, float b
+    ) {
+        short x[n];
+        short y[n];
+        RR_vec2 v;
+        
+        // Process the vectors
+        for(int i = 0; i < n; i++) {
+            v = v.rotate(vec[i], rotate) * scale + translate;
+            x[i] = v.x;
+            y[i] = v.y;
+        }
+        
+        // Draw the polygon
+        if(RR_g.debugmode == 1) polygonRGBA(win, x, y, n, r, g, b, 55); // Wire frame
+        else filledPolygonRGBA(win, x, y, n, r, g, b, 255);
+    }
+    
     // Draw a translated, rotated, scaled and tilted polygon
     void draw_polygon(
         SDL_Surface* win, RR_vec2* vec, unsigned char n,
         RR_vec2 translate, RR_vec2 rotate,
         RR_vec2 tilt_dir, RR_vec2 light_dir,
         double scale, float r, float g, float b,
-        float ambient, float phong)
-    {
+        float ambient, float phong
+    ) {
         short x[n];
         short y[n];
         RR_vec2 v;

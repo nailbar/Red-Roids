@@ -9,6 +9,9 @@ Key    Action
 =====================================================
 ESC    Exits (First to Main menu, then completely)
 F1     Loops through debug modes
+W      Burn engines
+A      Rotate counter clockwise
+D      Rotate clockwise
 
 Credits:
 Martin Wikström
