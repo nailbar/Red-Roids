@@ -17,7 +17,7 @@ public:
     // Constructor
     RR_menu() {
         for(int i = 0; i < RR_MENU_UNITS; i++) a[i] = RR_unit(0, RR_vec2(rand() % RR_g.wid, rand() % RR_g.hgt));
-        cursor = RR_unit_part(1, RR_vec2(RR_g.cntx, RR_g.cnty));
+        cursor = RR_unit_part(1, RR_vec2(RR_g.cntx, RR_g.cnty), 0);
         cursor_dir = RR_vec2(0);
         click = 0;
         sun_dir = RR_vec2(0, -1);

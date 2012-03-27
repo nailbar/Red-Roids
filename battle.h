@@ -31,6 +31,7 @@ public:
     
     // Main battle loop
     bool main(SDL_Surface* win, float fspd, Uint8* keys) {
+        int i1;
         
         // Center camera on player
         cam_trg = a[0].pos + a[0].spd * 0.5;
@@ -73,13 +74,6 @@ public:
             // Some bouncing
             for(int u = i + 1; u < RR_BATTLE_MAX_UNITS; u++) if(a[i].bounce(a[u])) {
                 
-                // Sparks from the bouncing
-//                 for(int k = 0; k < 10; k++) for(int j = next_particle; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
-//                     b[j] = RR_particle(0, (a[i].pos + a[u].pos) / 2.0);
-//                     next_particle = j + 1;
-//                     break;
-//                 }
-                
                 // "Eat" other ship
                 if(a[i].has_valid_target(a, RR_BATTLE_MAX_UNITS, i) && a[i].trg == u) {
                     a[u].from_preset(a[i].type);
@@ -87,6 +81,26 @@ public:
                 // Or get "eaten" by other ship
                 } else if(a[u].has_valid_target(a, RR_BATTLE_MAX_UNITS, u) && a[u].trg == i) {
                     a[i].from_preset(a[u].type);
+                }
+            }
+            
+            // Check ship integrity
+            i1 = rand() % RR_MAX_UNIT_PARTS;
+            
+            // Find parts without parents
+            if(a[i].p[i1].in_use) if(!a[i].p[a[i].p[i1].parent].in_use) {
+                a[i].p[i1].in_use = false;
+                for(int u = next_particle; u < RR_BATTLE_MAX_PARTICLES; u++) if(!b[u].in_use) {
+                    b[u] = RR_particle( // Destroyed part
+                        4,
+                        a[i].pos + a[i].nrm * a[i].p[i1].pos.x + a[i].nrm.extrude() * a[i].p[i1].pos.y,
+                        a[i].nrm,
+                        a[i].spd,
+                        a[i].p[i1].type
+                    );
+                    a[i].recalculate();
+                    next_particle = u + 1;
+                    break;
                 }
             }
             

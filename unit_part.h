@@ -9,17 +9,19 @@ public:
     RR_vec2 pos;
     bool in_use;
     float load, health;
+    int parent;
     
     // Constructor
     RR_unit_part() {
         in_use = false; // Not in use
     }
-    RR_unit_part(unsigned char newtype, RR_vec2 newpos) {
+    RR_unit_part(unsigned char newtype, RR_vec2 newpos, int newparent) {
         type = newtype;
         pos = newpos;
         in_use = true; // In use
         load = 0.0; // Loaded and ready if weapon
         health = weight(newtype);
+        parent = newparent;
     }
     
     // Cool down weapon for reload

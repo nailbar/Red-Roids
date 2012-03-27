@@ -61,7 +61,7 @@ public:
             spd = newspd + RR_g_vec2.rad_random() * 50.0; // Speed of blast plus speed of host
             nrm = newnrm;
             in_use = 1;
-            life = 30.0;
+            life = 10.0 + float(rand() % 20);
             break;
         }
     }
@@ -142,7 +142,10 @@ public:
         case 4: // Destroyed part
             life -= fspd;
             pos = pos + spd * fspd;
-            if(life < 0.0) in_use = 0;
+            if(life < 0.0) {
+                life = 0.25;
+                type = 3;
+            }
             nrm = nrm.rotate(nrm, RR_vec2(M_PI * fspd));
             break;
         }
@@ -153,7 +156,7 @@ public:
         switch(type) {
         case 1: // Light blast (max life 4 sec)
             if(life > 3.8) return 0; // Prevent blast from hitting host
-            return 5.0; // Enough to destroy a light blaster on first hit if lucky (1 in 5)
+            return 7.0; // Enough to destroy a light thruster on first hit if lucky
         default: return 0;
         }
     }
@@ -177,7 +180,7 @@ public:
                 d2 = n1.dot(pos - p1); // Distance from part to particle
                 
                 // Particle hits part and this part is closer than any other part it also have hit
-                if(d2 < a[i].p[u].size() && d2 < d1) {
+                if(d2 < a[i].p[u].size() + 3.0 && d2 < d1) {
                     d1 = d2;
                     i1 = u;
                     p2 = p1 + n1 * a[i].p[u].size();
