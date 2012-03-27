@@ -216,6 +216,29 @@ public:
             vec[2] = RR_vec2(0, 7);
             position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.8), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             break;
+        case 12: // Light blaster
+            
+            // Barrel
+            vec[0] = RR_vec2(-3, 0);
+            vec[1] = RR_vec2(5, 0);
+            vec[2] = RR_vec2(5, 1.5);
+            vec[3] = RR_vec2(-3, 1.5);
+            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI * 0.5), sun_dir, scale, 100, 110, 130, 0.2, 0.3);
+            
+            // Barrel
+            vec[0] = RR_vec2(-3, -1.5);
+            vec[1] = RR_vec2(5, -1.5);
+            vec[2] = RR_vec2(5, 0);
+            vec[3] = RR_vec2(-3, 0);
+            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI * 1.5), sun_dir, scale, 100, 110, 130, 0.2, 0.3);
+            
+            // Canister
+            vec[0] = RR_vec2(-7, -2);
+            vec[1] = RR_vec2(-3, -3);
+            vec[2] = RR_vec2(-3, 3);
+            vec[3] = RR_vec2(-7, 2);
+            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.2, 0.5);
+            break;
         }
         if(RR_g.debugmode == 1) pixelRGBA(win, position.x, position.y, 255, 255, 255, 255); // Debug position
         if(RR_g.debugmode == 3) ellipseRGBA(win, position.x, position.y, size(partid) * scale, size(partid) * scale, 255, 255, 0, 200); // Show part size
@@ -242,6 +265,7 @@ public:
         case 9: return 15.0; // Hull
         case 10: return 8.0; // Wing right
         case 11: return 8.0; // Wing left
+        case 12: return 4.0; // Light blaster
         default: return 1.0;
         }
     }
@@ -264,6 +288,7 @@ public:
         case 9: return 0.0; // Hull
         case 10: return 0.0; // Wing right
         case 11: return 0.0; // Wing left
+        case 12: return 0.0; // Light blaster
         default: return 0.0;
         }
     }
@@ -286,6 +311,7 @@ public:
         case 9: return 15.0; // Hull
         case 10: return 8.0; // Wing right
         case 11: return 8.0; // Wing left
+        case 12: return 4.0; // Light blaster
         default: return 1.0;
         }
     }
