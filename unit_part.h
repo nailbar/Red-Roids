@@ -8,7 +8,7 @@ public:
     unsigned char type;
     RR_vec2 pos;
     bool in_use;
-    float load;
+    float load, health;
     
     // Constructor
     RR_unit_part() {
@@ -19,6 +19,7 @@ public:
         pos = newpos;
         in_use = true; // In use
         load = 0.0; // Loaded and ready if weapon
+        health = weight(newtype);
     }
     
     // Cool down weapon for reload

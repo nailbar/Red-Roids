@@ -125,13 +125,13 @@ public:
         }
     }
     
-    // Is this a hitting particle?
-    bool hitting() {
+    // Get hit damage for particle
+    float hitdamage() {
         switch(type) {
         case 1: // Light blast (max life 4 sec)
-            if(life > 3.8) return false; // Prevent blast from hitting host
-            return true;
-        default: return false;
+            if(life > 3.8) return 0; // Prevent blast from hitting host
+            return 5.0; // Enough to destroy a light blaster on first hit if lucky (1 in 5)
+        default: return 0;
         }
     }
     
@@ -142,7 +142,7 @@ public:
         int i1;
         
         // Skip this if not a hitting particle
-        if(!hitting()) return;
+        if(hitdamage() <= 0.0) return;
         for(int i = 0; i < amax; i++) if(a[i].in_use) if(RR_g_vec2.box_distance(pos, a[i].pos) < a[i].size) {
             
             // Ship is close enough to possibly be hit -> Hit check each part of ship
@@ -164,6 +164,13 @@ public:
             // Did any part get hit?
             if(i1 > -1) {
                 in_use = false; // Particle is no more
+                
+                // Damage and optionally destroy part
+                a[i].p[i1].health -= ((rand() % 10000) / 10000.0) * hitdamage();
+                if(a[i].p[i1].health <= 0.0) {
+                    a[i].p[i1].in_use = false;
+                    a[i].recalculate();
+                }
                 
                 // Generate sparks and small parts
                 for(int k = 0; k < 15; k++) for(int j = current; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
