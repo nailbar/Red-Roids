@@ -8,6 +8,7 @@ public:
     unsigned char type;
     RR_vec2 pos;
     bool in_use;
+    float load;
     
     // Constructor
     RR_unit_part() {
@@ -17,6 +18,12 @@ public:
         type = newtype;
         pos = newpos;
         in_use = true; // In use
+        load = 0.0; // Loaded and ready if weapon
+    }
+    
+    // Cool down weapon for reload
+    void cool(float fspd) {
+        if(load > 0.0) load -= fspd;
     }
     
     // Draw the part on screen
@@ -317,6 +324,22 @@ public:
     }
     float weight() {
         return weight(type);
+    }
+    
+    // Get weapon type if loaded
+    unsigned char weapon() {
+        if(load > 0.0) return 0;
+        switch(type) {
+        case 12: return 1; // Light blaster
+        default: return 0;
+        }
+    }
+    
+    // Start weapon reload
+    void reload() {
+        switch(type) {
+        case 12: load = 0.3; break; // Light blaster
+        }
     }
 };
 
