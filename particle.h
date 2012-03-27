@@ -5,7 +5,7 @@
 
 class RR_particle {
 public:
-    unsigned char type;
+    unsigned char type, subtype;
     RR_vec2 pos, spd, nrm;
     bool in_use;
     float life;
@@ -52,6 +52,19 @@ public:
             break;
         }
     }
+    RR_particle(unsigned char newtype, RR_vec2 newpos, RR_vec2 newnrm, RR_vec2 newspd, unsigned char newsubtype) {
+        switch(newtype) {
+        case 4: // Destroyed part (30 seconds)
+            type = newtype;
+            subtype = newsubtype;
+            pos = newpos; // Out of Light blaster barrel
+            spd = newspd + RR_g_vec2.rad_random() * 50.0; // Speed of blast plus speed of host
+            nrm = newnrm;
+            in_use = 1;
+            life = 30.0;
+            break;
+        }
+    }
     
     // Draw the particle on screen
     void draw(SDL_Surface* win, RR_vec2 position, RR_vec2 normal, float scale) {
@@ -95,6 +108,10 @@ public:
             vec[5] = RR_vec2(0, -40);
             RR_g_vec2.draw_polygon(win, vec, 6, position, RR_vec2(life * 10.0), scale * life, 255, 255, 255);
             break;
+        case 4: // Destroyed part
+            RR_unit_part p;
+            p.draw(win, position, normal, scale, subtype, 0, RR_vec2(1,0));
+            break;
         }
     }
     
@@ -121,6 +138,12 @@ public:
         case 3: // Blast light
             life -= fspd;
             if(life < 0.0) in_use = 0;
+            break;
+        case 4: // Destroyed part
+            life -= fspd;
+            pos = pos + spd * fspd;
+            if(life < 0.0) in_use = 0;
+            nrm = nrm.rotate(nrm, RR_vec2(M_PI * fspd));
             break;
         }
     }
@@ -174,9 +197,16 @@ public:
                 
                 // Generate sparks and small parts
                 for(int k = 0; k < 15; k++) for(int j = current; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
-                    if(k == 0) b[j] = RR_particle(3, p2);
-                    else if(rand() % 100 < 80) b[j] = RR_particle(0, p2);
-                    else b[j] = RR_particle(2, p2);
+                    if(k == 0) b[j] = RR_particle(3, p2); // Light pulse
+                    else if(!a[i].p[i1].in_use && k == 1) b[j] = RR_particle( // Destroyed part
+                        4,
+                        a[i].pos + a[i].nrm * a[i].p[i1].pos.x + a[i].nrm.extrude() * a[i].p[i1].pos.y,
+                        a[i].nrm,
+                        a[i].spd,
+                        a[i].p[i1].type
+                    );
+                    else if(rand() % 100 < 80) b[j] = RR_particle(0, p2); // Sparks
+                    else b[j] = RR_particle(2, p2); // Fragments
                     current = j + 1;
                     break;
                 }
