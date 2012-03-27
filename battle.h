@@ -74,11 +74,11 @@ public:
             for(int u = i + 1; u < RR_BATTLE_MAX_UNITS; u++) if(a[i].bounce(a[u])) {
                 
                 // Sparks from the bouncing
-                for(int k = 0; k < 10; k++) for(int j = next_particle; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
-                    b[j] = RR_particle(0, (a[i].pos + a[u].pos) / 2.0);
-                    next_particle = j + 1;
-                    break;
-                }
+//                 for(int k = 0; k < 10; k++) for(int j = next_particle; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
+//                     b[j] = RR_particle(0, (a[i].pos + a[u].pos) / 2.0);
+//                     next_particle = j + 1;
+//                     break;
+//                 }
                 
                 // "Eat" other ship
                 if(a[i].has_valid_target(a, RR_BATTLE_MAX_UNITS, i) && a[i].trg == u) {
@@ -103,6 +103,9 @@ public:
             
             // Move particle
             b[i].move(fspd);
+            
+            // Calculate hits
+            b[i].hitships(a, RR_BATTLE_MAX_UNITS, b, RR_BATTLE_MAX_PARTICLES, i);
         } else if(next_particle == 0) next_particle = i;
         
         // Done

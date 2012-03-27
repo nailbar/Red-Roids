@@ -83,6 +83,56 @@ public:
             break;
         }
     }
+    
+    // Is this a hitting particle?
+    bool hitting() {
+        switch(type) {
+        case 1: // Light blast (max life 4 sec)
+            if(life > 3.8) return false; // Prevent blast from hitting host
+            return true;
+        default: return false;
+        }
+    }
+    
+    // Hit ships
+    void hitships(RR_unit* a, int amax, RR_particle* b, int bmax, int current) {
+        RR_vec2 p1, n1, p2;
+        float d1, d2;
+        int i1;
+        
+        // Skip this if not a hitting particle
+        if(!hitting()) return;
+        for(int i = 0; i < amax; i++) if(a[i].in_use) if(RR_g_vec2.box_distance(pos, a[i].pos) < a[i].size) {
+            
+            // Ship is close enough to possibly be hit -> Hit check each part of ship
+            d1 = 10000.0;
+            i1 = -1;
+            for(int u = 0; u < RR_MAX_UNIT_PARTS; u++) if(a[i].p[u].in_use) {
+                p1 = a[i].pos + a[i].nrm * a[i].p[u].pos.x + a[i].nrm.extrude() * a[i].p[u].pos.y; // Part position
+                n1 = RR_g_vec2.normal(p1, pos); // Hit direction
+                d2 = n1.dot(pos - p1); // Distance from part to particle
+                
+                // Particle hits part and this part is closer than any other part it also have hit
+                if(d2 < a[i].p[u].size() && d2 < d1) {
+                    d1 = d2;
+                    i1 = u;
+                    p2 = p1 + n1 * a[i].p[u].size();
+                }
+            }
+            
+            // Did any part get hit?
+            if(i1 > -1) {
+                in_use = false; // Particle is no more
+                
+                // Generate sparks
+                for(int k = 0; k < 15; k++) for(int j = current; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
+                    b[j] = RR_particle(0, p2);
+                    current = j + 1;
+                    break;
+                }
+            }
+        }
+    }
 };
 
 #endif // RR_PARTICLE_H
