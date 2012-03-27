@@ -52,6 +52,17 @@ public:
             // A.I. ships follow other ships
             else a[i].follow_target(a, RR_BATTLE_MAX_UNITS, i);
             
+            // Blaster test
+            if(keys[SDLK_q] && i == 0) {
+                for(int u = 0; u < RR_MAX_UNIT_PARTS; u++) if(a[i].p[u].in_use && a[i].p[u].type == 12) {
+                    for(int j = next_particle; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
+                        b[j] = RR_particle(1, a[i].pos + a[i].nrm * a[i].p[u].pos.x + a[i].nrm.extrude() * a[i].p[u].pos.y, a[i].nrm, a[i].spd);
+                        next_particle = j + 1;
+                        break;
+                    }
+                }
+            }
+            
             // Some bouncing
             for(int u = i + 1; u < RR_BATTLE_MAX_UNITS; u++) if(a[i].bounce(a[u])) {
                 

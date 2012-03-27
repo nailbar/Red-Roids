@@ -9,9 +9,10 @@ Key    Action
 =====================================================
 ESC    Exits (First to Main menu, then completely)
 F1     Loops through debug modes
-W      Burn engines
-A      Rotate counter clockwise
-D      Rotate clockwise
+I      Burn engines
+J      Rotate counter clockwise
+L      Rotate clockwise
+Q      Fire blasters
 
 Credits:
 Martin Wikström
