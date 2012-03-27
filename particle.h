@@ -24,6 +24,20 @@ public:
             in_use = 1;
             life = (rand() % 3000) / 1000.0;
             break;
+        case 2: // Hull fragment (max life 3 sec)
+            type = newtype;
+            pos = newpos;
+            spd = RR_g_vec2.rad_random() * 70.0;
+            nrm = RR_g_vec2.random();
+            in_use = 1;
+            life = (rand() % 4000) / 1000.0;
+            break;
+        case 3: // Blast light
+            type = newtype;
+            pos = newpos;
+            in_use = 1;
+            life = 0.25 + (rand() % 1250) / 10000.0;
+            break;
         }
     }
     RR_particle(unsigned char newtype, RR_vec2 newpos, RR_vec2 newnrm, RR_vec2 newspd) {
@@ -64,6 +78,23 @@ public:
             vec[3] = RR_vec2(-1, 1);
             RR_g_vec2.draw_polygon(win, vec, 4, position, normal, scale, 200, 255, 0);
             break;
+        case 2: // Hull fragment (max life 4 sec)
+            vec[0] = RR_vec2(-2, -4);
+            vec[1] = RR_vec2(1, -3);
+            vec[2] = RR_vec2(0, 4);
+            vec[3] = RR_vec2(-2, 3);
+            if(life < 1.0) RR_g_vec2.draw_polygon(win, vec, 4, position, normal, RR_vec2(1, 0), RR_vec2(1, 0), scale, 255 * life, 255 * life, 255 * life, 0.2, 0.3);
+            else RR_g_vec2.draw_polygon(win, vec, 4, position, normal, RR_vec2(1, 0), RR_vec2(1, 0), scale, 180, 180, 200, 0.2, 0.3);
+            break;
+        case 3: // Blast light
+            vec[0] = RR_vec2(-40, -20);
+            vec[1] = RR_vec2(-40, 20);
+            vec[2] = RR_vec2(0, 40);
+            vec[3] = RR_vec2(40, 20);
+            vec[4] = RR_vec2(40, -20);
+            vec[5] = RR_vec2(0, -40);
+            RR_g_vec2.draw_polygon(win, vec, 6, position, RR_vec2(life * 10.0), scale * life, 255, 255, 255);
+            break;
         }
     }
     
@@ -79,6 +110,16 @@ public:
         case 1: // Light blast (max life 4 sec)
             life -= fspd;
             pos = pos + spd * fspd;
+            if(life < 0.0) in_use = 0;
+            break;
+        case 2: // Hull fragment (max life 4 sec)
+            life -= fspd;
+            pos = pos + spd * fspd;
+            if(life < 0.0) in_use = 0;
+            else if(life <= 4.0) nrm = nrm.rotate(nrm, RR_vec2(M_PI * (12.0 / (5.0 - life)) * fspd));
+            break;
+        case 3: // Blast light
+            life -= fspd;
             if(life < 0.0) in_use = 0;
             break;
         }
@@ -124,9 +165,11 @@ public:
             if(i1 > -1) {
                 in_use = false; // Particle is no more
                 
-                // Generate sparks
+                // Generate sparks and small parts
                 for(int k = 0; k < 15; k++) for(int j = current; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
-                    b[j] = RR_particle(0, p2);
+                    if(k == 0) b[j] = RR_particle(3, p2);
+                    else if(rand() % 100 < 80) b[j] = RR_particle(0, p2);
+                    else b[j] = RR_particle(2, p2);
                     current = j + 1;
                     break;
                 }
