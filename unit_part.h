@@ -25,8 +25,8 @@ public:
     }
     
     // Cool down weapon for reload
-    void cool(float fspd) {
-        if(load > 0.0) load -= fspd;
+    void cool(float fspd, float mass) {
+        if(load > 0.0) load -= (1.0 / 50.0) * mass * fspd;
     }
     
     // Draw the part on screen

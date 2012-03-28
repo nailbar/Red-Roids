@@ -34,8 +34,10 @@ public:
         int i1;
         
         // Center camera on player
-        cam_trg = a[0].pos + a[0].spd * 0.5;
-        zoom_trg = ((double(RR_g.wid + RR_g.hgt) / 2.0) / 800.0) / (1.0 + RR_g_vec2.distance(RR_vec2(), a[0].spd) * 0.001);
+        if(a[0].in_use) {
+            cam_trg = a[0].pos + a[0].spd * 0.5;
+            zoom_trg = ((double(RR_g.wid + RR_g.hgt) / 2.0) / 800.0) / (1.0 + RR_g_vec2.distance(RR_vec2(), a[0].spd) * 0.001);
+        }
         
         // Smooth camera transitions
         cam = cam + (cam_trg - cam) * 0.04;
@@ -77,7 +79,7 @@ public:
             
             // Fire weapons
             for(int u = 0; u < RR_MAX_UNIT_PARTS; u++) if(a[i].p[u].in_use) {
-                a[i].p[u].cool(fspd);
+                if(a[i].guns) a[i].p[u].cool(fspd, a[i].weight / float(a[i].guns));
                 if(a[i].fire && a[i].p[u].weapon()) {
                     for(int j = next_particle; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
                         b[j] = RR_particle(
