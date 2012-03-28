@@ -321,7 +321,7 @@ public:
         
         // Turn ship
         float ratio = (thrust / (weight * 2.0));
-        if(ratio > 1.5) ratio = 1.5;
+        if(ratio > 1.0) ratio = 1.0;
         nrm = nrm.rotate(nrm, RR_vec2(trn * (thrust / weight) * M_PI * 3.0 * fspd));
         
         // Acceleration (thrust and weight taken into account)

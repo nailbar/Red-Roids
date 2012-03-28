@@ -238,24 +238,30 @@ public:
         RR_vec2 vec[4];
         vec[0] = RR_vec2(0, 0);
         vec[1] = RR_vec2(0, 5);
-        vec[2] = RR_vec2(1 + teamR + fsizeR, 5);
-        vec[3] = RR_vec2(1 + teamR + fsizeR, 0);
-        RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 10), RR_vec2(1, 0), 1.0, 105, 0, 0);
-        vec[2] = RR_vec2(1 + teamR, 5);
-        vec[3] = RR_vec2(1 + teamR, 0);
-        RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 10), RR_vec2(1, 0), 1.0, 155, 0, 0);
-        vec[2] = RR_vec2(1 + teamG + fsizeG, 5);
-        vec[3] = RR_vec2(1 + teamG + fsizeG, 0);
-        RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 20), RR_vec2(1, 0), 1.0, 0, 85, 0);
-        vec[2] = RR_vec2(1 + teamG, 5);
-        vec[3] = RR_vec2(1 + teamG, 0);
-        RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 20), RR_vec2(1, 0), 1.0, 0, 135, 0);
-        vec[2] = RR_vec2(1 + teamB + fsizeB, 5);
-        vec[3] = RR_vec2(1 + teamB + fsizeB, 0);
-        RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 30), RR_vec2(1, 0), 1.0, 0, 0, 155);
-        vec[2] = RR_vec2(1 + teamB, 5);
-        vec[3] = RR_vec2(1 + teamB, 0);
-        RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 30), RR_vec2(1, 0), 1.0, 0, 0, 205);
+        if(teamR + fsizeR) {
+            vec[2] = RR_vec2(1 + teamR + fsizeR, 5);
+            vec[3] = RR_vec2(1 + teamR + fsizeR, 0);
+            RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 10), RR_vec2(1, 0), 1.0, 105, 0, 0);
+            vec[2] = RR_vec2(1 + teamR, 5);
+            vec[3] = RR_vec2(1 + teamR, 0);
+            RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 10), RR_vec2(1, 0), 1.0, 155, 0, 0);
+        }
+        if(teamG + fsizeG) {
+            vec[2] = RR_vec2(1 + teamG + fsizeG, 5);
+            vec[3] = RR_vec2(1 + teamG + fsizeG, 0);
+            RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 20), RR_vec2(1, 0), 1.0, 0, 85, 0);
+            vec[2] = RR_vec2(1 + teamG, 5);
+            vec[3] = RR_vec2(1 + teamG, 0);
+            RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 20), RR_vec2(1, 0), 1.0, 0, 135, 0);
+        }
+        if(teamB + fsizeB) {
+            vec[2] = RR_vec2(1 + teamB + fsizeB, 5);
+            vec[3] = RR_vec2(1 + teamB + fsizeB, 0);
+            RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 30), RR_vec2(1, 0), 1.0, 0, 0, 155);
+            vec[2] = RR_vec2(1 + teamB, 5);
+            vec[3] = RR_vec2(1 + teamB, 0);
+            RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 30), RR_vec2(1, 0), 1.0, 0, 0, 205);
+        }
         
         // Done
         return 0;
