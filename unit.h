@@ -12,7 +12,7 @@ class RR_unit {
 public:
     RR_vec2 pos, nrm, spd;
     RR_unit_part p[RR_MAX_UNIT_PARTS];
-    bool in_use, burn_eng, fire, guns, self_destruct;
+    bool in_use, burn_eng, fire, guns;
     float trn, size, thrust, weight, timeout;
     int trg;
     char team, type, mode;
@@ -37,7 +37,6 @@ public:
         weight = 1.0;
         guns = 0;
         mode = 0;
-        self_destruct = 0;
         timeout = 1.0;
         
         // Ship presets
@@ -216,31 +215,36 @@ public:
         if(!has_valid_target(a, n, i)) trg = rand() % n;
         
         // Follow target
-        else follow(a[trg].pos);
+        else follow(a[trg].pos, false);
     }
     
     // Follow target coords
-    void follow(RR_vec2 target) {
+    void follow(RR_vec2 target, bool fixmode) {
         
         // Take own speed and distance into account
         double distance = nrm.distance(pos, target);
         double distance2 = distance;
+        RR_vec2 target_fix = target;
         
-        // Always avoid target if no guns
-        if(!guns) {
-            mode = 1;
-            self_destruct = 1;
+        // Switch mode depending on situation unless fixed mode
+        if(!fixmode) {
+            
+            // Always avoid target if no guns
+            if(!guns) mode = 1;
+            
+            // Start following target if far away
+            else if(distance > 800.0) mode = 0;
+            
+            // Avoid hitting target if too close
+            else if(distance < 200.0) mode = 1;
+        }
         
-        // Start following target if far away
-        } else if(distance > 800.0) mode = 0;
-        
-        // Avoid hitting target if too close
-        else if(distance < 200.0) mode = 1;
-        
-        // Calculate interception course
-        if(distance > 400) distance = 400;
-        distance = distance / 600.0 + 0.25;
-        RR_vec2 target_fix = target - spd * distance;
+        // Calculate interception course if attack mode
+        if(mode == 0) {
+            if(distance > 400) distance = 400;
+            distance = distance / 600.0 + 0.25;
+            target_fix = target - spd * distance;
+        }
         
         // Get relative direction to target
         RR_vec2 t_nrm = nrm.normal(pos, target_fix);
@@ -273,7 +277,7 @@ public:
             else if(e_dot > 0) trn = -1.0;
             
             // Smoother rotation
-            if(t_dot < 0.8) trn = trn * ((1.0 + t_dot) / 0.2);
+            if(t_dot < -0.8) trn = trn * ((1.0 + t_dot) / 0.2);
             
             // Burners on if target in front of ship
             if(t_dot < 0.0) burn_eng = 1;

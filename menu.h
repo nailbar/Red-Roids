@@ -55,7 +55,7 @@ public:
             }
             
             // Ships follow cursor
-            a[i].follow(RR_vec2(mpos[0], mpos[1]));
+            a[i].follow(RR_vec2(mpos[0], mpos[1]), true);
             
             // Some bouncing
             for(int u = i + 1; u < RR_MENU_UNITS; u++) {

@@ -78,7 +78,7 @@ public:
             i1 = rand() % RR_MAX_UNIT_PARTS;
             
             // Find parts without parents
-            if(a[i].p[i1].in_use) if(!a[i].p[a[i].p[i1].parent].in_use || (rand() % 200 < 2 && a[i].self_destruct)) {
+            if(a[i].p[i1].in_use) if(!a[i].p[a[i].p[i1].parent].in_use || (rand() % 50 < 2 && !a[i].guns)) {
                 a[i].p[i1].in_use = false;
                 for(int u = next_particle; u < RR_BATTLE_MAX_PARTICLES; u++) if(!b[u].in_use) {
                     b[u] = RR_particle( // Destroyed part
