@@ -170,6 +170,9 @@ public:
             return;
         }
         
+        // No engines results in weapon loss
+        if(thrust / weight < 0.1) guns = 0;
+        
         // Recenter ship and calculate size
         offset = (nose_right + aft_left) / 2.0;
         for(int i = RR_MAX_UNIT_PARTS - 1; i >= 0; i--) if(p[i].in_use) {
