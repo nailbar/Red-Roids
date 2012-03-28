@@ -63,7 +63,7 @@ public:
             if(rand() % 100 < 20) { // Bonus ship with two blasters
                 p[4] = RR_unit_part(12, RR_vec2(-7, -10), 2); // Light blaster
                 p[5] = RR_unit_part(12, RR_vec2(-7, 10), 2); // Light blaster
-            } else p[4] = RR_unit_part(12, RR_vec2(22, 0), 2); // Light blaster
+            } else p[4] = RR_unit_part(12, RR_vec2(22, 0), 1); // Light blaster
             team = 1;
             break;
         case 2: // Raptor light fighter
