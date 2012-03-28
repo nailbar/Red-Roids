@@ -14,7 +14,7 @@
 #endif
 
 #ifndef RR_BATTLE_MAX_FLEET
-#define RR_BATTLE_MAX_FLEET 1000
+#define RR_BATTLE_MAX_FLEET 500
 #endif
 
 #ifndef RR_BATTLE_REINFORCEMENT_INTERVAL
@@ -54,7 +54,7 @@ public:
         
         // Init fleets
         reinforcements = 0.0;
-        int fleetsize = rand() % RR_BATTLE_MAX_FLEET;
+        int fleetsize = rand() % (rand() % (rand() % RR_BATTLE_MAX_FLEET));
         if(fleetsize < 4) fleetsize = 4;
         fsizeR = fleetsize;
         fsizeG = fleetsize;
