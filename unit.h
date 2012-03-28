@@ -179,6 +179,29 @@ public:
         }
     }
     
+    // Find a better target
+    void find_better_target(RR_unit* a, int n, int i) {
+        int newtrg = rand() % n;
+        
+        // Check if new target is valid and closer than old
+        if(has_valid_target(a, n, i)) {
+            
+            // Make sure new target is in use
+            if(!a[newtrg].in_use) return;
+            
+            // Make sure new target is not self
+            if(newtrg == i) return;
+            
+            // Make sure new target is not on same team
+            if(team == a[newtrg].team) return;
+            
+            // Make sure new target is closer than old
+            if(RR_g_vec2.distance(pos, trg) > RR_g_vec2.distance(pos, newtrg)) trg = newtrg;
+            
+        // Previous target invalid, no tests required
+        } else trg = newtrg;
+    }
+    
     // Check if unit has a valid target
     bool has_valid_target(RR_unit* a, int n, int i) {
         
@@ -209,6 +232,7 @@ public:
             timeout = rand() % 30;
             mode = rand() % 2;
             if(rand() % 100 < 20) trg = rand() % n;
+            else if(rand() % 100 < 40) find_better_target(a, n, i);
         }
         
         // Check target validity
@@ -370,6 +394,34 @@ public:
         // Fire blasters
         if(keys[SDLK_q]) fire = true;
         else fire = false;
+    }
+    
+    // Draw a target pointer
+    void target_pointer(SDL_Surface* win, RR_vec2 position, RR_vec2 normal, float size, float scale) {
+        RR_vec2 vec[4];
+        vec[0] = RR_vec2(size + 20.0, 0);
+        vec[1] = RR_vec2(size + 25.0, -4.0);
+        vec[2] = RR_vec2(size + 40.0, 0);
+        vec[3] = RR_vec2(size + 25.0, 4.0);
+        RR_g_vec2.draw_polygon(win, vec, 4, position, normal, scale, 255, 50, 0);
+        vec[0] = RR_vec2(size + 22.0, 0);
+        vec[1] = RR_vec2(size + 25.0, -2.0);
+        vec[2] = RR_vec2(size + 30.0, 0);
+        vec[3] = RR_vec2(size + 25.0, 2.0);
+        RR_g_vec2.draw_polygon(win, vec, 4, position, normal, scale, 0, 0, 0);
+    }
+    
+    // Draw a target indicator
+    void target_indicator(SDL_Surface* win, RR_vec2 position, float size, float scale) {
+        RR_vec2 vec[4];
+        vec[0] = RR_vec2(size + 20.0, size + 20.0);
+        vec[1] = RR_vec2(size, size + 20.0);
+        vec[2] = RR_vec2(size + 25.0, size + 25.0);
+        vec[3] = RR_vec2(size + 20.0, size);
+        RR_g_vec2.draw_polygon(win, vec, 4, position, RR_vec2(1, 0), scale, 255, 50, 0);
+        RR_g_vec2.draw_polygon(win, vec, 4, position, RR_vec2(-1, 0), scale, 255, 50, 0);
+        RR_g_vec2.draw_polygon(win, vec, 4, position, RR_vec2(0, -1), scale, 255, 50, 0);
+        RR_g_vec2.draw_polygon(win, vec, 4, position, RR_vec2(0, 1), scale, 255, 50, 0);
     }
 };
 

@@ -48,7 +48,29 @@ public:
             a[i].draw(win, (a[i].pos - cam) * zoom + RR_vec2(RR_g.cntx, RR_g.cnty), a[i].nrm, zoom);
             
             // Player controls this ship
-            if(i == 0) a[i].player_input(keys);
+            if(i == 0) {
+                a[i].player_input(keys);
+                
+                // Find better target
+                if(keys[SDLK_t]) a[i].find_better_target(a, RR_BATTLE_MAX_UNITS, i);
+                
+                // Draw target indicator
+                if(a[i].has_valid_target(a, RR_BATTLE_MAX_UNITS, i)) {
+                    a[i].target_pointer(
+                        win,
+                        (a[i].pos - cam) * zoom + RR_vec2(RR_g.cntx, RR_g.cnty),
+                        RR_g_vec2.normal(a[i].pos, a[a[i].trg].pos),
+                        a[i].size,
+                        zoom
+                    );
+                    a[a[i].trg].target_indicator(
+                        win,
+                        (a[a[i].trg].pos - cam) * zoom + RR_vec2(RR_g.cntx, RR_g.cnty),
+                        a[a[i].trg].size,
+                        zoom
+                    );
+                } else a[i].find_better_target(a, RR_BATTLE_MAX_UNITS, i);
+            }
             
             // A.I. ships follow other ships
             else a[i].follow_target(a, RR_BATTLE_MAX_UNITS, i);
