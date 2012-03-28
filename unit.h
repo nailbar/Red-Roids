@@ -12,10 +12,10 @@ class RR_unit {
 public:
     RR_vec2 pos, nrm, spd;
     RR_unit_part p[RR_MAX_UNIT_PARTS];
-    bool in_use, burn_eng;
-    float trn, size, thrust, weight;
+    bool in_use, burn_eng, fire, guns, self_destruct;
+    float trn, size, thrust, weight, timeout;
     int trg;
-    char team, type;
+    char team, type, mode;
     
     // Constructor
     RR_unit() {
@@ -24,6 +24,7 @@ public:
     RR_unit(unsigned char preset, RR_vec2 newpos) {
         in_use = 1; // In use
         burn_eng = 0;
+        fire = 0;
         pos = newpos;
         nrm = RR_g_vec2.normal(RR_vec2(), RR_g_vec2.box_random());
         spd = RR_vec2();
@@ -34,6 +35,10 @@ public:
         size = 1.0;
         thrust = 0.0;
         weight = 1.0;
+        guns = 0;
+        mode = 0;
+        self_destruct = 0;
+        timeout = 1.0;
         
         // Ship presets
         from_preset(preset);
@@ -134,6 +139,7 @@ public:
         RR_vec2 aft_left = RR_vec2();
         RR_vec2 offset = RR_vec2();
         size = 0;
+        guns = 0;
         thrust = 0.0;
         weight = 0.0;
         float this_distance = 0;
@@ -156,6 +162,7 @@ public:
             // Get thrust and weight for part
             thrust += p[i].thrust();
             weight += p[i].weight();
+            if(p[i].weapon()) guns++;
         }
         
         // Remove ship if no parts
@@ -195,7 +202,15 @@ public:
     // Follow target unit
     void follow_target(RR_unit* a, int n, int i) {
         burn_eng = 0;
+        fire = 0;
         trn = 0;
+        
+        // Avoid doing the same thing all the time
+        if(timeout < 0.0) {
+            timeout = rand() % 30;
+            mode = rand() % 2;
+            if(rand() % 100 < 20) trg = rand() % n;
+        }
         
         // Check target validity
         if(!has_valid_target(a, n, i)) trg = rand() % n;
@@ -209,6 +224,20 @@ public:
         
         // Take own speed and distance into account
         double distance = nrm.distance(pos, target);
+        double distance2 = distance;
+        
+        // Always avoid target if no guns
+        if(!guns) {
+            mode = 1;
+            self_destruct = 1;
+        
+        // Start following target if far away
+        } else if(distance > 800.0) mode = 0;
+        
+        // Avoid hitting target if too close
+        else if(distance < 200.0) mode = 1;
+        
+        // Calculate interception course
         if(distance > 400) distance = 400;
         distance = distance / 600.0 + 0.25;
         RR_vec2 target_fix = target - spd * distance;
@@ -218,20 +247,46 @@ public:
         double t_dot = t_nrm.dot(t_nrm, nrm); // How much in front of unit
         double e_dot = t_nrm.dot(t_nrm, nrm.extrude()); // How much beside unit
         
-        // Rotate in direction of target
-        if(e_dot < 0) trn = -1.0;
-        else if(e_dot > 0) trn = 1.0;
+        // Attack mode
+        if(mode == 0) {
+            
+            // Rotate in direction of target
+            if(e_dot < 0) trn = -1.0;
+            else if(e_dot > 0) trn = 1.0;
+            
+            // Smoother rotation
+            if(t_dot > 0.8) trn = trn * ((1.0 - t_dot) / 0.2);
+            
+            // Burners on if target in front of ship
+            if(t_dot > 0.5) burn_eng = 1;
+            else burn_eng = 0;
+            
+            // Fire if target is close enough
+            if(t_dot > 0.95 && distance2 < 500.0) fire = true;
+            else fire = false;
         
-        // Smoother rotation
-        if(t_dot > 0.8) trn = trn * ((1.0 - t_dot) / 0.2);
-        
-        // Burners on if target in front of ship
-        if(t_dot > 0.5) burn_eng = 1;
-        else burn_eng = 0;
+        // Escape mode
+        } else if(mode == 1) {
+            
+            // Rotate away from of target
+            if(e_dot < 0) trn = 1.0;
+            else if(e_dot > 0) trn = -1.0;
+            
+            // Smoother rotation
+            if(t_dot < 0.8) trn = trn * ((1.0 + t_dot) / 0.2);
+            
+            // Burners on if target in front of ship
+            if(t_dot < 0.0) burn_eng = 1;
+            else burn_eng = 0;
+            
+            // No firing
+            fire = false;
+        }
     }
     
     // Move unit
     void move(float fspd) {
+        timeout -= fspd;
         
         // Turn ship
         nrm = nrm.rotate(nrm, RR_vec2(trn * M_PI * 2.0 * fspd));
@@ -307,6 +362,10 @@ public:
         trn = 0;
         if(keys[SDLK_j]) trn -= 1.0;
         if(keys[SDLK_l]) trn += 1.0;
+        
+        // Fire blasters
+        if(keys[SDLK_q]) fire = true;
+        else fire = false;
     }
 };
 

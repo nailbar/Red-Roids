@@ -53,10 +53,10 @@ public:
             // A.I. ships follow other ships
             else a[i].follow_target(a, RR_BATTLE_MAX_UNITS, i);
             
-            // Blaster test
+            // Fire weapons
             for(int u = 0; u < RR_MAX_UNIT_PARTS; u++) if(a[i].p[u].in_use) {
                 a[i].p[u].cool(fspd);
-                if(keys[SDLK_q] && i == 0 && a[i].p[u].weapon()) {
+                if(a[i].fire && a[i].p[u].weapon()) {
                     for(int j = next_particle; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
                         b[j] = RR_particle(
                             a[i].p[u].weapon(),
@@ -72,23 +72,13 @@ public:
             }
             
             // Some bouncing
-            for(int u = i + 1; u < RR_BATTLE_MAX_UNITS; u++) if(a[i].bounce(a[u])) {
-                
-                // "Eat" other ship
-                if(a[i].has_valid_target(a, RR_BATTLE_MAX_UNITS, i) && a[i].trg == u) {
-                    a[u].from_preset(a[i].type);
-                
-                // Or get "eaten" by other ship
-                } else if(a[u].has_valid_target(a, RR_BATTLE_MAX_UNITS, u) && a[u].trg == i) {
-                    a[i].from_preset(a[u].type);
-                }
-            }
+            for(int u = i + 1; u < RR_BATTLE_MAX_UNITS; u++) a[i].bounce(a[u]);
             
             // Check ship integrity
             i1 = rand() % RR_MAX_UNIT_PARTS;
             
             // Find parts without parents
-            if(a[i].p[i1].in_use) if(!a[i].p[a[i].p[i1].parent].in_use) {
+            if(a[i].p[i1].in_use) if(!a[i].p[a[i].p[i1].parent].in_use || (rand() % 200 < 2 && a[i].self_destruct)) {
                 a[i].p[i1].in_use = false;
                 for(int u = next_particle; u < RR_BATTLE_MAX_PARTICLES; u++) if(!b[u].in_use) {
                     b[u] = RR_particle( // Destroyed part
