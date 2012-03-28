@@ -10,7 +10,15 @@
 #endif
 
 #ifndef RR_BATTLE_FIELD_LIMIT
-#define RR_BATTLE_FIELD_LIMIT 8000.0
+#define RR_BATTLE_FIELD_LIMIT 5000.0
+#endif
+
+#ifndef RR_BATTLE_MAX_FLEET
+#define RR_BATTLE_MAX_FLEET 1000
+#endif
+
+#ifndef RR_BATTLE_REINFORCEMENT_INTERVAL
+#define RR_BATTLE_REINFORCEMENT_INTERVAL 60
 #endif
 
 #include "unit.h"
@@ -21,8 +29,16 @@ public:
     RR_unit a[RR_BATTLE_MAX_UNITS]; // Units currently on battlefield
     RR_particle b[RR_BATTLE_MAX_PARTICLES]; // Particles on battlefield
     RR_vec2 cam, cam_trg;
-    double zoom, zoom_trg;
-    int next_particle;
+    double zoom, zoom_trg, reinforcements;
+    int next_particle, player, player_team;
+    
+    // Fleets
+    unsigned char fleetR[RR_BATTLE_MAX_FLEET];
+    int fsizeR;
+    unsigned char fleetG[RR_BATTLE_MAX_FLEET];
+    int fsizeG;
+    unsigned char fleetB[RR_BATTLE_MAX_FLEET];
+    int fsizeB;
     
     // Constructor
     RR_battle() {
@@ -31,16 +47,50 @@ public:
         zoom = 0.001;
         zoom_trg = zoom;
         next_particle = 0;
+        player = rand() % RR_BATTLE_MAX_UNITS;
+        player_team = rand() % 3;
+        
+        // Init fleets
+        reinforcements = 0.0;
+        int fleetsize = rand() % RR_BATTLE_MAX_FLEET;
+        if(fleetsize < 4) fleetsize = 4;
+        fsizeR = fleetsize;
+        fsizeG = fleetsize;
+        fsizeB = fleetsize;
+        for(int i = 0; i < RR_BATTLE_MAX_FLEET; i++) if(i < fleetsize) {
+            if(rand() % 5 > 0) {
+                fleetR[i] = 1; // Arrow light fighter
+                fleetG[i] = 2; // Bullet light fighter
+                fleetB[i] = 3; // Raptor light fighter
+            } else {
+                fleetR[i] = 4; // Arrow medium fighter
+                fleetG[i] = 5; // Bullet medium fighter
+                fleetB[i] = 6; // Raptor medium fighter
+            }
+        } else {
+            fleetR[i] = 0;
+            fleetG[i] = 0;
+            fleetB[i] = 0;
+        }
     }
     
     // Main battle loop
     bool main(SDL_Surface* win, float fspd, Uint8* keys) {
         int i1;
+        int teamR = 0;
+        int teamG = 0;
+        int teamB = 0;
         
         // Center camera on player
-        if(a[0].in_use) {
-            cam_trg = a[0].pos + a[0].spd * 0.75;
-            zoom_trg = ((double(RR_g.wid + RR_g.hgt) / 2.0) / 800.0) / (1.0 + RR_g_vec2.distance(RR_vec2(), a[0].spd) * 0.002);
+        if(a[player].in_use && a[player].team == player_team) {
+            cam_trg = a[player].pos + a[player].spd * 0.75;
+            zoom_trg = ((double(RR_g.wid + RR_g.hgt) / 2.0) / 800.0) / (1.0 + RR_g_vec2.distance(RR_vec2(), a[player].spd) * 0.002);
+        } else player = rand() % RR_BATTLE_MAX_UNITS;
+        
+        // Show map
+        if(keys[SDLK_z]) {
+            cam_trg = RR_vec2(0, 0);
+            zoom_trg = ((double(RR_g.wid + RR_g.hgt) / 2.0) * 0.4) / RR_BATTLE_FIELD_LIMIT;
         }
         
         // Smooth camera transitions
@@ -49,16 +99,25 @@ public:
         
         // Loop through ships
         for(int i = 0; i < RR_BATTLE_MAX_UNITS; i++) if(a[i].in_use) {
-            if(a[i].pos.x > RR_BATTLE_FIELD_LIMIT) a[i].pos.x = RR_BATTLE_FIELD_LIMIT;
-            if(a[i].pos.y > RR_BATTLE_FIELD_LIMIT) a[i].pos.y = RR_BATTLE_FIELD_LIMIT;
-            if(a[i].pos.x < -RR_BATTLE_FIELD_LIMIT) a[i].pos.x = -RR_BATTLE_FIELD_LIMIT;
-            if(a[i].pos.y < -RR_BATTLE_FIELD_LIMIT) a[i].pos.y = -RR_BATTLE_FIELD_LIMIT;
+            
+            // Count ships
+            switch(a[i].team) {
+            case 0: teamR++; break;
+            case 1: teamG++; break;
+            case 2: teamB++; break;
+            }
+            
+            // Stay on battlefield
+            if(a[i].pos.x > RR_BATTLE_FIELD_LIMIT) a[i].spd.x -= 1000.0 * fspd;
+            if(a[i].pos.y > RR_BATTLE_FIELD_LIMIT) a[i].spd.y -= 1000.0 * fspd;
+            if(a[i].pos.x < -RR_BATTLE_FIELD_LIMIT) a[i].spd.x += 1000.0 * fspd;
+            if(a[i].pos.y < -RR_BATTLE_FIELD_LIMIT) a[i].spd.y += 1000.0 * fspd;
             
             // Display ship
             a[i].draw(win, (a[i].pos - cam) * zoom + RR_vec2(RR_g.cntx, RR_g.cnty), a[i].nrm, zoom);
             
             // Player controls this ship
-            if(i == 0) {
+            if(i == player) {
                 a[i].player_input(keys);
                 
                 // Find better target
@@ -128,7 +187,7 @@ public:
             
             // Move ships
             a[i].move(fspd);
-        } else a[i] = RR_unit(rand() % 6, RR_g_vec2.box_random() * 1000.0);
+        }
         
         // Loop through particles
         next_particle = 0;
@@ -143,6 +202,24 @@ public:
             // Calculate hits
             b[i].hitships(a, RR_BATTLE_MAX_UNITS, b, RR_BATTLE_MAX_PARTICLES, i);
         } else if(next_particle == 0) next_particle = i;
+        
+        // Spawn reinforcements
+        if(reinforcements > 0.0) reinforcements -= fspd;
+        else {
+            reinforcements = RR_BATTLE_REINFORCEMENT_INTERVAL;
+            for(int i = 0; i < RR_BATTLE_MAX_UNITS; i++) if(!a[i].in_use) {
+                if(teamR < teamG && teamR < teamB && fsizeR) {
+                    fsizeR--; teamR++;
+                    a[i] = RR_unit(fleetR[fsizeR], RR_vec2(-RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0);
+                } else if(teamG < teamB && fsizeG) {
+                    fsizeG--; teamG++;
+                    a[i] = RR_unit(fleetG[fsizeG], RR_vec2(RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0);
+                } else if(fsizeB) {
+                    fsizeB--; teamB++;
+                    a[i] = RR_unit(fleetB[fsizeB], RR_vec2(0, -RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0);
+                }
+            }
+        }
         
         // Done
         return 0;

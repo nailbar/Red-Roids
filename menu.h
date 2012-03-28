@@ -16,7 +16,7 @@ public:
     
     // Constructor
     RR_menu() {
-        for(int i = 0; i < RR_MENU_UNITS; i++) a[i] = RR_unit(0, RR_vec2(rand() % RR_g.wid, rand() % RR_g.hgt));
+        for(int i = 0; i < RR_MENU_UNITS; i++) a[i] = RR_unit(1, RR_vec2(rand() % RR_g.wid, rand() % RR_g.hgt));
         cursor = RR_unit_part(1, RR_vec2(RR_g.cntx, RR_g.cnty), 0);
         cursor_dir = RR_vec2(0);
         click = 0;
@@ -51,7 +51,7 @@ public:
                     vec = vec.normal(click_pos, a[i].pos);
                     a[i].spd = a[i].spd + vec * (400.0 - dis);
                 }
-                a[i].from_preset(rnd);
+                a[i].from_preset(rnd + 1);
             }
             
             // Ships follow cursor
@@ -95,11 +95,11 @@ public:
         if(button_clicked) return_value = 4;
         
         // Button graphics (quick and dirty)
-        RR_unit unit = RR_unit(0, RR_vec2());
+        RR_unit unit = RR_unit(1, RR_vec2());
         unit.draw(win, RR_vec2(100, 120), RR_vec2(1, 0), 1.0, sun_dir);
         unit.draw(win, RR_vec2(100, 180), RR_vec2(1, 0), 1.0, sun_dir);
         unit.draw(win, RR_vec2(RR_g.wid - 200, 180), RR_vec2(2), 1.0, sun_dir);
-        unit.from_preset(2);
+        unit.from_preset(3);
         unit.draw(win, RR_vec2(200, 120), RR_vec2(-1, 0), 1.0, sun_dir);
         unit.draw(win, RR_vec2(200, 180), RR_vec2(-1, 0), 1.0, sun_dir);
         unit.draw(win, RR_vec2(RR_g.wid - 150, 100), RR_vec2(1.7), 1.0, sun_dir);

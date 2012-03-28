@@ -52,14 +52,14 @@ public:
         // Construct unit
         type = preset;
         switch(preset) {
-        case 0: // Arrow light fighter
+        case 1: // Arrow light fighter
             p[0] = RR_unit_part(2, RR_vec2(0, 0), 1); // Red small cockpit
             p[1] = RR_unit_part(1, RR_vec2(3, 0), 0); // Hull
             p[2] = RR_unit_part(0, RR_vec2(-11, 0), 1); // Engine
             p[3] = RR_unit_part(12, RR_vec2(23, 0), 1); // Light blaster
             team = 0;
             break;
-        case 1: // Bullet light fighter
+        case 2: // Bullet light fighter
             p[0] = RR_unit_part(3, RR_vec2(-6, 0), 2); // Green small cockpit
             p[1] = RR_unit_part(5, RR_vec2(0, 0), 2); // Hull
             p[2] = RR_unit_part(6, RR_vec2(-15, 0), 0); // Hull
@@ -70,7 +70,7 @@ public:
             } else p[4] = RR_unit_part(12, RR_vec2(22, 0), 1); // Light blaster
             team = 1;
             break;
-        case 2: // Raptor light fighter
+        case 3: // Raptor light fighter
             p[0] = RR_unit_part(4, RR_vec2(-5, 0), 3); // Blue small cockpit
             p[1] = RR_unit_part(7, RR_vec2(0, 10), 3); // Hull right
             p[2] = RR_unit_part(8, RR_vec2(0, -10), 3); // Hull left
@@ -78,7 +78,7 @@ public:
             p[4] = RR_unit_part(12, RR_vec2(3, 0), 0); // Light blaster
             team = 2;
             break;
-        case 3: // Arrow medium fighter
+        case 4: // Arrow medium fighter
             p[0] = RR_unit_part(2, RR_vec2(-10, 0), 4); // Red small cockpit
             p[1] = RR_unit_part(1, RR_vec2(3, 0), 4); // Hull
             p[2] = RR_unit_part(7, RR_vec2(-20, 12), 4); // Hull right
@@ -94,7 +94,7 @@ public:
             }
             team = 0;
             break;
-        case 4: // Bullet medium fighter
+        case 5: // Bullet medium fighter
             p[0] = RR_unit_part(3, RR_vec2(-25, 0), 2); // Green small cockpit
             p[1] = RR_unit_part(9, RR_vec2(0, 0), 2); // Hull
             p[2] = RR_unit_part(6, RR_vec2(-22, 0), 0); // Hull
@@ -107,7 +107,7 @@ public:
             p[9] = RR_unit_part(12, RR_vec2(-6, 12), 1); // Light blaster
             team = 1;
             break;
-        case 5: // Raptor medium fighter
+        case 6: // Raptor medium fighter
             p[0] = RR_unit_part(4, RR_vec2(-5, 0), 1); // Blue small cockpit
             p[1] = RR_unit_part(5, RR_vec2(0, 0), 0); // Hull
             p[2] = RR_unit_part(10, RR_vec2(-37, 14), 4); // Wing right
@@ -290,7 +290,7 @@ public:
             else burn_eng = 0;
             
             // Fire if target is close enough
-            if(t_dot > 0.95 && distance2 < 500.0) fire = true;
+            if(t_dot > 0.9 && distance2 < 600.0) fire = true;
             else fire = false;
         
         // Escape mode
