@@ -9,6 +9,10 @@
 #define RR_BATTLE_MAX_PARTICLES 400
 #endif
 
+#ifndef RR_BATTLE_FIELD_LIMIT
+#define RR_BATTLE_FIELD_LIMIT 8000.0
+#endif
+
 #include "unit.h"
 #include "particle.h"
 
@@ -35,8 +39,8 @@ public:
         
         // Center camera on player
         if(a[0].in_use) {
-            cam_trg = a[0].pos + a[0].spd * 0.5;
-            zoom_trg = ((double(RR_g.wid + RR_g.hgt) / 2.0) / 800.0) / (1.0 + RR_g_vec2.distance(RR_vec2(), a[0].spd) * 0.001);
+            cam_trg = a[0].pos + a[0].spd * 0.75;
+            zoom_trg = ((double(RR_g.wid + RR_g.hgt) / 2.0) / 800.0) / (1.0 + RR_g_vec2.distance(RR_vec2(), a[0].spd) * 0.002);
         }
         
         // Smooth camera transitions
@@ -45,6 +49,10 @@ public:
         
         // Loop through ships
         for(int i = 0; i < RR_BATTLE_MAX_UNITS; i++) if(a[i].in_use) {
+            if(a[i].pos.x > RR_BATTLE_FIELD_LIMIT) a[i].pos.x = RR_BATTLE_FIELD_LIMIT;
+            if(a[i].pos.y > RR_BATTLE_FIELD_LIMIT) a[i].pos.y = RR_BATTLE_FIELD_LIMIT;
+            if(a[i].pos.x < -RR_BATTLE_FIELD_LIMIT) a[i].pos.x = -RR_BATTLE_FIELD_LIMIT;
+            if(a[i].pos.y < -RR_BATTLE_FIELD_LIMIT) a[i].pos.y = -RR_BATTLE_FIELD_LIMIT;
             
             // Display ship
             a[i].draw(win, (a[i].pos - cam) * zoom + RR_vec2(RR_g.cntx, RR_g.cnty), a[i].nrm, zoom);
@@ -54,7 +62,7 @@ public:
                 a[i].player_input(keys);
                 
                 // Find better target
-                if(keys[SDLK_t]) a[i].find_better_target(a, RR_BATTLE_MAX_UNITS, i);
+                if(keys[SDLK_t] || RR_g_vec2.distance(a[i].pos, a[a[i].trg].pos) > 1300.0) a[i].find_better_target(a, RR_BATTLE_MAX_UNITS, i);
                 
                 // Draw target indicator
                 if(a[i].has_valid_target(a, RR_BATTLE_MAX_UNITS, i)) {
