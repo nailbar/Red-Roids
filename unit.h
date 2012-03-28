@@ -383,16 +383,16 @@ public:
     void player_input(Uint8* keys) {
         
         // Burn engines on W key
-        if(keys[SDLK_i]) burn_eng = 1;
+        if(keys[SDLK_i] || keys[SDLK_w]) burn_eng = 1;
         else burn_eng = 0;
         
         // Turn ship on A and D
         trn = 0;
-        if(keys[SDLK_j]) trn -= 1.0;
-        if(keys[SDLK_l]) trn += 1.0;
+        if(keys[SDLK_j] || keys[SDLK_a]) trn -= 1.0;
+        if(keys[SDLK_l] || keys[SDLK_d]) trn += 1.0;
         
         // Fire blasters
-        if(keys[SDLK_q]) fire = true;
+        if(keys[SDLK_q] || keys[SDLK_SPACE]) fire = true;
         else fire = false;
     }
     

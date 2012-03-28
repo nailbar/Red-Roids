@@ -5,16 +5,16 @@ To build on Ubuntu 11.10:
 sudo apt-get install build-essential libsdl-gfx1.2-dev
 ./compile.sh
 
-Key    Action
+Key       Action
 =====================================================
-ESC    Exits (First to Main menu, then completely)
-F1     Loops through debug modes
-I      Burn engines
-J      Rotate counter clockwise
-L      Rotate clockwise
-Q      Fire blasters
-T      Find better target
-Z      Show entire battle field
+ESC       Exits (First to Main menu, then completely)
+F1        Loops through debug modes
+I, W      Burn engines
+J, A      Rotate counter clockwise
+L, D      Rotate clockwise
+Q, SPACE  Fire blasters
+T         Find better target
+Z         Show entire battle field
 
 Credits:
 Martin Wikström
