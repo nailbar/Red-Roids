@@ -380,7 +380,7 @@ public:
     }
     
     // Control ship by player input
-    void player_input(Uint8* keys) {
+    bool player_input(Uint8* keys) {
         
         // Burn engines on W key
         if(keys[SDLK_i] || keys[SDLK_w]) burn_eng = 1;
@@ -394,6 +394,10 @@ public:
         // Fire blasters
         if(keys[SDLK_q] || keys[SDLK_SPACE]) fire = true;
         else fire = false;
+        
+        // Return action or inaction
+        if(burn_eng || trn || fire) return true;
+        return false;
     }
     
     // Draw a target pointer

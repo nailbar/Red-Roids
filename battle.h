@@ -29,7 +29,8 @@ public:
     RR_unit a[RR_BATTLE_MAX_UNITS]; // Units currently on battlefield
     RR_particle b[RR_BATTLE_MAX_PARTICLES]; // Particles on battlefield
     RR_vec2 cam, cam_trg;
-    double zoom, zoom_trg, reinforcements;
+    double zoom, zoom_trg;
+    float reinforcements, player_timeout;
     int next_particle, player, player_team;
     
     // Fleets
@@ -49,6 +50,7 @@ public:
         next_particle = 0;
         player = rand() % RR_BATTLE_MAX_UNITS;
         player_team = rand() % 3;
+        player_timeout = 5.0;
         
         // Init fleets
         reinforcements = 0.0;
@@ -118,7 +120,9 @@ public:
             
             // Player controls this ship
             if(i == player) {
-                a[i].player_input(keys);
+                if(a[i].player_input(keys)) player_timeout = 15.0;
+                else if(player_timeout > 0.0) player_timeout -= fspd;
+                else a[i].follow_target(a, RR_BATTLE_MAX_UNITS, i);
                 
                 // Find better target
                 if(keys[SDLK_t] || RR_g_vec2.distance(a[i].pos, a[a[i].trg].pos) > 1300.0) a[i].find_better_target(a, RR_BATTLE_MAX_UNITS, i);
@@ -220,6 +224,20 @@ public:
                 }
             }
         }
+        
+        // Team status indicators
+        RR_vec2 vec[4];
+        vec[0] = RR_vec2(0, 0);
+        vec[1] = RR_vec2(0, 5);
+        vec[2] = RR_vec2(1 + teamR + fsizeR, 5);
+        vec[3] = RR_vec2(1 + teamR + fsizeR, 0);
+        RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 10), RR_vec2(1, 0), 1.0, 105, 0, 0);
+        vec[2] = RR_vec2(1 + teamG + fsizeG, 5);
+        vec[3] = RR_vec2(1 + teamG + fsizeG, 0);
+        RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 20), RR_vec2(1, 0), 1.0, 0, 85, 0);
+        vec[2] = RR_vec2(1 + teamB + fsizeB, 5);
+        vec[3] = RR_vec2(1 + teamB + fsizeB, 0);
+        RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 30), RR_vec2(1, 0), 1.0, 0, 0, 155);
         
         // Done
         return 0;
