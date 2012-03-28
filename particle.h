@@ -42,13 +42,13 @@ public:
     }
     RR_particle(unsigned char newtype, RR_vec2 newpos, RR_vec2 newnrm, RR_vec2 newspd) {
         switch(newtype) {
-        case 1: // Light blast (4 seconds)
+        case 1: // Light blast (3 seconds)
             type = newtype;
             pos = newpos + newnrm * 4.0; // Out of Light blaster barrel
-            spd = newspd + newnrm * 400.0; // Speed of blast plus speed of host
+            spd = newspd + newnrm * 600.0; // Speed of blast plus speed of host
             nrm = newnrm;
             in_use = 1;
-            life = 4.0;
+            life = 3.0;
             break;
         }
     }
@@ -57,8 +57,8 @@ public:
         case 4: // Destroyed part (30 seconds)
             type = newtype;
             subtype = newsubtype;
-            pos = newpos; // Out of Light blaster barrel
-            spd = newspd + RR_g_vec2.rad_random() * 50.0; // Speed of blast plus speed of host
+            pos = newpos;
+            spd = newspd + RR_g_vec2.rad_random() * 50.0;
             nrm = newnrm;
             in_use = 1;
             life = 10.0 + float(rand() % 20);
@@ -76,7 +76,7 @@ public:
             vec[2] = RR_vec2(0, 6);
             if(life <= 3.0) RR_g_vec2.draw_polygon(win, vec, 3, position, normal, scale / (4.0 - life), 255, 255 / (4.0 - life), 0);
             break;
-        case 1: // Light blast (max life 4 sec)
+        case 1: // Light blast (max life 3 sec)
             vec[0] = RR_vec2(2, 0);
             vec[1] = RR_vec2(1, -2);
             vec[2] = RR_vec2(-1, -2);
@@ -92,10 +92,10 @@ public:
             RR_g_vec2.draw_polygon(win, vec, 4, position, normal, scale, 200, 255, 0);
             break;
         case 2: // Hull fragment (max life 4 sec)
-            vec[0] = RR_vec2(-2, -4);
-            vec[1] = RR_vec2(1, -3);
-            vec[2] = RR_vec2(0, 4);
-            vec[3] = RR_vec2(-2, 3);
+            vec[0] = RR_vec2(-3, -5);
+            vec[1] = RR_vec2(2, -4);
+            vec[2] = RR_vec2(0, 5);
+            vec[3] = RR_vec2(-3, 4);
             if(life < 1.0) RR_g_vec2.draw_polygon(win, vec, 4, position, normal, RR_vec2(1, 0), RR_vec2(1, 0), scale, 255 * life, 255 * life, 255 * life, 0.2, 0.3);
             else RR_g_vec2.draw_polygon(win, vec, 4, position, normal, RR_vec2(1, 0), RR_vec2(1, 0), scale, 180, 180, 200, 0.2, 0.3);
             break;
@@ -124,7 +124,7 @@ public:
             if(life < 0.0) in_use = 0;
             else if(life <= 3.0) nrm = nrm.rotate(nrm, RR_vec2(M_PI * (12.0 / (4.0 - life)) * fspd));
             break;
-        case 1: // Light blast (max life 4 sec)
+        case 1: // Light blast (max life 2 sec)
             life -= fspd;
             pos = pos + spd * fspd;
             if(life < 0.0) in_use = 0;
@@ -154,8 +154,8 @@ public:
     // Get hit damage for particle
     float hitdamage() {
         switch(type) {
-        case 1: // Light blast (max life 4 sec)
-            if(life > 3.9) return 0; // Prevent blast from hitting host
+        case 1: // Light blast (max life 3 sec)
+            if(life > 2.95) return 0; // Prevent blast from hitting host
             return 7.0; // Enough to destroy a light thruster on first hit if lucky
         default: return 0;
         }

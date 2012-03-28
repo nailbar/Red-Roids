@@ -89,6 +89,9 @@ public:
             zoom_trg = ((double(RR_g.wid + RR_g.hgt) / 2.0) / 800.0) / (1.0 + RR_g_vec2.distance(RR_vec2(), a[player].spd) * 0.002);
         } else player = rand() % RR_BATTLE_MAX_UNITS;
         
+        // Switch ship
+        if(keys[SDLK_n]) player = rand() % RR_BATTLE_MAX_UNITS;
+        
         // Show map
         if(keys[SDLK_z]) {
             cam_trg = RR_vec2(0, 0);
@@ -151,10 +154,10 @@ public:
             // Fire weapons
             for(int u = 0; u < RR_MAX_UNIT_PARTS; u++) if(a[i].p[u].in_use) {
                 if(a[i].guns) a[i].p[u].cool(fspd, a[i].weight / float(a[i].guns));
-                if(a[i].fire && a[i].p[u].weapon()) {
+                if(a[i].fire && a[i].p[u].weapon(false)) {
                     for(int j = next_particle; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
                         b[j] = RR_particle(
-                            a[i].p[u].weapon(),
+                            a[i].p[u].weapon(false),
                             a[i].pos + a[i].nrm * a[i].p[u].pos.x + a[i].nrm.extrude() * a[i].p[u].pos.y,
                             a[i].nrm,
                             a[i].spd
@@ -221,6 +224,12 @@ public:
                 } else if(fsizeB) {
                     fsizeB--; teamB++;
                     a[i] = RR_unit(fleetB[fsizeB], RR_vec2(0, -RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0);
+                } else if(fsizeR) {
+                    fsizeR--; teamR++;
+                    a[i] = RR_unit(fleetR[fsizeR], RR_vec2(-RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0);
+                } else if(fsizeG) {
+                    fsizeG--; teamG++;
+                    a[i] = RR_unit(fleetG[fsizeG], RR_vec2(RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0);
                 }
             }
         }
@@ -232,12 +241,21 @@ public:
         vec[2] = RR_vec2(1 + teamR + fsizeR, 5);
         vec[3] = RR_vec2(1 + teamR + fsizeR, 0);
         RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 10), RR_vec2(1, 0), 1.0, 105, 0, 0);
+        vec[2] = RR_vec2(1 + teamR, 5);
+        vec[3] = RR_vec2(1 + teamR, 0);
+        RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 10), RR_vec2(1, 0), 1.0, 155, 0, 0);
         vec[2] = RR_vec2(1 + teamG + fsizeG, 5);
         vec[3] = RR_vec2(1 + teamG + fsizeG, 0);
         RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 20), RR_vec2(1, 0), 1.0, 0, 85, 0);
+        vec[2] = RR_vec2(1 + teamG, 5);
+        vec[3] = RR_vec2(1 + teamG, 0);
+        RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 20), RR_vec2(1, 0), 1.0, 0, 135, 0);
         vec[2] = RR_vec2(1 + teamB + fsizeB, 5);
         vec[3] = RR_vec2(1 + teamB + fsizeB, 0);
         RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 30), RR_vec2(1, 0), 1.0, 0, 0, 155);
+        vec[2] = RR_vec2(1 + teamB, 5);
+        vec[3] = RR_vec2(1 + teamB, 0);
+        RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 30), RR_vec2(1, 0), 1.0, 0, 0, 205);
         
         // Done
         return 0;

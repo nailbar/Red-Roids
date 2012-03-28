@@ -330,8 +330,8 @@ public:
     }
     
     // Get weapon type if loaded
-    unsigned char weapon() {
-        if(load > 0.0) return 0;
+    unsigned char weapon(bool regardless) {
+        if(load > 0.0 && !regardless) return 0;
         switch(type) {
         case 12: return 1; // Light blaster
         default: return 0;

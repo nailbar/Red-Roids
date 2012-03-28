@@ -161,7 +161,7 @@ public:
             // Get thrust and weight for part
             thrust += p[i].thrust();
             weight += p[i].weight();
-            if(p[i].weapon()) guns++;
+            if(p[i].weapon(true)) guns++;
         }
         
         // Remove ship if no parts
@@ -317,7 +317,9 @@ public:
         timeout -= fspd;
         
         // Turn ship
-        nrm = nrm.rotate(nrm, RR_vec2(trn * M_PI * 2.0 * fspd));
+        float ratio = (thrust / (weight * 2.0));
+        if(ratio > 1.5) ratio = 1.5;
+        nrm = nrm.rotate(nrm, RR_vec2(trn * (thrust / weight) * M_PI * 3.0 * fspd));
         
         // Acceleration (thrust and weight taken into account)
         //  * High acceleration value lowered a lot by friction
