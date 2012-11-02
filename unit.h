@@ -478,6 +478,16 @@ void RR_unit::target_pointer(SDL_Surface* win, RR_vec2 position, RR_vec2 normal,
     vec[2] = RR_vec2(size + 30.0, 0);
     vec[3] = RR_vec2(size + 25.0, 2.0);
     RR_g_vec2.draw_polygon(win, vec, 4, position, normal, scale, 0, 0, 0);
+    
+    // Also nose indicator
+    vec[0] = RR_vec2(size + 60.0, -4.0);
+    vec[1] = RR_vec2(size + 60.0, -7.0);
+    vec[2] = RR_vec2(size + 80.0, -4.0);
+    RR_g_vec2.draw_polygon(win, vec, 3, position, nrm, scale, 255, 50, 0);
+    vec[0] = RR_vec2(size + 60.0, 4.0);
+    vec[1] = RR_vec2(size + 60.0, 7.0);
+    vec[2] = RR_vec2(size + 80.0, 4.0);
+    RR_g_vec2.draw_polygon(win, vec, 3, position, nrm, scale, 255, 50, 0);
 }
 
 // Draw a target indicator
