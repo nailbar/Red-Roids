@@ -13,7 +13,7 @@ public:
     RR_vec2 pos, nrm, spd;
     RR_unit_part p[RR_MAX_UNIT_PARTS];
     bool in_use, burn_eng, fire, guns;
-    float trn, size, thrust, weight, timeout;
+    float trn, trn2, size, thrust, weight, timeout;
     int trg;
     char team, type, mode;
     
@@ -71,6 +71,7 @@ RR_unit::RR_unit(unsigned char preset, RR_vec2 newpos) {
     nrm = RR_g_vec2.normal(RR_vec2(), RR_g_vec2.box_random());
     spd = RR_vec2();
     trn = 0;
+    trn2 = 0;
     trg = -1;
     team = -1;
     type = -1;
@@ -361,10 +362,27 @@ void RR_unit::follow(RR_vec2 target, bool fixmode) {
 void RR_unit::move(float fspd) {
     timeout -= fspd;
     
+    // Smooth turning
+    if(trn > 0.01) {
+        if(trn2 < trn) trn2 += (trn2 < 0.0 ? 6.0 : 2.0) * fspd;
+        if(trn2 > trn) trn2 = trn;
+    } else if(trn < -0.01) {
+        if(trn2 > trn) trn2 -= (trn2 > 0.0 ? 6.0 : 2.0) * fspd;
+        if(trn2 < trn) trn2 = trn;
+    } else {
+        if(trn2 < trn) {
+            trn2 += 6.0 * fspd;
+            if(trn2 > trn) trn2 = trn;
+        } else if(trn2 > trn) {
+            trn2 -= 6.0 * fspd;
+            if(trn2 < trn) trn2 = trn;
+        }
+    }
+    
     // Turn ship
     float ratio = (thrust / (weight * 2.0));
     if(ratio > 1.0) ratio = 1.0;
-    nrm = nrm.rotate(nrm, RR_vec2(trn * (thrust / weight) * M_PI * 3.0 * fspd));
+    nrm = nrm.rotate(nrm, RR_vec2(trn2 * (thrust / weight) * M_PI * 2.0 * fspd));
     
     // Acceleration (thrust and weight taken into account)
     //  * High acceleration value lowered a lot by friction
