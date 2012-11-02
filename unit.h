@@ -8,9 +8,13 @@
 #define RR_MAX_UNIT_PARTS 20
 #endif
 
+#ifndef RR_BOUNCE_DAMAGE
+#define RR_BOUNCE_DAMAGE 0.005
+#endif
+
 class RR_unit {
 public:
-    RR_vec2 pos, nrm, spd;
+    RR_vec2 pos, nrm, spd, tmp_vec2;
     RR_unit_part p[RR_MAX_UNIT_PARTS];
     bool in_use, burn_eng, fire, guns;
     float trn, trn2, size, thrust, weight, timeout;
@@ -20,6 +24,7 @@ public:
     // Constructor
     RR_unit();
     RR_unit(unsigned char, RR_vec2);
+    RR_unit(unsigned char, RR_vec2, RR_vec2);
     
     // Generate from preset
     void from_preset(unsigned char);
@@ -47,7 +52,7 @@ public:
     void draw(SDL_Surface*, RR_vec2, RR_vec2, float);
     
     // Check if another unit is too close and bounce on it
-    bool bounce(RR_unit &);
+    float bounce(RR_unit &, bool, bool);
     
     // Control ship by player input
     bool player_input(Uint8*);
@@ -69,6 +74,28 @@ RR_unit::RR_unit(unsigned char preset, RR_vec2 newpos) {
     fire = 0;
     pos = newpos;
     nrm = RR_g_vec2.normal(RR_vec2(), RR_g_vec2.box_random());
+    spd = RR_vec2();
+    trn = 0;
+    trn2 = 0;
+    trg = -1;
+    team = -1;
+    type = -1;
+    size = 1.0;
+    thrust = 0.0;
+    weight = 1.0;
+    guns = 0;
+    mode = 0;
+    timeout = 1.0;
+    
+    // Ship presets
+    from_preset(preset);
+}
+RR_unit::RR_unit(unsigned char preset, RR_vec2 newpos, RR_vec2 newnrm) {
+    in_use = 1; // In use
+    burn_eng = 0;
+    fire = 0;
+    pos = newpos;
+    nrm = newnrm;
     spd = RR_vec2();
     trn = 0;
     trn2 = 0;
@@ -388,7 +415,7 @@ void RR_unit::move(float fspd) {
     //  * High acceleration value lowered a lot by friction
     if(burn_eng) spd = spd + nrm * (thrust / weight) * 500.0 * fspd;
     
-    // Friction in space
+    // Friction in space \o/
     spd = spd - spd * 0.5 * fspd;
     
     // Move the ship
@@ -411,9 +438,10 @@ void RR_unit::draw(SDL_Surface* win, RR_vec2 position, RR_vec2 normal, float sca
 }
 
 // Check if another unit is too close and bounce on it
-bool RR_unit::bounce(RR_unit &other) {
+float RR_unit::bounce(RR_unit &other, bool keepoff, bool hulldamage) {
     RR_vec2 p1, p2, n;
     double s;
+    float f1;
     
     // Quick box-fit test first
     if(RR_g_vec2.box_distance(pos, other.pos) < size + other.size) {
@@ -430,18 +458,42 @@ bool RR_unit::bounce(RR_unit &other) {
                     
                     // Get relative speed
                     s = RR_g_vec2.dot(n, spd) + RR_g_vec2.dot(n, RR_vec2() - other.spd);
+                    f1 = (weight + other.weight) / 100.0;
                     if(s > 0.0) {
                         spd = spd - n * s * (2.0 / (weight + other.weight) * other.weight);
                         other.spd = other.spd + n * s * (2.0 / (weight + other.weight) * weight);
+                        
+                        // Exact spot that touches
+                        tmp_vec2 = (p1 + n * p[i].size() + p2 - n * other.p[u].size()) / 2.0;
+                        
+                        // Move ships away from each other
+                        if(keepoff) {
+                            pos = pos - n * ((p[i].size() + other.p[u].size()) / 2.0);
+                            other.pos = other.pos + n * ((p[i].size() + other.p[u].size()) / 2.0);
+                        }
+                        
+                        // Damage and optionally destroy part
+                        if(hulldamage) {
+                            p[i].health -= ((rand() % 10000) / 10000.0) * s * RR_BOUNCE_DAMAGE * f1;
+                            if(p[i].health <= 0.0) {
+                                p[i].in_use = false;
+                                recalculate();
+                            }
+                            other.p[u].health -= ((rand() % 10000) / 10000.0) * s * RR_BOUNCE_DAMAGE * f1;
+                            if(other.p[u].health <= 0.0) {
+                                other.p[u].in_use = false;
+                                other.recalculate();
+                            }
+                        }
                     }
-                    return true;
+                    return s * f1;
                 }
             }
         }
     }
     
     // No hit
-    return false;
+    return 0;
 }
 
 // Control ship by player input

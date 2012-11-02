@@ -78,7 +78,7 @@ public:
     
     // Main battle loop
     bool main(SDL_Surface* win, float fspd, Uint8* keys) {
-        int i1;
+        int i1, i2;
         int teamR = 0;
         int teamG = 0;
         int teamB = 0;
@@ -170,7 +170,15 @@ public:
             }
             
             // Some bouncing
-            for(int u = i + 1; u < RR_BATTLE_MAX_UNITS; u++) a[i].bounce(a[u]);
+            for(int u = i + 1; u < RR_BATTLE_MAX_UNITS; u++) if((i2 = a[i].bounce(a[u], true, true))) {
+                i1 = 0;
+                for(int k = 0; k < i2 * 0.01; k++) for(int j = i1; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
+                    if(rand() % 100 < 30) b[j] = RR_particle(0, a[i].tmp_vec2); // Sparks
+                    else b[j] = RR_particle(2, a[i].tmp_vec2); // Fragments
+                    i1 = j + 1;
+                    break;
+                }
+            }
             
             // Check ship integrity
             i1 = rand() % RR_MAX_UNIT_PARTS;
@@ -217,19 +225,39 @@ public:
             for(int i = 0; i < RR_BATTLE_MAX_UNITS; i++) if(!a[i].in_use) {
                 if(teamR < teamG && teamR < teamB && fsizeR) {
                     fsizeR--; teamR++;
-                    a[i] = RR_unit(fleetR[fsizeR], RR_vec2(-RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0);
+                    a[i] = RR_unit(
+                        fleetR[fsizeR],
+                        RR_vec2(-RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0,
+                        RR_g_vec2.normal(RR_vec2(-RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT), RR_vec2())
+                    );
                 } else if(teamG < teamB && fsizeG) {
                     fsizeG--; teamG++;
-                    a[i] = RR_unit(fleetG[fsizeG], RR_vec2(RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0);
+                    a[i] = RR_unit(
+                        fleetG[fsizeG],
+                        RR_vec2(RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0,
+                        RR_g_vec2.normal(RR_vec2(RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT), RR_vec2())
+                    );
                 } else if(fsizeB) {
                     fsizeB--; teamB++;
-                    a[i] = RR_unit(fleetB[fsizeB], RR_vec2(0, -RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0);
+                    a[i] = RR_unit(
+                        fleetB[fsizeB],
+                        RR_vec2(0, -RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0,
+                        RR_g_vec2.normal(RR_vec2(0, -RR_BATTLE_FIELD_LIMIT), RR_vec2())
+                    );
                 } else if(fsizeR) {
                     fsizeR--; teamR++;
-                    a[i] = RR_unit(fleetR[fsizeR], RR_vec2(-RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0);
+                    a[i] = RR_unit(
+                        fleetR[fsizeR],
+                        RR_vec2(-RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0,
+                        RR_g_vec2.normal(RR_vec2(-RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT), RR_vec2())
+                    );
                 } else if(fsizeG) {
                     fsizeG--; teamG++;
-                    a[i] = RR_unit(fleetG[fsizeG], RR_vec2(RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0);
+                    a[i] = RR_unit(
+                        fleetG[fsizeG],
+                        RR_vec2(RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0,
+                        RR_g_vec2.normal(RR_vec2(RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT), RR_vec2())
+                    );
                 }
             }
         }
