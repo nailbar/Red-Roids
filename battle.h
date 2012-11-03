@@ -30,7 +30,7 @@ public:
     RR_unit a[RR_BATTLE_MAX_UNITS]; // Units currently on battlefield
     RR_particle b[RR_BATTLE_MAX_PARTICLES]; // Particles on battlefield
     RR_starfield stars; // Background starfield
-    RR_vec2 cam, cam_trg, teamR_pos, teamG_pos, teamB_pos;
+    RR_vec2 cam, cam_trg, teamR_pos, teamG_pos, teamB_pos, top_left, bottom_right;
     double zoom, zoom_trg;
     float reinforcements, player_timeout, battle_timeout;
     int next_particle, player, player_team, wings;
@@ -45,32 +45,23 @@ public:
     
     // Constructor
     RR_battle() {
+        player_timeout = 0.0;
+        top_left = RR_vec2(-10, -10);
+        bottom_right = RR_vec2(10, 10);
+        teamR_pos = RR_vec2(0) * RR_BATTLE_FIELD_LIMIT;
+        teamG_pos = RR_vec2(0.3 * M_PI * 2.0) * RR_BATTLE_FIELD_LIMIT;
+        teamB_pos = RR_vec2(0.6 * M_PI * 2.0) * RR_BATTLE_FIELD_LIMIT;
+        wings = 0;
+        
+        // Init the battle
+        next_battle();
+    }
+    
+    void next_battle() {
         cam = RR_vec2();
         cam_trg = cam;
         zoom = 0.001;
         zoom_trg = zoom;
-        next_particle = 0;
-        player = rand() % RR_BATTLE_MAX_UNITS;
-        player_team = rand() % 3;
-        player_timeout = 0.0;
-        teamR_pos = RR_vec2(-RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT);
-        teamG_pos = RR_vec2(RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT);
-        teamB_pos = RR_vec2(0, -RR_BATTLE_FIELD_LIMIT);
-        battle_timeout = 5.0;
-        
-        // Init fleets
-        wings = 1;
-        fsizeR = wings;
-        fsizeG = wings;
-        fsizeB = wings;
-        for(int i = 0; i < wings && i < RR_BATTLE_MAX_FLEET; i++) {
-            fleetR[i] = rand() % 4;
-            fleetG[i] = rand() % 4;
-            fleetB[i] = rand() % 4;
-        }
-    }
-    
-    void next_battle() {
         
         // Clear field
         for(int i = 0; i < RR_BATTLE_MAX_UNITS; i++) a[i].in_use = false;
@@ -94,6 +85,8 @@ public:
     // Main battle loop
     bool main(SDL_Surface* win, float fspd, Uint8* keys) {
         int i1, i2;
+        float f1;
+        bool first_ship = 0;
         int teamR = 0;
         int teamG = 0;
         int teamB = 0;
@@ -109,8 +102,10 @@ public:
         
         // Show map
         if(keys[SDLK_z]) {
-            cam_trg = RR_vec2(0, 0);
-            zoom_trg = ((double(RR_g.wid + RR_g.hgt) / 2.0) * 0.4) / RR_BATTLE_FIELD_LIMIT;
+            cam_trg = (top_left + bottom_right) / 2.0;
+            zoom_trg = (RR_g.wid / (bottom_right.x - top_left.x)) / 1.5;
+            f1 = (RR_g.hgt / (bottom_right.y - top_left.y)) / 1.5;
+            if(f1 < zoom_trg) zoom_trg = f1;
         }
         
         // Smooth camera transitions
@@ -125,6 +120,21 @@ public:
         
         // Loop through ships
         for(int i = 0; i < RR_BATTLE_MAX_UNITS; i++) if(a[i].in_use) {
+            if(!first_ship) {
+                first_ship = true;
+                top_left = RR_vec2(
+                    a[i].pos.x - a[i].size * 3.0,
+                    a[i].pos.y - a[i].size * 3.0
+                );
+                bottom_right = RR_vec2(
+                    a[i].pos.x + a[i].size * 3.0,
+                    a[i].pos.y + a[i].size * 3.0
+                );
+            }
+            if(a[i].pos.x < top_left.x) top_left.x = a[i].pos.x;
+            if(a[i].pos.y < top_left.y) top_left.y = a[i].pos.y;
+            if(a[i].pos.x > bottom_right.x) bottom_right.x = a[i].pos.x;
+            if(a[i].pos.y > bottom_right.y) bottom_right.y = a[i].pos.y;
             
             // Count ships
             switch(a[i].team) {
@@ -133,11 +143,8 @@ public:
             case 2: teamB++; break;
             }
             
-            // Stay on battlefield
-            if(a[i].pos.x > RR_BATTLE_FIELD_LIMIT) a[i].spd.x -= 1000.0 * fspd;
-            if(a[i].pos.y > RR_BATTLE_FIELD_LIMIT) a[i].spd.y -= 1000.0 * fspd;
-            if(a[i].pos.x < -RR_BATTLE_FIELD_LIMIT) a[i].spd.x += 1000.0 * fspd;
-            if(a[i].pos.y < -RR_BATTLE_FIELD_LIMIT) a[i].spd.y += 1000.0 * fspd;
+            // All ships are attracted to center of battlefield
+            a[i].spd = a[i].spd - a[i].pos * 0.01 * fspd;
             
             // Display ship
             a[i].draw(win, (a[i].pos - cam) * zoom + RR_vec2(RR_g.cntx, RR_g.cnty), a[i].nrm, zoom);
@@ -261,7 +268,7 @@ public:
         }
         
         // Target status indicator
-        if(a[player].in_use) {
+        if(a[player].in_use && a[player].team == player_team) {
             a[player].draw(win, RR_vec2(50 + a[player].size, RR_g.hgt - 50 - a[player].size), a[player].nrm, 1.0, RR_vec2(0, -1), true);
             if(a[player].has_valid_target(a, RR_BATTLE_MAX_UNITS, player)) {
                 a[a[player].trg].draw(win, RR_vec2(RR_g.wid - 50 - a[a[player].trg].size, RR_g.hgt - 50 - a[a[player].trg].size), a[a[player].trg].nrm, 1.0, RR_vec2(0, -1), true);
