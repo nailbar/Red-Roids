@@ -30,10 +30,10 @@ public:
     RR_unit a[RR_BATTLE_MAX_UNITS]; // Units currently on battlefield
     RR_particle b[RR_BATTLE_MAX_PARTICLES]; // Particles on battlefield
     RR_starfield stars; // Background starfield
-    RR_vec2 cam, cam_trg;
+    RR_vec2 cam, cam_trg, teamR_pos, teamG_pos, teamB_pos;
     double zoom, zoom_trg;
-    float reinforcements, player_timeout;
-    int next_particle, player, player_team;
+    float reinforcements, player_timeout, battle_timeout;
+    int next_particle, player, player_team, wings;
     
     // Fleets
     unsigned char fleetR[RR_BATTLE_MAX_FLEET];
@@ -52,29 +52,42 @@ public:
         next_particle = 0;
         player = rand() % RR_BATTLE_MAX_UNITS;
         player_team = rand() % 3;
-        player_timeout = 5.0;
+        player_timeout = 0.0;
+        teamR_pos = RR_vec2(-RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT);
+        teamG_pos = RR_vec2(RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT);
+        teamB_pos = RR_vec2(0, -RR_BATTLE_FIELD_LIMIT);
+        battle_timeout = 5.0;
         
         // Init fleets
+        wings = 1;
+        fsizeR = wings;
+        fsizeG = wings;
+        fsizeB = wings;
+        for(int i = 0; i < wings && i < RR_BATTLE_MAX_FLEET; i++) {
+            fleetR[i] = rand() % 4;
+            fleetG[i] = rand() % 4;
+            fleetB[i] = rand() % 4;
+        }
+    }
+    
+    void next_battle() {
+        
+        // Clear field
+        for(int i = 0; i < RR_BATTLE_MAX_UNITS; i++) a[i].in_use = false;
+        next_particle = 0;
+        player = rand() % RR_BATTLE_MAX_UNITS;
+        player_team = rand() % 3;
         reinforcements = 0.0;
-        int fleetsize = rand() % (rand() % (rand() % RR_BATTLE_MAX_FLEET));
-        if(fleetsize < 4) fleetsize = 4;
-        fsizeR = fleetsize;
-        fsizeG = fleetsize;
-        fsizeB = fleetsize;
-        for(int i = 0; i < RR_BATTLE_MAX_FLEET; i++) if(i < fleetsize) {
-            if(rand() % 5 > 0) {
-                fleetR[i] = 1; // Arrow light fighter
-                fleetG[i] = 2; // Bullet light fighter
-                fleetB[i] = 3; // Raptor light fighter
-            } else {
-                fleetR[i] = 4; // Arrow medium fighter
-                fleetG[i] = 5; // Bullet medium fighter
-                fleetB[i] = 6; // Raptor medium fighter
-            }
-        } else {
-            fleetR[i] = 0;
-            fleetG[i] = 0;
-            fleetB[i] = 0;
+        battle_timeout = 5.0;
+            
+        wings++;
+        fsizeR = wings;
+        fsizeG = wings;
+        fsizeB = wings;
+        for(int i = 0; i < wings && i < RR_BATTLE_MAX_FLEET; i++) {
+            fleetR[i] = rand() % 4;
+            fleetG[i] = rand() % 4;
+            fleetB[i] = rand() % 4;
         }
     }
     
@@ -228,45 +241,23 @@ public:
         // Spawn reinforcements
         if(reinforcements > 0.0) reinforcements -= fspd;
         else {
-            reinforcements = RR_BATTLE_REINFORCEMENT_INTERVAL;
-            for(int i = 0; i < RR_BATTLE_MAX_UNITS; i++) if(!a[i].in_use) {
-                if(teamR < teamG && teamR < teamB && fsizeR) {
-                    fsizeR--; teamR++;
-                    a[i] = RR_unit(
-                        fleetR[fsizeR],
-                        RR_vec2(-RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0,
-                        RR_g_vec2.normal(RR_vec2(-RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT), RR_vec2())
-                    );
-                } else if(teamG < teamB && fsizeG) {
-                    fsizeG--; teamG++;
-                    a[i] = RR_unit(
-                        fleetG[fsizeG],
-                        RR_vec2(RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0,
-                        RR_g_vec2.normal(RR_vec2(RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT), RR_vec2())
-                    );
-                } else if(fsizeB) {
-                    fsizeB--; teamB++;
-                    a[i] = RR_unit(
-                        fleetB[fsizeB],
-                        RR_vec2(0, -RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0,
-                        RR_g_vec2.normal(RR_vec2(0, -RR_BATTLE_FIELD_LIMIT), RR_vec2())
-                    );
-                } else if(fsizeR) {
-                    fsizeR--; teamR++;
-                    a[i] = RR_unit(
-                        fleetR[fsizeR],
-                        RR_vec2(-RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0,
-                        RR_g_vec2.normal(RR_vec2(-RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT), RR_vec2())
-                    );
-                } else if(fsizeG) {
-                    fsizeG--; teamG++;
-                    a[i] = RR_unit(
-                        fleetG[fsizeG],
-                        RR_vec2(RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT) + RR_g_vec2.box_random() * 500.0,
-                        RR_g_vec2.normal(RR_vec2(RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT), RR_vec2())
-                    );
-                }
+            if(teamR < teamG && teamR < teamB && fsizeR) {
+                fsizeR--;
+                addfleet(fleetR[fsizeR], 1);
+            } else if(teamG < teamB && fsizeG) {
+                fsizeG--;
+                addfleet(fleetG[fsizeG], 2);
+            } else if(fsizeB) {
+                fsizeB--;
+                addfleet(fleetB[fsizeB], 3);
+            } else if(fsizeR) {
+                fsizeR--;
+                addfleet(fleetR[fsizeR], 1);
+            } else if(fsizeG) {
+                fsizeG--;
+                addfleet(fleetG[fsizeG], 2);
             }
+            if(teamR > 0 && teamG > 0 && teamB > 0) reinforcements = RR_BATTLE_REINFORCEMENT_INTERVAL;
         }
         
         // Target status indicator
@@ -306,8 +297,99 @@ public:
             RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 30), RR_vec2(1, 0), 1.0, 0, 0, 205);
         }
         
+        // Next battle
+        if(teamR + teamG < 1 || teamR + teamB < 1 || teamB + teamG < 1) {
+            battle_timeout -= fspd;
+            if(battle_timeout <= 0.0) next_battle();
+        }
+        
         // Done
         return 0;
+    }
+    
+    // Add a fleet to the battlefield
+    void addfleet(int fleet_type, int fleet_team) {
+        int i1 = 0;
+        switch(fleet_type) {
+        case 0: // Light patrol
+            if(fleet_team == 1) {
+                i1 = addship(1, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+                i1 = addship(1, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+            } else if(fleet_team == 2) {
+                i1 = addship(2, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+                i1 = addship(2, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+            } else if(fleet_team == 3) {
+                i1 = addship(3, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+                i1 = addship(3, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+            }
+            break;
+        case 1: // Medium patrol
+            if(fleet_team == 1) {
+                i1 = addship(4, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+                i1 = addship(1, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+                i1 = addship(1, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+            } else if(fleet_team == 2) {
+                i1 = addship(5, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+                i1 = addship(2, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+                i1 = addship(2, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+            } else if(fleet_team == 3) {
+                i1 = addship(6, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+                i1 = addship(3, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+                i1 = addship(3, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+            }
+            break;
+        case 2: // Heavy patrol
+            if(fleet_team == 1) {
+                i1 = addship(4, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+                i1 = addship(4, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+                i1 = addship(1, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+                i1 = addship(1, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+                i1 = addship(1, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+            } else if(fleet_team == 2) {
+                i1 = addship(5, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+                i1 = addship(5, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+                i1 = addship(2, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+                i1 = addship(2, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+                i1 = addship(2, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+            } else if(fleet_team == 3) {
+                i1 = addship(6, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+                i1 = addship(6, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+                i1 = addship(3, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+                i1 = addship(3, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+                i1 = addship(3, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+            }
+            break;
+        case 3: // Assault wing
+            if(fleet_team == 1) {
+                i1 = addship(7, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+                i1 = addship(7, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+                i1 = addship(4, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+                i1 = addship(4, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+                i1 = addship(4, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+            } else if(fleet_team == 2) {
+                i1 = addship(8, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+                i1 = addship(8, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+                i1 = addship(5, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+                i1 = addship(5, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+                i1 = addship(5, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+            } else if(fleet_team == 3) {
+                i1 = addship(9, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+                i1 = addship(9, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+                i1 = addship(6, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+                i1 = addship(6, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+                i1 = addship(6, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+            }
+            break;
+        }
+    }
+    
+    // Add a single ship to the battlefield
+    int addship(int ship_type, RR_vec2 ship_pos, RR_vec2 ship_nrm, int ifrom) {
+        for(int i = ifrom; i < RR_BATTLE_MAX_UNITS; i++) if(!a[i].in_use) {
+            a[i] = RR_unit(ship_type, ship_pos, ship_nrm);
+            return i + 1;
+        }
+        return RR_BATTLE_MAX_UNITS;
     }
 };
 
