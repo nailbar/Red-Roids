@@ -23,11 +23,13 @@
 
 #include "unit.h"
 #include "particle.h"
+#include "starfield.h"
 
 class RR_battle {
 public:
     RR_unit a[RR_BATTLE_MAX_UNITS]; // Units currently on battlefield
     RR_particle b[RR_BATTLE_MAX_PARTICLES]; // Particles on battlefield
+    RR_starfield stars; // Background starfield
     RR_vec2 cam, cam_trg;
     double zoom, zoom_trg;
     float reinforcements, player_timeout;
@@ -101,6 +103,9 @@ public:
         // Smooth camera transitions
         cam = cam + (cam_trg - cam) * 0.04;
         zoom = zoom + (zoom_trg - zoom) * 0.04;
+        
+        // Draw starfield
+        stars.draw(win, cam);
         
         // Loop through ships
         for(int i = 0; i < RR_BATTLE_MAX_UNITS; i++) if(a[i].in_use) {
