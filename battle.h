@@ -144,7 +144,7 @@ public:
             }
             
             // All ships are attracted to center of battlefield
-            a[i].spd = a[i].spd - a[i].pos * 0.01 * fspd;
+            a[i].spd = a[i].spd - a[i].pos * 0.005 * fspd;
             
             // Display ship
             a[i].draw(win, (a[i].pos - cam) * zoom + RR_vec2(RR_g.cntx, RR_g.cnty), a[i].nrm, zoom);
@@ -180,7 +180,7 @@ public:
             
             // Fire weapons
             for(int u = 0; u < RR_MAX_UNIT_PARTS; u++) if(a[i].p[u].in_use) {
-                if(a[i].guns) a[i].p[u].cool(fspd, a[i].weight / float(a[i].guns));
+                if(a[i].guns) a[i].p[u].cool(fspd, a[i].power);
                 if(a[i].fire && a[i].p[u].weapon(false)) {
                     for(int j = next_particle; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
                         b[j] = RR_particle(
@@ -368,20 +368,17 @@ public:
             break;
         case 3: // Assault wing
             if(fleet_team == 1) {
-                i1 = addship(7, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
-                i1 = addship(7, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+                i1 = addship(4, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
                 i1 = addship(4, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
                 i1 = addship(4, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
                 i1 = addship(4, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
             } else if(fleet_team == 2) {
-                i1 = addship(8, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
-                i1 = addship(8, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+                i1 = addship(5, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
                 i1 = addship(5, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
                 i1 = addship(5, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
                 i1 = addship(5, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
             } else if(fleet_team == 3) {
-                i1 = addship(9, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
-                i1 = addship(9, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+                i1 = addship(6, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
                 i1 = addship(6, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
                 i1 = addship(6, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
                 i1 = addship(6, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);

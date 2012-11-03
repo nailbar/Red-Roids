@@ -17,7 +17,7 @@ public:
     RR_vec2 pos, nrm, spd, tmp_vec2;
     RR_unit_part p[RR_MAX_UNIT_PARTS];
     bool in_use, burn_eng, fire, guns;
-    float trn, trn2, size, thrust, weight, timeout;
+    float trn, trn2, size, thrust, weight, power, timeout;
     int trg;
     char team, type, mode;
     
@@ -84,6 +84,7 @@ RR_unit::RR_unit(unsigned char preset, RR_vec2 newpos) {
     size = 1.0;
     thrust = 0.0;
     weight = 1.0;
+    power = 0.0;
     guns = 0;
     mode = 0;
     timeout = 1.0;
@@ -106,6 +107,7 @@ RR_unit::RR_unit(unsigned char preset, RR_vec2 newpos, RR_vec2 newnrm) {
     size = 1.0;
     thrust = 0.0;
     weight = 1.0;
+    power = 0.0;
     guns = 0;
     mode = 0;
     timeout = 1.0;
@@ -212,7 +214,9 @@ void RR_unit::recalculate() {
     guns = 0;
     thrust = 0.0;
     weight = 0.0;
+    power = 0.0;
     float this_distance = 0;
+    float power_draw = 0.0;
     
     // Check for center
     for(int i = RR_MAX_UNIT_PARTS - 1; i >= 0; i--) if(p[i].in_use) {
@@ -232,6 +236,8 @@ void RR_unit::recalculate() {
         // Get thrust and weight for part
         thrust += p[i].thrust();
         weight += p[i].weight();
+        power += p[i].power();
+        power_draw += p[i].power_draw();
         if(p[i].weapon(true)) guns++;
     }
     
@@ -241,8 +247,11 @@ void RR_unit::recalculate() {
         return;
     }
     
-    // No engines results in weapon loss
-    if(thrust / weight < 0.1) guns = 0;
+    // Calculate power distribution
+    if(power_draw) power = power / power_draw;
+    
+    // No engines or no power turns off guns which will result in self destruction
+    if(thrust / weight < 0.1 || power < 0.1) guns = 0;
     
     // Recenter ship and calculate size
     offset = (nose_right + aft_left) / 2.0;
@@ -408,8 +417,8 @@ void RR_unit::move(float fspd) {
     }
     
     // Turn ship
-    float ratio = (thrust / (weight * 2.0));
-    if(ratio > 1.0) ratio = 1.0;
+//     float ratio = (thrust / (power * 2.0));
+//     if(ratio > 1.0) ratio = 1.0;
     nrm = nrm.rotate(nrm, RR_vec2(trn2 * (thrust / weight) * M_PI * 2.0 * fspd));
     
     // Acceleration (thrust and weight taken into account)

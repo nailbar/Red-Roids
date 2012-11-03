@@ -25,8 +25,8 @@ public:
     }
     
     // Cool down weapon for reload
-    void cool(float fspd, float mass) {
-        if(load > 0.0) load -= (1.0 / 50.0) * mass * fspd;
+    void cool(float fspd, float cooling_power) {
+        if(load > 0.0) load -= (1.0 / 50.0) * cooling_power * fspd;
     }
     
     // Draw the part on screen
@@ -369,6 +369,36 @@ public:
     }
     float weight() {
         return weight(type);
+    }
+    
+    // Get power generation of a part
+    float power(int partid) {
+        switch(partid) {
+        case 1: return 30.0; // Hull
+        case 5: return 25.0; // Hull
+        case 6: return 28.0; // Hull
+        case 7: return 20.0; // Hull right
+        case 8: return 20.0; // Hull left
+        case 9: return 40.0; // Hull
+        case 10: return 25.0; // Wing right
+        case 11: return 25.0; // Wing left
+        default: return 0.0;
+        }
+    }
+    float power() {
+        return power(type);
+    }
+    
+    // Get power draw of a part
+    float power_draw(int partid) {
+        switch(partid) {
+        case 0: return 0.5; // Engine
+        case 12: return 1.0; // Light blaster
+        default: return 0.0;
+        }
+    }
+    float power_draw() {
+        return power_draw(type);
     }
     
     // Get weapon type if loaded
