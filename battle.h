@@ -107,6 +107,9 @@ public:
         // Draw starfield
         stars.draw(win, cam);
         
+        // Darken background if zoom-out is in use
+        if(keys[SDLK_z]) boxRGBA(win, 0, 0, RR_g.wid, RR_g.hgt, 0, 0, 0, 200);
+        
         // Loop through ships
         for(int i = 0; i < RR_BATTLE_MAX_UNITS; i++) if(a[i].in_use) {
             
