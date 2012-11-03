@@ -146,10 +146,9 @@ public:
                         zoom
                     );
                 } else a[i].find_better_target(a, RR_BATTLE_MAX_UNITS, i);
-            }
             
             // A.I. ships follow other ships
-            else a[i].follow_target(a, RR_BATTLE_MAX_UNITS, i);
+            } else a[i].follow_target(a, RR_BATTLE_MAX_UNITS, i);
             
             // Fire weapons
             for(int u = 0; u < RR_MAX_UNIT_PARTS; u++) if(a[i].p[u].in_use) {
@@ -259,6 +258,14 @@ public:
                         RR_g_vec2.normal(RR_vec2(RR_BATTLE_FIELD_LIMIT, RR_BATTLE_FIELD_LIMIT), RR_vec2())
                     );
                 }
+            }
+        }
+        
+        // Target status indicator
+        if(a[player].in_use) {
+            a[player].draw(win, RR_vec2(50 + a[player].size, RR_g.hgt - 50 - a[player].size), a[player].nrm, 1.0, RR_vec2(0, -1), true);
+            if(a[player].has_valid_target(a, RR_BATTLE_MAX_UNITS, player)) {
+                a[a[player].trg].draw(win, RR_vec2(RR_g.wid - 50 - a[a[player].trg].size, RR_g.hgt - 50 - a[a[player].trg].size), a[a[player].trg].nrm, 1.0, RR_vec2(0, -1), true);
             }
         }
         

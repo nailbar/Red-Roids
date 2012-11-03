@@ -33,8 +33,16 @@ public:
     void draw(
         SDL_Surface* win, RR_vec2 position, RR_vec2 normal,
         float scale, unsigned char partid, unsigned char action,
-        RR_vec2 sun_dir
+        RR_vec2 sun_dir, bool showdmg
     ) {
+        
+        // Get damage color
+        float damage = 1.0 - health / weight(partid);
+        unsigned char dcolr = int(damage > 0.5 ? 255 : 256 * damage * 2.0);
+        unsigned char dcolg = int(damage < 0.5 ? 255 : 256 * (1.0 - damage) * 2.0);
+        unsigned char dcolb = 0;
+        
+        // Draw parts
         RR_vec2 vec[5];
         switch(partid) {
         case 0: // Engine
@@ -42,10 +50,11 @@ public:
             vec[1] = RR_vec2(4, -7);
             vec[2] = RR_vec2(4, 7);
             vec[3] = RR_vec2(-4, 5);
-            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 100, 110, 130, 0.2, 0.3);
+            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.3);
+            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 100, 110, 130, 0.2, 0.3);
             
             // Action 1: engine burn
-            if(action & 1) {
+            if(action & 1 && !showdmg) {
                 vec[0] = RR_vec2(-4, -5);
                 vec[1] = RR_vec2(-7 - (rand() % 7), -4);
                 vec[2] = RR_vec2(-7 - (rand() % 7), 0);
@@ -60,13 +69,15 @@ public:
             vec[0] = RR_vec2(24, 0);
             vec[1] = RR_vec2(-16, 0);
             vec[2] = RR_vec2(-6, 12);
-            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.1), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            if(showdmg) position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.1), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
+            else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.1), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             
             // Left side
             vec[0] = RR_vec2(24, 0);
             vec[1] = RR_vec2(-16, 0);
             vec[2] = RR_vec2(-6, -12);
-            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.1), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            if(showdmg)position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.1), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
+            else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.1), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             break;
         case 2: // Red small cockpit
             
@@ -75,7 +86,8 @@ public:
             vec[1] = RR_vec2(-3, -4);
             vec[2] = RR_vec2(-3, 4);
             vec[3] = RR_vec2(-7, 2);
-            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.2, 0.5);
+            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.5);
+            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.2, 0.5);
             
             // Cockpit front
             vec[0] = RR_vec2(7, -3);
@@ -83,7 +95,8 @@ public:
             vec[2] = RR_vec2(-3, 4);
             vec[3] = RR_vec2(7, 3);
             vec[4] = RR_vec2(10, 0);
-            position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, 255, 0, 0, 0.2, 0.2);
+            if(showdmg) position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.2);
+            else position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, 255, 0, 0, 0.2, 0.2);
             break;
         case 3: // Green small cockpit
             
@@ -92,7 +105,8 @@ public:
             vec[1] = RR_vec2(-3, -4);
             vec[2] = RR_vec2(-3, 4);
             vec[3] = RR_vec2(-7, 2);
-            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.2, 0.5);
+            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.5);
+            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.2, 0.5);
             
             // Cockpit front
             vec[0] = RR_vec2(7, -3);
@@ -100,7 +114,8 @@ public:
             vec[2] = RR_vec2(-3, 4);
             vec[3] = RR_vec2(7, 3);
             vec[4] = RR_vec2(10, 0);
-            position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, 0, 200, 0, 0.2, 0.2);
+            if(showdmg) position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.2);
+            else position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, 0, 200, 0, 0.2, 0.2);
             break;
         case 4: // Blue small cockpit
             
@@ -109,7 +124,8 @@ public:
             vec[1] = RR_vec2(-3, -4);
             vec[2] = RR_vec2(-3, 4);
             vec[3] = RR_vec2(-7, 2);
-            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.1, 0.5);
+            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, dcolr, dcolg, dcolb, 0.1, 0.5);
+            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.1, 0.5);
             
             // Cockpit front
             vec[0] = RR_vec2(7, -3);
@@ -117,7 +133,8 @@ public:
             vec[2] = RR_vec2(-3, 4);
             vec[3] = RR_vec2(7, 3);
             vec[4] = RR_vec2(10, 0);
-            position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, 0, 0, 255, 0.6, 0.2);
+            if(showdmg) position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, dcolr, dcolg, dcolb, 0.6, 0.2);
+            else position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, 0, 0, 255, 0.6, 0.2);
             break;
         case 5: // Hull
 
@@ -125,19 +142,22 @@ public:
             vec[0] = RR_vec2(-13, 0);
             vec[1] = RR_vec2(21, 4);
             vec[2] = RR_vec2(21, -4);
-            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(0), sun_dir, scale, 180, 180, 200, 0.4, 1.0);
+            if(showdmg) position.draw_polygon(win, vec, 3, position, normal, RR_vec2(0), sun_dir, scale, dcolr, dcolg, dcolb, 0.4, 1.0);
+            else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(0), sun_dir, scale, 180, 180, 200, 0.4, 1.0);
             
             // Right side
             vec[0] = RR_vec2(21, 4);
             vec[1] = RR_vec2(-13, 0);
             vec[2] = RR_vec2(-9, 9);
-            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            if(showdmg) position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.4), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
+            else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             
             // Left side
             vec[0] = RR_vec2(21, -4);
             vec[1] = RR_vec2(-13, 0);
             vec[2] = RR_vec2(-9, -9);
-            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            if(showdmg) position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.4), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
+            else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             break;
         case 6: // Hull
             
@@ -146,35 +166,40 @@ public:
             vec[1] = RR_vec2(10, -4);
             vec[2] = RR_vec2(-10, -4);
             vec[3] = RR_vec2(-10, 4);
-            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.6, 1.0);
+            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, dcolr, dcolg, dcolb, 0.6, 1.0);
+            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.6, 1.0);
             
             // Right side
             vec[0] = RR_vec2(10, 4);
             vec[1] = RR_vec2(-10, 4);
             vec[2] = RR_vec2(-6, 12);
             vec[3] = RR_vec2(6, 12);
-            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(1.57), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(1.57), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
+            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(1.57), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             
             // Left side
             vec[0] = RR_vec2(10, -4);
             vec[1] = RR_vec2(-10, -4);
             vec[2] = RR_vec2(-6, -12);
             vec[3] = RR_vec2(6, -12);
-            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(-1.57), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(-1.57), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
+            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(-1.57), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             break;
         case 7: // Hull right
             vec[0] = RR_vec2(27, -4);
             vec[1] = RR_vec2(-13, -4);
             vec[2] = RR_vec2(-7, 5);
             vec[3] = RR_vec2(0, 5);
-            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(1.4), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
+            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             break;
         case 8: // Hull left
             vec[0] = RR_vec2(27, 4);
             vec[1] = RR_vec2(-13, 4);
             vec[2] = RR_vec2(-7, -5);
             vec[3] = RR_vec2(0, -5);
-            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(-1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(-1.4), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
+            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(-1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             break;
         case 9: // Hull
 
@@ -182,19 +207,22 @@ public:
             vec[0] = RR_vec2(-19.5, 0);
             vec[1] = RR_vec2(31.5, 6);
             vec[2] = RR_vec2(31.5, -6);
-            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(0), sun_dir, scale, 180, 180, 200, 0.4, 1.0);
+            if(showdmg) position.draw_polygon(win, vec, 3, position, normal, RR_vec2(0), sun_dir, scale, dcolr, dcolg, dcolb, 0.4, 1.0);
+            else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(0), sun_dir, scale, 180, 180, 200, 0.4, 1.0);
             
             // Right side
             vec[0] = RR_vec2(31.5, 6);
             vec[1] = RR_vec2(-19.5, 0);
             vec[2] = RR_vec2(-13.5, 13.5);
-            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            if(showdmg) position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.4), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
+            else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             
             // Left side
             vec[0] = RR_vec2(31.5, -6);
             vec[1] = RR_vec2(-19.5, 0);
             vec[2] = RR_vec2(-13.5, -13.5);
-            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            if(showdmg) position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.4), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
+            else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             break;
         case 10: // Wing right
             
@@ -203,13 +231,15 @@ public:
             vec[1] = RR_vec2(-25, 10);
             vec[2] = RR_vec2(-23, 12);
             vec[3] = RR_vec2(8, 5);
-            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(1.3), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(1.3), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
+            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(1.3), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             
             // Left side
             vec[0] = RR_vec2(14, -3);
             vec[1] = RR_vec2(-25, 10);
             vec[2] = RR_vec2(0, -7);
-            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.8), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            if(showdmg) position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.8), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
+            else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.8), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             break;
         case 11: // Wing left
             
@@ -218,13 +248,15 @@ public:
             vec[1] = RR_vec2(-25, -10);
             vec[2] = RR_vec2(-23, -12);
             vec[3] = RR_vec2(8, -5);
-            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(-1.3), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(-1.3), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
+            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(-1.3), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             
             // Left side
             vec[0] = RR_vec2(14, 3);
             vec[1] = RR_vec2(-25, -10);
             vec[2] = RR_vec2(0, 7);
-            position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.8), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+            if(showdmg) position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.8), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
+            else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.8), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
             break;
         case 12: // Light blaster
             
@@ -233,25 +265,35 @@ public:
             vec[1] = RR_vec2(5, 0);
             vec[2] = RR_vec2(5, 1.5);
             vec[3] = RR_vec2(-3, 1.5);
-            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI * 0.5), sun_dir, scale, 100, 110, 130, 0.2, 0.3);
+            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI * 0.5), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.3);
+            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI * 0.5), sun_dir, scale, 100, 110, 130, 0.2, 0.3);
             
             // Barrel
             vec[0] = RR_vec2(-3, -1.5);
             vec[1] = RR_vec2(5, -1.5);
             vec[2] = RR_vec2(5, 0);
             vec[3] = RR_vec2(-3, 0);
-            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI * 1.5), sun_dir, scale, 100, 110, 130, 0.2, 0.3);
+            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI * 1.5), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.3);
+            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI * 1.5), sun_dir, scale, 100, 110, 130, 0.2, 0.3);
             
             // Canister
             vec[0] = RR_vec2(-7, -2);
             vec[1] = RR_vec2(-3, -3);
             vec[2] = RR_vec2(-3, 3);
             vec[3] = RR_vec2(-7, 2);
-            position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.2, 0.5);
+            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.5);
+            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.2, 0.5);
             break;
         }
         if(RR_g.debugmode == 1) pixelRGBA(win, position.x, position.y, 255, 255, 255, 255); // Debug position
         if(RR_g.debugmode == 3) ellipseRGBA(win, position.x, position.y, size(partid) * scale, size(partid) * scale, 255, 255, 0, 200); // Show part size
+    }
+    void draw(
+        SDL_Surface* win, RR_vec2 position, RR_vec2 normal,
+        float scale, unsigned char partid, unsigned char action,
+        RR_vec2 sun_dir
+    ) {
+        draw(win, position, normal, scale, partid, action, sun_dir, false);
     }
     void draw(
         SDL_Surface* win, RR_vec2 position, RR_vec2 normal,
