@@ -30,6 +30,7 @@ struct RR_practical_globals {
 
 // Include classes
 // #include "roidmap.h"
+#include "text.h"
 #include "unit.h"
 #include "menu.h"
 #include "battle.h"

@@ -1,7 +1,9 @@
 #ifndef RR_MENU_H
 #define RR_MENU_H 1
 
+#include "text.h"
 #include "unit.h"
+#include "starfield.h"
 
 #ifndef RR_MENU_UNITS
 #define RR_MENU_UNITS 20
@@ -13,6 +15,8 @@ public:
     RR_unit_part cursor;
     RR_vec2 cursor_dir, click_pos, sun_dir;
     char click;
+    RR_starfield stars; // Background starfield
+    float starpos;
     
     // Constructor
     RR_menu() {
@@ -21,6 +25,7 @@ public:
         cursor_dir = RR_vec2(0);
         click = 0;
         sun_dir = RR_vec2(0, -1);
+        starpos = 0.0;
     }
     
     // Handle information about mouse clicks
@@ -42,6 +47,11 @@ public:
         RR_vec2 vec;
         double dis;
         int rnd = rand() % 6;
+        
+        // Draw starfield
+        stars.draw(win, RR_vec2(starpos += 300.0 * fspd, 0));
+        
+        // Draw ships
         for(int i = 0; i < RR_MENU_UNITS; i++) {
             
             // A click forces ships away from cursor
@@ -75,41 +85,28 @@ public:
     
     // Handle the menu items
     char handle_menu(SDL_Surface* win, int* mpos) {
-        char button_clicked;
         char return_value = 0;
+        float f1 = RR_g.wid / 1000.0;
         
-        // New instant battle button
-        button_clicked = draw_button(win, mpos, RR_vec2(150, 150));
-        if(button_clicked) return_value = 1;
+        // Title and credits
+        RR_g_text.draw(win, RR_vec2(250 * f1, 50 * f1), 14 * f1, 120, 160, 255, "Red Roids");
+        RR_g_text.draw(win, RR_vec2(250 * f1, 130 * f1), 4 * f1, 20, 60, 155, " * by Martin Wikstrom");
         
-        // Resume battle button
-        button_clicked = draw_button(win, mpos, RR_vec2(RR_g.wid - 150, 150));
-        if(button_clicked) return_value = 2;
+        // Menu entries
+        if(mpos[1] > 200 * f1 && mpos[1] < 250 * f1) {
+            RR_g_text.draw(win, RR_vec2(250 * f1, 200 * f1), 10 * f1, 255, 60, 20, "Instant action");
+            if(click == 3) return_value = 1;
+        } else RR_g_text.draw(win, RR_vec2(250 * f1, 200 * f1), 10 * f1, 180, 180, 200, "Instant action");
         
-//         // Undefined button
-//         button_clicked = draw_button(win, mpos, RR_vec2(150, 400));
-//         if(button_clicked) return_value = 3;
+        if(mpos[1] > 260 * f1 && mpos[1] < 310 * f1) {
+            RR_g_text.draw(win, RR_vec2(250 * f1, 260 * f1), 10 * f1, 255, 60, 20, "Continue");
+            if(click == 3) return_value = 2;
+        } else RR_g_text.draw(win, RR_vec2(250 * f1, 260 * f1), 10 * f1, 150, 150, 170, "Continue");
         
-        // Exit button
-        button_clicked = draw_button(win, mpos, RR_vec2(RR_g.wid - 150, 400));
-        if(button_clicked) return_value = 4;
-        
-        // Button graphics (quick and dirty)
-        RR_unit unit = RR_unit(1, RR_vec2());
-        unit.draw(win, RR_vec2(100, 120), RR_vec2(1, 0), 1.0, sun_dir);
-        unit.draw(win, RR_vec2(100, 180), RR_vec2(1, 0), 1.0, sun_dir);
-        unit.draw(win, RR_vec2(RR_g.wid - 200, 180), RR_vec2(2), 1.0, sun_dir);
-        unit.from_preset(3);
-        unit.draw(win, RR_vec2(200, 120), RR_vec2(-1, 0), 1.0, sun_dir);
-        unit.draw(win, RR_vec2(200, 180), RR_vec2(-1, 0), 1.0, sun_dir);
-        unit.draw(win, RR_vec2(RR_g.wid - 150, 100), RR_vec2(1.7), 1.0, sun_dir);
-        unit.draw(win, RR_vec2(RR_g.wid - 100, 140), RR_vec2(2.4), 1.0, sun_dir);
-        RR_unit_part part;
-        part.draw(win, RR_vec2(RR_g.wid - 160, 400), RR_vec2(0.5), 1, 4, 0, sun_dir);
-        part.draw(win, RR_vec2(RR_g.wid - 180, 430), RR_vec2(0.4), 1, 7, 0, sun_dir);
-        part.draw(win, RR_vec2(RR_g.wid - 140, 380), RR_vec2(0.4), 1, 8, 0, sun_dir);
-        part.draw(win, RR_vec2(RR_g.wid - 180, 380), RR_vec2(0.5), 1, 0, 0, sun_dir);
-        
+        if(mpos[1] > 320 * f1 && mpos[1] < 370 * f1) {
+            RR_g_text.draw(win, RR_vec2(250 * f1, 320 * f1), 10 * f1, 255, 60, 20, "Exit");
+            if(click == 3) return_value = 4;
+        } else RR_g_text.draw(win, RR_vec2(250 * f1, 320 * f1), 10 * f1, 120, 120, 140, "Exit");
         
         // Tell caller if user clicked anything
         return return_value;
@@ -124,56 +121,6 @@ public:
         
         // Draw cursor
         cursor.draw(win, cursor.pos, cursor_dir, 0.5, 1, 0, sun_dir);
-    }
-    
-    // Handle the menu items
-    bool draw_button(SDL_Surface* win, int* mpos, RR_vec2 position) {
-        RR_vec2 vec[4];
-        
-        // Check for hovering
-        bool hover = true;
-        bool is_clicked = false;
-        if(mpos[0] < position.x - 100) hover = false;
-        if(mpos[0] > position.x + 100) hover = false;
-        if(mpos[1] < position.y - 100) hover = false;
-        if(mpos[1] > position.y + 100) hover = false;
-        
-        // Center
-        vec[0] = RR_vec2(-90, -90);
-        vec[1] = RR_vec2(90, -90);
-        vec[2] = RR_vec2(90, 90);
-        vec[3] = RR_vec2(-90, 90);
-        
-        // Hover effect
-        if(hover) {
-            vec[0].draw_polygon(win, vec, 4, position, 200, 0, 0);
-            vec[0] = RR_vec2(-85, -85);
-            vec[1] = RR_vec2(85, -85);
-            vec[2] = RR_vec2(85, 85);
-            vec[3] = RR_vec2(-85, 85);
-            vec[0].draw_polygon(win, vec, 4, position, 15, 20, 15);
-            
-            // Clicked
-            if(
-                click == 3 && click_pos.x > position.x - 100
-                && click_pos.x < position.x + 100
-                && click_pos.y > position.y - 100
-                && click_pos.y < position.y + 100
-            ) is_clicked = true;
-        } else vec[0].draw_polygon(win, vec, 4, position, 90, 100, 90);
-        
-        // Sides
-        vec[0] = RR_vec2(100, -100);
-        vec[1] = RR_vec2(90, -90);
-        vec[2] = RR_vec2(90, 90);
-        vec[3] = RR_vec2(100, 100);
-        RR_g_vec2.draw_polygon(win, vec, 4, position, RR_vec2(1, 0), RR_vec2(0), sun_dir, 1.0, 90, 100, 90, 0.2, 1.0);
-        RR_g_vec2.draw_polygon(win, vec, 4, position, RR_vec2(0, 1), RR_vec2(0), sun_dir, 1.0, 90, 100, 90, 0.2, 1.0);
-        RR_g_vec2.draw_polygon(win, vec, 4, position, RR_vec2(0, -1), RR_vec2(0), sun_dir, 1.0, 90, 100, 90, 0.2, 1.0);
-        RR_g_vec2.draw_polygon(win, vec, 4, position, RR_vec2(-1, 0), RR_vec2(0), sun_dir, 1.0, 90, 100, 90, 0.2, 1.0);
-        
-        // Tell caller about hover status
-        return is_clicked;
     }
 };
 

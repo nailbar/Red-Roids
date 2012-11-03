@@ -269,9 +269,30 @@ public:
         
         // Target status indicator
         if(a[player].in_use && a[player].team == player_team) {
-            a[player].draw(win, RR_vec2(50 + a[player].size, RR_g.hgt - 50 - a[player].size), a[player].nrm, 1.0, RR_vec2(0, -1), true);
+            f1 = RR_g.wid / 1000.0;
+            a[player].draw(
+                win,
+                RR_vec2(
+                    50 + a[player].size * f1,
+                    RR_g.hgt - 50 - a[player].size * f1
+                ),
+                a[player].nrm,
+                f1,
+                RR_vec2(0, -1),
+                true
+            );
             if(a[player].has_valid_target(a, RR_BATTLE_MAX_UNITS, player)) {
-                a[a[player].trg].draw(win, RR_vec2(RR_g.wid - 50 - a[a[player].trg].size, RR_g.hgt - 50 - a[a[player].trg].size), a[a[player].trg].nrm, 1.0, RR_vec2(0, -1), true);
+                a[a[player].trg].draw(
+                    win,
+                    RR_vec2(
+                        RR_g.wid - 50 - a[a[player].trg].size * f1,
+                        RR_g.hgt - 50 - a[a[player].trg].size * f1
+                    ),
+                    a[a[player].trg].nrm,
+                    f1,
+                    RR_vec2(0, -1),
+                    true
+                );
             }
         }
         
