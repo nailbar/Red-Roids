@@ -9,6 +9,8 @@
 // Practical globals
 struct RR_practical_globals {
     short wid, hgt, cntx, cnty;
+    bool midle;
+    Uint8* keys; // Keyboard input
     
     // Debug modes:
     //  * 0 = Off
@@ -25,6 +27,7 @@ struct RR_practical_globals {
         cntx = wid / 2;
         cnty = hgt / 2;
         debugmode = 0; // Off
+        midle = false;
     }
 } RR_g;
 
@@ -52,8 +55,7 @@ int main(int argc, char* args[]) {
     // Variables for game loop
     SDL_Event event;
     bool inloop = true;
-    Uint8* keys; // Keyboard input
-    keys = SDL_GetKeyState(NULL);
+    RR_g.keys = SDL_GetKeyState(NULL); // Keyboard input
     int mpos[2] = {RR_g.cntx, RR_g.cnty}; // Mouse coordinates
     Uint8 mkeys; // Mouse keys
     char gamemode = 2;//1; // 1 = menu, 2 = battle
@@ -79,6 +81,7 @@ int main(int argc, char* args[]) {
             case SDL_MOUSEMOTION:
                 mpos[0]=event.motion.x;
                 mpos[1]=event.motion.y;
+                RR_g.midle = false; // Mouse is no longer idle
                 break;
             
             // Resize window
@@ -151,7 +154,7 @@ int main(int argc, char* args[]) {
         
         // Battle
         case 2:
-            battle.main(win, fspd, keys);
+            battle.main(win, fspd, RR_g.keys);
             break;
         default: // Unknown (error?)
             inloop = false;

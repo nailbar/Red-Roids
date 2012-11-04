@@ -17,6 +17,8 @@ public:
     char click;
     RR_starfield stars; // Background starfield
     float starpos;
+    char cur_entry;
+    char cur_key;
     
     // Constructor
     RR_menu() {
@@ -26,6 +28,8 @@ public:
         click = 0;
         sun_dir = RR_vec2(0, -1);
         starpos = 0.0;
+        cur_entry = 0;
+        cur_key = 0;
     }
     
     // Handle information about mouse clicks
@@ -85,31 +89,64 @@ public:
     
     // Handle the menu items
     char handle_menu(SDL_Surface* win, int* mpos) {
-        char return_value = 0;
         float f1 = RR_g.wid / 1000.0;
         
         // Title and credits
         RR_g_text.draw(win, RR_vec2(250 * f1, 50 * f1), 14 * f1, 120, 160, 255, "Red Roids");
         RR_g_text.draw(win, RR_vec2(250 * f1, 130 * f1), 4 * f1, 20, 60, 155, " * by Martin Wikstrom");
         
+        // Up key
+        if(RR_g.keys[SDLK_w] || RR_g.keys[SDLK_i] || RR_g.keys[SDLK_UP]) {
+            RR_g.midle = true;
+            cur_key = 1;
+        } else if(cur_key == 1) {
+            cur_key = 0;
+            if(cur_entry == 2) cur_entry = 1;
+            else if(cur_entry == 4) cur_entry = 2;
+            else if(cur_entry == 0) cur_entry = 4;
+        }
+        
+        // Down key
+        if(RR_g.keys[SDLK_s] || RR_g.keys[SDLK_k] || RR_g.keys[SDLK_DOWN]) {
+            RR_g.midle = true;
+            cur_key = 2;
+        } else if(cur_key == 2) {
+            cur_key = 0;
+            if(cur_entry == 2) cur_entry = 4;
+            else if(cur_entry == 1) cur_entry = 2;
+            else if(cur_entry == 0) cur_entry = 1;
+        }
+        
+        // Fire key
+        if(RR_g.keys[SDLK_q] || RR_g.keys[SDLK_SPACE] || RR_g.keys[SDLK_RETURN]) {
+            RR_g.midle = true;
+            cur_key = 3;
+        } else if(cur_key == 3) {
+            cur_key = 0;
+            click = 3;
+        }
+        
+        // Mouse over
+        if(!RR_g.midle) {
+            if(mpos[1] > 200 * f1 && mpos[1] < 250 * f1) cur_entry = 1;
+            else if(mpos[1] > 260 * f1 && mpos[1] < 310 * f1) cur_entry = 2;
+            else if(mpos[1] > 320 * f1 && mpos[1] < 370 * f1) cur_entry = 4;
+            else cur_entry = 0;
+        }
+        
         // Menu entries
-        if(mpos[1] > 200 * f1 && mpos[1] < 250 * f1) {
-            RR_g_text.draw(win, RR_vec2(250 * f1, 200 * f1), 10 * f1, 255, 60, 20, "Instant action");
-            if(click == 3) return_value = 1;
-        } else RR_g_text.draw(win, RR_vec2(250 * f1, 200 * f1), 10 * f1, 180, 180, 200, "Instant action");
+        if(cur_entry == 1) RR_g_text.draw(win, RR_vec2(250 * f1, 200 * f1), 10 * f1, 255, 60, 20, "Instant action");
+        else RR_g_text.draw(win, RR_vec2(250 * f1, 200 * f1), 10 * f1, 180, 180, 200, "Instant action");
         
-        if(mpos[1] > 260 * f1 && mpos[1] < 310 * f1) {
-            RR_g_text.draw(win, RR_vec2(250 * f1, 260 * f1), 10 * f1, 255, 60, 20, "Continue");
-            if(click == 3) return_value = 2;
-        } else RR_g_text.draw(win, RR_vec2(250 * f1, 260 * f1), 10 * f1, 150, 150, 170, "Continue");
+        if(cur_entry == 2) RR_g_text.draw(win, RR_vec2(250 * f1, 260 * f1), 10 * f1, 255, 60, 20, "Continue");
+        else RR_g_text.draw(win, RR_vec2(250 * f1, 260 * f1), 10 * f1, 150, 150, 170, "Continue");
         
-        if(mpos[1] > 320 * f1 && mpos[1] < 370 * f1) {
-            RR_g_text.draw(win, RR_vec2(250 * f1, 320 * f1), 10 * f1, 255, 60, 20, "Exit");
-            if(click == 3) return_value = 4;
-        } else RR_g_text.draw(win, RR_vec2(250 * f1, 320 * f1), 10 * f1, 120, 120, 140, "Exit");
+        if(cur_entry == 4) RR_g_text.draw(win, RR_vec2(250 * f1, 320 * f1), 10 * f1, 255, 60, 20, "Exit");
+        else RR_g_text.draw(win, RR_vec2(250 * f1, 320 * f1), 10 * f1, 120, 120, 140, "Exit");
         
         // Tell caller if user clicked anything
-        return return_value;
+        if(click == 3) return cur_entry;
+        return 0;
     }
     
     // Handle the cursor
