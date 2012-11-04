@@ -34,6 +34,7 @@ public:
     double zoom, zoom_trg;
     float reinforcements, player_timeout, battle_timeout;
     int next_particle, player, player_team, wings;
+    bool zoom_key, zoom_toggle;
     
     // Fleets
     unsigned char fleetR[RR_BATTLE_MAX_FLEET];
@@ -52,6 +53,8 @@ public:
         teamG_pos = RR_vec2(0.3 * M_PI * 2.0) * RR_BATTLE_FIELD_LIMIT;
         teamB_pos = RR_vec2(0.6 * M_PI * 2.0) * RR_BATTLE_FIELD_LIMIT;
         wings = 0;
+        zoom_key = false;
+        zoom_toggle = false;
         
         // Init the battle
         next_battle();
@@ -101,7 +104,13 @@ public:
         if(keys[SDLK_n]) player = rand() % RR_BATTLE_MAX_UNITS;
         
         // Show map
-        if(keys[SDLK_z]) {
+        if(keys[SDLK_z]) zoom_key = true;
+        else if(zoom_key) {
+            zoom_key = false;
+            if(zoom_toggle) zoom_toggle = false;
+            else zoom_toggle = true;
+        }
+        if(zoom_toggle) {
             cam_trg = (top_left + bottom_right) / 2.0;
             zoom_trg = (RR_g.wid / (bottom_right.x - top_left.x)) / 1.5;
             f1 = (RR_g.hgt / (bottom_right.y - top_left.y)) / 1.5;
@@ -116,7 +125,7 @@ public:
         stars.draw(win, cam);
         
         // Darken background if zoom-out is in use
-        if(keys[SDLK_z]) boxRGBA(win, 0, 0, RR_g.wid, RR_g.hgt, 0, 0, 0, 200);
+        if(zoom_toggle) boxRGBA(win, 0, 0, RR_g.wid, RR_g.hgt, 0, 0, 0, 200);
         
         // Loop through ships
         for(int i = 0; i < RR_BATTLE_MAX_UNITS; i++) if(a[i].in_use) {
