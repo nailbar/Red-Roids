@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #ifndef RR_BATTLE_H
 #define RR_BATTLE_H 1
 
@@ -18,9 +20,10 @@
 #endif
 
 #ifndef RR_BATTLE_REINFORCEMENT_INTERVAL
-#define RR_BATTLE_REINFORCEMENT_INTERVAL 60
+#define RR_BATTLE_REINFORCEMENT_INTERVAL 20
 #endif
 
+#include "text.h"
 #include "unit.h"
 #include "particle.h"
 #include "starfield.h"
@@ -277,8 +280,8 @@ public:
         }
         
         // Target status indicator
+        f1 = RR_g.wid / 1000.0;
         if(a[player].in_use && a[player].team == player_team) {
-            f1 = RR_g.wid / 1000.0;
             a[player].draw(
                 win,
                 RR_vec2(
@@ -306,32 +309,17 @@ public:
         }
         
         // Team status indicators
-        RR_vec2 vec[4];
-        vec[0] = RR_vec2(0, 0);
-        vec[1] = RR_vec2(0, 5);
-        if(teamR + fsizeR) {
-            vec[2] = RR_vec2(1 + teamR + fsizeR, 5);
-            vec[3] = RR_vec2(1 + teamR + fsizeR, 0);
-            RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 10), RR_vec2(1, 0), 1.0, 105, 0, 0);
-            vec[2] = RR_vec2(1 + teamR, 5);
-            vec[3] = RR_vec2(1 + teamR, 0);
-            RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 10), RR_vec2(1, 0), 1.0, 155, 0, 0);
-        }
-        if(teamG + fsizeG) {
-            vec[2] = RR_vec2(1 + teamG + fsizeG, 5);
-            vec[3] = RR_vec2(1 + teamG + fsizeG, 0);
-            RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 20), RR_vec2(1, 0), 1.0, 0, 85, 0);
-            vec[2] = RR_vec2(1 + teamG, 5);
-            vec[3] = RR_vec2(1 + teamG, 0);
-            RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 20), RR_vec2(1, 0), 1.0, 0, 135, 0);
-        }
-        if(teamB + fsizeB) {
-            vec[2] = RR_vec2(1 + teamB + fsizeB, 5);
-            vec[3] = RR_vec2(1 + teamB + fsizeB, 0);
-            RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 30), RR_vec2(1, 0), 1.0, 0, 0, 155);
-            vec[2] = RR_vec2(1 + teamB, 5);
-            vec[3] = RR_vec2(1 + teamB, 0);
-            RR_g_vec2.draw_polygon(win, vec, 4, RR_vec2(10, 30), RR_vec2(1, 0), 1.0, 0, 0, 205);
+        char str[50];
+        RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 120, 160, 205, "Ships on field:\nReinforcements:");
+        sprintf(str, "                 %d\n                 %d", teamR, fsizeR);
+        RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 255, 0, 0, str);
+        sprintf(str, "                    %d\n                    %d", teamG, fsizeG);
+        RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 0, 200, 0, str);
+        sprintf(str, "                       %d\n                       %d", teamB, fsizeB);
+        RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 50, 100, 255, str);
+        if(fsizeR || fsizeG || fsizeB) {
+            sprintf(str, "\n                          %d", int(reinforcements));
+            RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 150, 150, 150, str);
         }
         
         // Next battle

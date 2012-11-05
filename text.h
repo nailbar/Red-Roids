@@ -69,25 +69,27 @@ public:
         }
     }
     void draw_box(SDL_Surface* win, RR_vec2 pos, int scale, float r, float g, float b, int flags) {
-        if(flags & 1) boxRGBA(win, pos.x,             pos.y,             pos.x + scale - 2,     pos.y + scale - 2,     r, g, b, 255);
-        if(flags & 2) boxRGBA(win, pos.x + scale,     pos.y,             pos.x + scale * 2 - 2, pos.y + scale - 2,     r, g, b, 255);
-        if(flags & 4) boxRGBA(win, pos.x + scale * 2, pos.y,             pos.x + scale * 3 - 2, pos.y + scale - 2,     r, g, b, 255);
+        int spacing = int(scale / 7) + 1;
         
-        if(flags & 8) boxRGBA(win, pos.x,             pos.y + scale,     pos.x + scale - 2,     pos.y + scale * 2 - 2, r, g, b, 255);
-        if(flags & 16) boxRGBA(win, pos.x + scale,     pos.y + scale,     pos.x + scale * 2 - 2, pos.y + scale * 2 - 2, r, g, b, 255);
-        if(flags & 32) boxRGBA(win, pos.x + scale * 2, pos.y + scale,     pos.x + scale * 3 - 2, pos.y + scale * 2 - 2, r, g, b, 255);
+        if(flags & 1) boxRGBA(win,     pos.x,             pos.y,             pos.x + scale - spacing,     pos.y + scale - spacing,     r, g, b, 255);
+        if(flags & 2) boxRGBA(win,     pos.x + scale,     pos.y,             pos.x + scale * 2 - spacing, pos.y + scale - spacing,     r, g, b, 255);
+        if(flags & 4) boxRGBA(win,     pos.x + scale * 2, pos.y,             pos.x + scale * 3 - spacing, pos.y + scale - spacing,     r, g, b, 255);
         
-        if(flags & 64) boxRGBA(win, pos.x,             pos.y + scale * 2, pos.x + scale - 2,     pos.y + scale * 3 - 2, r, g, b, 255);
-        if(flags & 128) boxRGBA(win, pos.x + scale,     pos.y + scale * 2, pos.x + scale * 2 - 2, pos.y + scale * 3 - 2, r, g, b, 255);
-        if(flags & 256) boxRGBA(win, pos.x + scale * 2, pos.y + scale * 2, pos.x + scale * 3 - 2, pos.y + scale * 3 - 2, r, g, b, 255);
+        if(flags & 8) boxRGBA(win,     pos.x,             pos.y + scale,     pos.x + scale - spacing,     pos.y + scale * 2 - spacing, r, g, b, 255);
+        if(flags & 16) boxRGBA(win,    pos.x + scale,     pos.y + scale,     pos.x + scale * 2 - spacing, pos.y + scale * 2 - spacing, r, g, b, 255);
+        if(flags & 32) boxRGBA(win,    pos.x + scale * 2, pos.y + scale,     pos.x + scale * 3 - spacing, pos.y + scale * 2 - spacing, r, g, b, 255);
         
-        if(flags & 512) boxRGBA(win, pos.x,             pos.y + scale * 3, pos.x + scale - 2,     pos.y + scale * 4 - 2, r, g, b, 255);
-        if(flags & 1024) boxRGBA(win, pos.x + scale,     pos.y + scale * 3, pos.x + scale * 2 - 2, pos.y + scale * 4 - 2, r, g, b, 255);
-        if(flags & 2048) boxRGBA(win, pos.x + scale * 2, pos.y + scale * 3, pos.x + scale * 3 - 2, pos.y + scale * 4 - 2, r, g, b, 255);
+        if(flags & 64) boxRGBA(win,    pos.x,             pos.y + scale * 2, pos.x + scale - spacing,     pos.y + scale * 3 - spacing, r, g, b, 255);
+        if(flags & 128) boxRGBA(win,   pos.x + scale,     pos.y + scale * 2, pos.x + scale * 2 - spacing, pos.y + scale * 3 - spacing, r, g, b, 255);
+        if(flags & 256) boxRGBA(win,   pos.x + scale * 2, pos.y + scale * 2, pos.x + scale * 3 - spacing, pos.y + scale * 3 - spacing, r, g, b, 255);
         
-        if(flags & 4096) boxRGBA(win, pos.x,             pos.y + scale * 4, pos.x + scale - 2,     pos.y + scale * 5 - 2, r, g, b, 255);
-        if(flags & 8192) boxRGBA(win, pos.x + scale,     pos.y + scale * 4, pos.x + scale * 2 - 2, pos.y + scale * 5 - 2, r, g, b, 255);
-        if(flags & 16384) boxRGBA(win, pos.x + scale * 2, pos.y + scale * 4, pos.x + scale * 3 - 2, pos.y + scale * 5 - 2, r, g, b, 255);
+        if(flags & 512) boxRGBA(win,   pos.x,             pos.y + scale * 3, pos.x + scale - spacing,     pos.y + scale * 4 - spacing, r, g, b, 255);
+        if(flags & 1024) boxRGBA(win,  pos.x + scale,     pos.y + scale * 3, pos.x + scale * 2 - spacing, pos.y + scale * 4 - spacing, r, g, b, 255);
+        if(flags & 2048) boxRGBA(win,  pos.x + scale * 2, pos.y + scale * 3, pos.x + scale * 3 - spacing, pos.y + scale * 4 - spacing, r, g, b, 255);
+        
+        if(flags & 4096) boxRGBA(win,  pos.x,             pos.y + scale * 4, pos.x + scale - spacing,     pos.y + scale * 5 - spacing, r, g, b, 255);
+        if(flags & 8192) boxRGBA(win,  pos.x + scale,     pos.y + scale * 4, pos.x + scale * 2 - spacing, pos.y + scale * 5 - spacing, r, g, b, 255);
+        if(flags & 16384) boxRGBA(win, pos.x + scale * 2, pos.y + scale * 4, pos.x + scale * 3 - spacing, pos.y + scale * 5 - spacing, r, g, b, 255);
     }
 } RR_g_text;
 
