@@ -95,7 +95,7 @@ int main(int argc, char* args[]) {
             
             // Check for ESC key
             case SDL_KEYDOWN:
-                if(event.key.keysym.sym == SDLK_ESCAPE) {
+                if(event.key.keysym.sym == SDLK_ESCAPE || event.key.keysym.sym == SDLK_BACKSPACE) {
                     if(gamemode == 1) inloop = false;
                     else gamemode = 1;
                 } else if(event.key.keysym.sym == SDLK_F1) {
