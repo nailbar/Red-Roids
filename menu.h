@@ -53,7 +53,7 @@ public:
         int rnd = rand() % 6;
         
         // Draw starfield
-        stars.draw(win, RR_vec2(starpos += 300.0 * fspd, 0));
+        stars.draw(win, RR_vec2(starpos += 300.0 * fspd, 0), 1.0);
         
         // Draw ships
         for(int i = 0; i < RR_MENU_UNITS; i++) {
