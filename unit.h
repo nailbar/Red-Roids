@@ -17,8 +17,8 @@ public:
     RR_vec2 pos, nrm, spd, tmp_vec2;
     RR_unit_part p[RR_MAX_UNIT_PARTS];
     bool in_use, burn_eng, fire, guns;
-    float trn, trn2, size, thrust, weight, power, timeout;
-    int trg;
+    float trn, trn2, size, thrust, weight, power, timeout, nearest_dis;
+    int trg, nearest_trg, test_trg;
     char team, type, mode;
     
     // Constructor
@@ -37,6 +37,9 @@ public:
     
     // Check if unit has a valid target
     bool has_valid_target(RR_unit*, int, int);
+    
+    // Look for nearest target
+    void find_nearest_target(RR_unit*, int, int);
     
     // Follow target unit
     void follow_target(RR_unit*, int, int);
@@ -79,6 +82,9 @@ RR_unit::RR_unit(unsigned char preset, RR_vec2 newpos) {
     trn = 0;
     trn2 = 0;
     trg = -1;
+    nearest_trg = -1;
+    test_trg = 0;
+    nearest_dis = -1;
     team = -1;
     type = -1;
     size = 1.0;
@@ -102,6 +108,9 @@ RR_unit::RR_unit(unsigned char preset, RR_vec2 newpos, RR_vec2 newnrm) {
     trn = 0;
     trn2 = 0;
     trg = -1;
+    nearest_trg = -1;
+    test_trg = 0;
+    nearest_dis = -1;
     team = -1;
     type = -1;
     size = 1.0;
@@ -266,6 +275,10 @@ void RR_unit::recalculate() {
 void RR_unit::find_better_target(RR_unit* a, int n, int i) {
     int newtrg = rand() % n;
     
+    // Use nearest target
+    if(nearest_trg > -1 && nearest_trg < n) newtrg = nearest_trg;
+    if(newtrg == trg) return;
+    
     // Check if new target is valid and closer than old
     if(has_valid_target(a, n, i)) {
         
@@ -279,7 +292,7 @@ void RR_unit::find_better_target(RR_unit* a, int n, int i) {
         if(team == a[newtrg].team) return;
         
         // Make sure new target is closer than old
-        if(RR_g_vec2.distance(pos, trg) > RR_g_vec2.distance(pos, newtrg)) trg = newtrg;
+        if(RR_g_vec2.distance(pos, a[trg].pos) > RR_g_vec2.distance(pos, a[newtrg].pos)) trg = newtrg;
         
     // Previous target invalid, no tests required
     } else trg = newtrg;
@@ -302,6 +315,38 @@ bool RR_unit::has_valid_target(RR_unit* a, int n, int i) {
     
     // Target is valid
     return true;
+}
+
+// Look for nearest target
+void RR_unit::find_nearest_target(RR_unit* a, int n, int i) {
+    RR_vec2 v1;
+    if(test_trg < 0 || test_trg >= n) test_trg = 0;
+    for(int u = 0; u < 20; u++) {
+        test_trg++;
+        if(test_trg >= n) test_trg = 0;
+        if(test_trg != i && a[test_trg].in_use && a[test_trg].team != team) break;
+    }
+    
+    // Get distance to current nearest
+    if(nearest_trg > -1 && nearest_trg < n && nearest_trg != i) {
+        if(a[nearest_trg].in_use && a[nearest_trg].team != team) {
+            v1 = a[i].pos - a[nearest_trg].pos;
+            nearest_dis = v1.x * v1.x + v1.y * v1.y;
+        } else nearest_dis = -1;
+    } else nearest_dis = -1;
+    
+    // Get distance to test
+    float f1 = -1;
+    if(test_trg != i && a[test_trg].in_use && a[test_trg].team != team) {
+        v1 = a[i].pos - a[test_trg].pos;
+        f1 = v1.x * v1.x + v1.y * v1.y;
+    }
+    
+    // Compare and select
+    if(f1 > -1 && (f1 < nearest_dis || nearest_dis < 0)) {
+        nearest_trg = test_trg;
+        nearest_dis = f1;
+    }
 }
 
 // Follow target unit

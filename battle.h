@@ -161,6 +161,9 @@ public:
             // Display ship
             a[i].draw(win, (a[i].pos - cam) * zoom + RR_vec2(RR_g.cntx, RR_g.cnty), a[i].nrm, zoom);
             
+            // Update nearest target id
+            a[i].find_nearest_target(a, RR_BATTLE_MAX_UNITS, i);
+            
             // Player controls this ship
             if(i == player) {
                 if(a[i].player_input(keys)) player_timeout = 15.0;
@@ -168,7 +171,7 @@ public:
                 else a[i].follow_target(a, RR_BATTLE_MAX_UNITS, i);
                 
                 // Find better target
-                if(keys[SDLK_t] || RR_g_vec2.distance(a[i].pos, a[a[i].trg].pos) > 1300.0) a[i].find_better_target(a, RR_BATTLE_MAX_UNITS, i);
+                if(keys[SDLK_t] || RR_g_vec2.distance(a[i].pos, a[a[i].trg].pos) > 1500.0) a[i].find_better_target(a, RR_BATTLE_MAX_UNITS, i);
                 
                 // Draw target indicator
                 if(a[i].has_valid_target(a, RR_BATTLE_MAX_UNITS, i)) {
@@ -280,6 +283,7 @@ public:
         }
         
         // Target status indicator
+        char str[50];
         f1 = RR_g.wid / 1000.0;
         if(a[player].in_use && a[player].team == player_team) {
             a[player].draw(
@@ -305,11 +309,12 @@ public:
                     RR_vec2(0, -1),
                     true
                 );
+                sprintf(str, "Distance: %d", int(RR_g_vec2.distance(a[player].pos, a[a[player].trg].pos) * 0.01));
+                RR_g_text.draw(win, RR_vec2(RR_g.wid - 100 * f1, RR_g.hgt - 20 * f1), 2.0 * f1, 120, 160, 205, str);
             }
         }
         
         // Team status indicators
-        char str[50];
         RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 120, 160, 205, "Ships on field:\nReinforcements:");
         sprintf(str, "                 %d\n                 %d", teamR, fsizeR);
         RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 255, 0, 0, str);
