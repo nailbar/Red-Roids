@@ -284,6 +284,48 @@ public:
             if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.5);
             else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.2, 0.5);
             break;
+        case 13: // Light core
+
+            // Front
+            vec[0] = RR_vec2(0, 0);
+            vec[1] = RR_vec2(7, -6);
+            vec[2] = RR_vec2(10, -4);
+            vec[3] = RR_vec2(10, 4);
+            vec[4] = RR_vec2(7, 6);
+            if(showdmg) position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.2);
+            else position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, 180, 180, 200, 0.2, 0.2);
+            
+            // Rear
+            vec[0] = RR_vec2(0, 0);
+            vec[1] = RR_vec2(-7, -6);
+            vec[2] = RR_vec2(-10, -4);
+            vec[3] = RR_vec2(-10, 4);
+            vec[4] = RR_vec2(-7, 6);
+            if(showdmg) position.draw_polygon(win, vec, 5, position, normal, RR_vec2(M_PI), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.2);
+            else position.draw_polygon(win, vec, 5, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.2, 0.2);
+            
+            // Left
+            vec[0] = RR_vec2(0, 0);
+            vec[1] = RR_vec2(-7, -6);
+            vec[2] = RR_vec2(7, -6);
+            if(showdmg) position.draw_polygon(win, vec, 3, position, normal, RR_vec2(M_PI * -0.5), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.2);
+            else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(M_PI * -0.5), sun_dir, scale, 180, 180, 200, 0.2, 0.2);
+            
+            // Right
+            vec[0] = RR_vec2(0, 0);
+            vec[1] = RR_vec2(-7, 6);
+            vec[2] = RR_vec2(7, 6);
+            if(showdmg) position.draw_polygon(win, vec, 3, position, normal, RR_vec2(M_PI * 0.5), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.2);
+            else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(M_PI * 0.5), sun_dir, scale, 180, 180, 200, 0.2, 0.2);
+            
+            // Center
+            vec[0] = RR_vec2(-5, 4);
+            vec[1] = RR_vec2(-5, -4);
+            vec[2] = RR_vec2(5, -4);
+            vec[3] = RR_vec2(5, 4);
+            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(normal), sun_dir, scale, dcolr, dcolg, dcolb, 1.0, 0.0);
+            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(normal), sun_dir, scale, 224, 95, 0, 1.0, 0.0);
+            break;
         }
         if(RR_g.debugmode == 1) pixelRGBA(win, position.x, position.y, 255, 255, 255, 255); // Debug position
         if(RR_g.debugmode == 3) ellipseRGBA(win, position.x, position.y, size(partid) * scale, size(partid) * scale, 255, 255, 0, 200); // Show part size
@@ -318,6 +360,7 @@ public:
         case 10: return 8.0; // Wing right
         case 11: return 8.0; // Wing left
         case 12: return 4.0; // Light blaster
+        case 13: return 6.0; // Light core
         default: return 1.0;
         }
     }
@@ -341,6 +384,7 @@ public:
         case 10: return 0.0; // Wing right
         case 11: return 0.0; // Wing left
         case 12: return 0.0; // Light blaster
+        case 13: return 0.0; // Light core
         default: return 0.0;
         }
     }
@@ -364,6 +408,7 @@ public:
         case 10: return 8.0; // Wing right
         case 11: return 8.0; // Wing left
         case 12: return 4.0; // Light blaster
+        case 13: return 6.0; // Light core
         default: return 1.0;
         }
     }
@@ -382,6 +427,7 @@ public:
         case 9: return 40.0; // Hull
         case 10: return 25.0; // Wing right
         case 11: return 25.0; // Wing left
+        case 13: return 40.0; // Light core
         default: return 0.0;
         }
     }
@@ -393,7 +439,19 @@ public:
     float power_draw(int partid) {
         switch(partid) {
         case 0: return 0.5; // Engine
+        case 1: return 0.0; // Hull
+        case 2: return 0.0; // Red small cockpit
+        case 3: return 0.0; // Green small cockpit
+        case 4: return 0.0; // Blue small cockpit
+        case 5: return 0.0; // Hull
+        case 6: return 0.0; // Hull
+        case 7: return 0.0; // Hull right
+        case 8: return 0.0; // Hull left
+        case 9: return 0.0; // Hull
+        case 10: return 0.0; // Wing right
+        case 11: return 0.0; // Wing left
         case 12: return 1.0; // Light blaster
+        case 13: return 0.0; // Light core
         default: return 0.0;
         }
     }
