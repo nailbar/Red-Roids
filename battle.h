@@ -226,7 +226,7 @@ public:
             i1 = rand() % RR_MAX_UNIT_PARTS;
             
             // Find parts without parents
-            if(a[i].p[i1].in_use) if(!a[i].p[a[i].p[i1].parent].in_use || (rand() % 50 < 2 && !a[i].guns)) {
+            if(a[i].p[i1].in_use) if(!a[i].p[a[i].p[i1].parent].in_use) {
                 a[i].p[i1].in_use = false;
                 for(int u = next_particle; u < RR_BATTLE_MAX_PARTICLES; u++) if(!b[u].in_use) {
                     b[u] = RR_particle( // Destroyed part
@@ -240,6 +240,31 @@ public:
                     next_particle = u + 1;
                     break;
                 }
+            }
+            
+            // Self destruction
+            if(a[i].suicide_timer(fspd)) {
+                for(int u = 0; u < RR_MAX_UNIT_PARTS; u++) if(a[i].p[u].in_use) {
+                    for(int j = next_particle; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
+                        b[j] = RR_particle( // Destroyed part
+                            4,
+                            a[i].pos + a[i].nrm * a[i].p[u].pos.x + a[i].nrm.extrude() * a[i].p[u].pos.y,
+                            a[i].nrm,
+                            a[i].spd,
+                            a[i].p[u].type
+                        );
+                        next_particle = j + 1;
+                        break;
+                    }
+                    for(int k = 0; k < a[i].p[u].size() * 3.0; k++) for(int j = next_particle; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
+                        if(k == 0) b[j] = RR_particle(3, a[i].pos + a[i].nrm * a[i].p[u].pos.x + a[i].nrm.extrude() * a[i].p[u].pos.y); // Light pulse
+                        else if(rand() % 100 < 80) b[j] = RR_particle(0, a[i].pos + a[i].nrm * a[i].p[u].pos.x + a[i].nrm.extrude() * a[i].p[u].pos.y); // Sparks
+                        else b[j] = RR_particle(2, a[i].pos + a[i].nrm * a[i].p[u].pos.x + a[i].nrm.extrude() * a[i].p[u].pos.y); // Fragments
+                        next_particle = j + 1;
+                        break;
+                    }
+                }
+                a[i].in_use = false;
             }
             
             // Move ships

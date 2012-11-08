@@ -17,7 +17,7 @@ public:
     RR_vec2 pos, nrm, spd, tmp_vec2;
     RR_unit_part p[RR_MAX_UNIT_PARTS];
     bool in_use, burn_eng, fire, guns;
-    float trn, trn2, size, thrust, weight, power, timeout, nearest_dis;
+    float trn, trn2, size, thrust, weight, power, timeout, nearest_dis, self_destoy;
     int trg, nearest_trg, test_trg;
     char team, type, mode;
     
@@ -66,6 +66,9 @@ public:
     
     // Draw a target indicator
     void target_indicator(SDL_Surface*, RR_vec2, float, float);
+    
+    // Check if ship will self destruct
+    bool suicide_timer(float);
 };
 
 // Constructor
@@ -94,6 +97,7 @@ RR_unit::RR_unit(unsigned char preset, RR_vec2 newpos) {
     guns = 0;
     mode = 0;
     timeout = 1.0;
+    self_destoy = -1;
     
     // Ship presets
     from_preset(preset);
@@ -120,6 +124,7 @@ RR_unit::RR_unit(unsigned char preset, RR_vec2 newpos, RR_vec2 newnrm) {
     guns = 0;
     mode = 0;
     timeout = 1.0;
+    self_destoy = -1;
     
     // Ship presets
     from_preset(preset);
@@ -259,8 +264,8 @@ void RR_unit::recalculate() {
     // Calculate power distribution
     if(power_draw) power = power / power_draw;
     
-    // No engines or no power turns off guns which will result in self destruction
-    if(thrust / weight < 0.1 || power < 0.1) guns = 0;
+    // No engines, no power, or no guns will result in self destruction
+    if(thrust / weight < 0.1 || power < 0.1 || guns == 0) if(self_destoy < 0) self_destoy = 1.0;
     
     // Recenter ship and calculate size
     offset = (nose_right + aft_left) / 2.0;
@@ -609,6 +614,13 @@ void RR_unit::target_indicator(SDL_Surface* win, RR_vec2 position, float size, f
     RR_g_vec2.draw_polygon(win, vec, 4, position, RR_vec2(-1, 0), scale, 255, 50, 0);
     RR_g_vec2.draw_polygon(win, vec, 4, position, RR_vec2(0, -1), scale, 255, 50, 0);
     RR_g_vec2.draw_polygon(win, vec, 4, position, RR_vec2(0, 1), scale, 255, 50, 0);
+}
+    
+// Check if ship will self destruct
+bool RR_unit::suicide_timer(float fspd) {
+    if(self_destoy > 0) self_destoy += fspd;
+    if(self_destoy > 5.0) return true;
+    return false;
 }
 
 #endif // RR_UNIT_H
