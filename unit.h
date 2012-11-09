@@ -390,15 +390,15 @@ void RR_unit::follow(RR_vec2 target, bool fixmode) {
         if(!guns) mode = 1;
         
         // Start following target if far away
-        else if(distance > 800.0) mode = 0;
+        else if(distance > 1000.0) mode = 0;
         
         // Avoid hitting target if too close
-        else if(distance < 200.0) mode = 1;
+        else if(distance < 300.0) mode = 1;
     }
     
     // Calculate interception course if attack mode
     if(mode == 0) {
-        if(distance > 400) distance = 400;
+        if(distance > 600) distance = 600;
         distance = distance / 600.0 + 0.25;
         target_fix = target - spd * distance;
     }
@@ -471,10 +471,10 @@ void RR_unit::move(float fspd) {
     
     // Acceleration (thrust and weight taken into account)
     //  * High acceleration value lowered a lot by friction
-    if(burn_eng) spd = spd + nrm * (thrust / weight) * 500.0 * fspd;
+    if(burn_eng) spd = spd + nrm * (thrust / weight) * 600.0 * fspd;
     
     // Friction in space \o/
-    spd = spd - spd * 0.5 * fspd;
+    spd = spd - spd * 0.8 * fspd;
     
     // Move the ship
     pos = pos + spd * fspd;
