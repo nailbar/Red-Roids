@@ -376,80 +376,21 @@ public:
     // Add a fleet to the battlefield
     void addfleet(int fleet_type, int fleet_team) {
         int i1 = 0;
-        switch(fleet_type) {
-        case 0: // Light patrol
+        for(int i = 0; i < 2 + fleet_type; i++) {
             if(fleet_team == 1) {
-                i1 = addship(1, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
-                i1 = addship(1, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+                i1 = addship(rand() % 11 + 1, fleet_team, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
             } else if(fleet_team == 2) {
-                i1 = addship(2, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
-                i1 = addship(2, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+                i1 = addship(rand() % 11 + 1, fleet_team, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
             } else if(fleet_team == 3) {
-                i1 = addship(3, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
-                i1 = addship(3, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+                i1 = addship(rand() % 11 + 1, fleet_team, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
             }
-            break;
-        case 1: // Medium patrol
-            if(fleet_team == 1) {
-                i1 = addship(4, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
-                i1 = addship(1, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
-                i1 = addship(1, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
-            } else if(fleet_team == 2) {
-                i1 = addship(5, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
-                i1 = addship(2, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
-                i1 = addship(2, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
-            } else if(fleet_team == 3) {
-                i1 = addship(6, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
-                i1 = addship(3, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
-                i1 = addship(3, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
-            }
-            break;
-        case 2: // Heavy patrol
-            if(fleet_team == 1) {
-                i1 = addship(4, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
-                i1 = addship(4, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
-                i1 = addship(1, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
-                i1 = addship(1, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
-                i1 = addship(1, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
-            } else if(fleet_team == 2) {
-                i1 = addship(5, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
-                i1 = addship(5, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
-                i1 = addship(2, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
-                i1 = addship(2, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
-                i1 = addship(2, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
-            } else if(fleet_team == 3) {
-                i1 = addship(6, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
-                i1 = addship(6, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
-                i1 = addship(3, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
-                i1 = addship(3, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
-                i1 = addship(3, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
-            }
-            break;
-        case 3: // Assault wing
-            if(fleet_team == 1) {
-                i1 = addship(4, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
-                i1 = addship(4, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
-                i1 = addship(4, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
-                i1 = addship(4, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
-            } else if(fleet_team == 2) {
-                i1 = addship(5, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
-                i1 = addship(5, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
-                i1 = addship(5, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
-                i1 = addship(5, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
-            } else if(fleet_team == 3) {
-                i1 = addship(6, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
-                i1 = addship(6, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
-                i1 = addship(6, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
-                i1 = addship(6, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
-            }
-            break;
         }
     }
     
     // Add a single ship to the battlefield
-    int addship(int ship_type, RR_vec2 ship_pos, RR_vec2 ship_nrm, int ifrom) {
+    int addship(int ship_type, char ship_team, RR_vec2 ship_pos, RR_vec2 ship_nrm, int ifrom) {
         for(int i = ifrom; i < RR_BATTLE_MAX_UNITS; i++) if(!a[i].in_use) {
-            a[i] = RR_unit(ship_type, ship_pos, ship_nrm);
+            a[i] = RR_unit(ship_type, ship_team, ship_pos, ship_nrm);
             return i + 1;
         }
         return RR_BATTLE_MAX_UNITS;
