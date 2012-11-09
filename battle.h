@@ -358,6 +358,17 @@ public:
             if(battle_timeout <= 0.0) next_battle();
         }
         
+//         // Dev testing
+//         RR_unit unitx;
+//         unitx.from_preset(11);
+//         unitx.draw(win, RR_vec2(300, 300), a[0].nrm, 3.0);
+//         RR_unit_part partx;
+//         for(int i = 0; i < 30; i++) partx.draw(
+//             win, RR_vec2(300, 100 + i * 30), RR_vec2(0), 1.0,
+//             i, // Part
+//             0, RR_vec2(0), false
+//         );
+        
         // Done
         return 0;
     }

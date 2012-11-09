@@ -208,6 +208,53 @@ void RR_unit::from_preset(unsigned char preset) {
         p[10] = RR_unit_part(12, RR_vec2(-3, 10), 1); // Light blaster
         team = 2;
         break;
+    case 7: // Scout 1
+        p[0] = RR_unit_part(2, RR_vec2(-5, 0), 5);
+        p[1] = RR_unit_part(7, RR_vec2(0, 8), 5);
+        p[2] = RR_unit_part(8, RR_vec2(0, -8), 5);
+        p[3] = RR_unit_part(0, RR_vec2(-12, 0), 5);
+        p[4] = RR_unit_part(12, RR_vec2(11, 0), 5);
+        p[5] = RR_unit_part(13, RR_vec2(0, 0), 0);
+        team = 0;
+        break;
+    case 8: // Scout 2
+        p[0] = RR_unit_part(2, RR_vec2(1, 0), 5);
+        p[1] = RR_unit_part(1, RR_vec2(5, 0), 5);
+        p[3] = RR_unit_part(0, RR_vec2(-10, 0), 5);
+        p[4] = RR_unit_part(12, RR_vec2(29, 0), 5);
+        p[5] = RR_unit_part(13, RR_vec2(0, 0), 0);
+        team = 0;
+        break;
+    case 9: // Light fighter 1
+        p[0] = RR_unit_part(2, RR_vec2(0, 0), 1);
+        p[1] = RR_unit_part(6, RR_vec2(0, 0), 10);
+        p[2] = RR_unit_part(5, RR_vec2(15, 0), 1);
+        p[3] = RR_unit_part(0, RR_vec2(-12, 0), 10);
+        p[5] = RR_unit_part(12, RR_vec2(6, -11), 1);
+        p[6] = RR_unit_part(12, RR_vec2(6, 11), 1);
+        p[10] = RR_unit_part(13, RR_vec2(0, 0), 0);
+        team = 0;
+        break;
+    case 10: // Light fighter 2
+        p[0] = RR_unit_part(2, RR_vec2(-2, 0), 10);
+        p[1] = RR_unit_part(1, RR_vec2(18, 0), 10);
+        p[2] = RR_unit_part(7, RR_vec2(-4, 7), 10);
+        p[3] = RR_unit_part(8, RR_vec2(-4, -7), 10);
+        p[5] = RR_unit_part(12, RR_vec2(-2, 14), 2);
+        p[6] = RR_unit_part(12, RR_vec2(-2, -14), 3);
+        p[7] = RR_unit_part(0, RR_vec2(-11, 0), 10);
+        p[10] = RR_unit_part(13, RR_vec2(0, 0), 0);
+        team = 0;
+        break;
+    case 11: // Light fighter 3
+        p[0] = RR_unit_part(2, RR_vec2(-2, 0), 1);
+        p[1] = RR_unit_part(9, RR_vec2(6, 0), 10);
+        p[5] = RR_unit_part(12, RR_vec2(1, 14), 1);
+        p[6] = RR_unit_part(12, RR_vec2(1, -14), 1);
+        p[7] = RR_unit_part(0, RR_vec2(-13, 0), 10);
+        p[10] = RR_unit_part(13, RR_vec2(0, 0), 0);
+        team = 0;
+        break;
     default: // Pod
         p[0] = RR_unit_part(2, RR_vec2(0, 0), 0); // Red small cockpit
         team = -1;
