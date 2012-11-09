@@ -138,16 +138,16 @@ void RR_unit::from_preset(unsigned char preset, char newteam) {
     
     // Construct unit
     type = preset;
-    team = (newteam - 1) % 3 + 1;
+    team = newteam % 3;
     switch(preset) {
     case 1: // Arrow light fighter
-        p[0] = RR_unit_part(1 + team, RR_vec2(0, 0), 1); // Small cockpit
+        p[0] = RR_unit_part(2 + team, RR_vec2(0, 0), 1); // Small cockpit
         p[1] = RR_unit_part(1, RR_vec2(3, 0), 0); // Hull
         p[2] = RR_unit_part(0, RR_vec2(-11, 0), 1); // Engine
         p[3] = RR_unit_part(12, RR_vec2(23, 0), 1); // Light blaster
         break;
     case 2: // Bullet light fighter
-        p[0] = RR_unit_part(1 + team, RR_vec2(-6, 0), 2); // Small cockpit
+        p[0] = RR_unit_part(2 + team, RR_vec2(-6, 0), 2); // Small cockpit
         p[1] = RR_unit_part(5, RR_vec2(0, 0), 2); // Hull
         p[2] = RR_unit_part(6, RR_vec2(-15, 0), 0); // Hull
         p[3] = RR_unit_part(0, RR_vec2(-27, 0), 2); // Engine
@@ -157,7 +157,7 @@ void RR_unit::from_preset(unsigned char preset, char newteam) {
         } else p[4] = RR_unit_part(12, RR_vec2(22, 0), 1); // Light blaster
         break;
     case 3: // Raptor light fighter
-        p[0] = RR_unit_part(1 + team, RR_vec2(-5, 0), 3); // Small cockpit
+        p[0] = RR_unit_part(2 + team, RR_vec2(-5, 0), 3); // Small cockpit
         p[1] = RR_unit_part(7, RR_vec2(0, 10), 3); // Hull right
         p[2] = RR_unit_part(8, RR_vec2(0, -10), 3); // Hull left
         p[3] = RR_unit_part(0, RR_vec2(-11, 0), 0); // Engine
@@ -179,7 +179,7 @@ void RR_unit::from_preset(unsigned char preset, char newteam) {
         }
         break;
     case 5: // Bullet medium fighter
-        p[0] = RR_unit_part(1 + team, RR_vec2(-25, 0), 2); // Small cockpit
+        p[0] = RR_unit_part(2 + team, RR_vec2(-25, 0), 2); // Small cockpit
         p[1] = RR_unit_part(9, RR_vec2(0, 0), 2); // Hull
         p[2] = RR_unit_part(6, RR_vec2(-22, 0), 0); // Hull
         p[3] = RR_unit_part(7, RR_vec2(-40, 9), 2); // Hull right
@@ -191,7 +191,7 @@ void RR_unit::from_preset(unsigned char preset, char newteam) {
         p[9] = RR_unit_part(12, RR_vec2(-6, 12), 1); // Light blaster
         break;
     case 6: // Raptor medium fighter
-        p[0] = RR_unit_part(1 + team, RR_vec2(-5, 0), 1); // Small cockpit
+        p[0] = RR_unit_part(2 + team, RR_vec2(-5, 0), 1); // Small cockpit
         p[1] = RR_unit_part(5, RR_vec2(0, 0), 0); // Hull
         p[2] = RR_unit_part(10, RR_vec2(-37, 14), 4); // Wing right
         p[3] = RR_unit_part(11, RR_vec2(-37, -14), 5); // Wing left
@@ -204,7 +204,7 @@ void RR_unit::from_preset(unsigned char preset, char newteam) {
         p[10] = RR_unit_part(12, RR_vec2(-3, 10), 1); // Light blaster
         break;
     case 7: // Scout 1
-        p[0] = RR_unit_part(1 + team, RR_vec2(-5, 0), 5);
+        p[0] = RR_unit_part(2 + team, RR_vec2(-5, 0), 5);
         p[1] = RR_unit_part(7, RR_vec2(0, 8), 5);
         p[2] = RR_unit_part(8, RR_vec2(0, -8), 5);
         p[3] = RR_unit_part(0, RR_vec2(-12, 0), 5);
@@ -212,14 +212,14 @@ void RR_unit::from_preset(unsigned char preset, char newteam) {
         p[5] = RR_unit_part(13, RR_vec2(0, 0), 0);
         break;
     case 8: // Scout 2
-        p[0] = RR_unit_part(1 + team, RR_vec2(1, 0), 5);
+        p[0] = RR_unit_part(2 + team, RR_vec2(1, 0), 5);
         p[1] = RR_unit_part(1, RR_vec2(5, 0), 5);
         p[3] = RR_unit_part(0, RR_vec2(-10, 0), 5);
         p[4] = RR_unit_part(12, RR_vec2(29, 0), 5);
         p[5] = RR_unit_part(13, RR_vec2(0, 0), 0);
         break;
     case 9: // Light fighter 1
-        p[0] = RR_unit_part(1 + team, RR_vec2(0, 0), 1);
+        p[0] = RR_unit_part(2 + team, RR_vec2(0, 0), 1);
         p[1] = RR_unit_part(6, RR_vec2(0, 0), 10);
         p[2] = RR_unit_part(5, RR_vec2(15, 0), 1);
         p[3] = RR_unit_part(0, RR_vec2(-12, 0), 10);
@@ -228,7 +228,7 @@ void RR_unit::from_preset(unsigned char preset, char newteam) {
         p[10] = RR_unit_part(13, RR_vec2(0, 0), 0);
         break;
     case 10: // Light fighter 2
-        p[0] = RR_unit_part(1 + team, RR_vec2(-2, 0), 10);
+        p[0] = RR_unit_part(2 + team, RR_vec2(-2, 0), 10);
         p[1] = RR_unit_part(1, RR_vec2(18, 0), 10);
         p[2] = RR_unit_part(7, RR_vec2(-4, 7), 10);
         p[3] = RR_unit_part(8, RR_vec2(-4, -7), 10);
@@ -238,7 +238,7 @@ void RR_unit::from_preset(unsigned char preset, char newteam) {
         p[10] = RR_unit_part(13, RR_vec2(0, 0), 0);
         break;
     case 11: // Light fighter 3
-        p[0] = RR_unit_part(1 + team, RR_vec2(-2, 0), 1);
+        p[0] = RR_unit_part(2 + team, RR_vec2(-2, 0), 1);
         p[1] = RR_unit_part(9, RR_vec2(6, 0), 10);
         p[5] = RR_unit_part(12, RR_vec2(1, 14), 1);
         p[6] = RR_unit_part(12, RR_vec2(1, -14), 1);
@@ -246,7 +246,7 @@ void RR_unit::from_preset(unsigned char preset, char newteam) {
         p[10] = RR_unit_part(13, RR_vec2(0, 0), 0);
         break;
     default: // Pod
-        p[0] = RR_unit_part(1 + team, RR_vec2(0, 0), 0); // Small cockpit
+        p[0] = RR_unit_part(2 + team, RR_vec2(0, 0), 0); // Small cockpit
         type = 0;
     }
     

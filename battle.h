@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <iostream>
 
 #ifndef RR_BATTLE_H
 #define RR_BATTLE_H 1
@@ -290,19 +291,19 @@ public:
         else {
             if(teamR < teamG && teamR < teamB && fsizeR) {
                 fsizeR--;
-                addfleet(fleetR[fsizeR], 1);
+                addfleet(fleetR[fsizeR], 0);
             } else if(teamG < teamB && fsizeG) {
                 fsizeG--;
-                addfleet(fleetG[fsizeG], 2);
+                addfleet(fleetG[fsizeG], 1);
             } else if(fsizeB) {
                 fsizeB--;
-                addfleet(fleetB[fsizeB], 3);
+                addfleet(fleetB[fsizeB], 2);
             } else if(fsizeR) {
                 fsizeR--;
-                addfleet(fleetR[fsizeR], 1);
+                addfleet(fleetR[fsizeR], 0);
             } else if(fsizeG) {
                 fsizeG--;
-                addfleet(fleetG[fsizeG], 2);
+                addfleet(fleetG[fsizeG], 1);
             }
             if(teamR > 0 && teamG > 0 && teamB > 0) reinforcements = RR_BATTLE_REINFORCEMENT_INTERVAL;
         }
@@ -377,18 +378,19 @@ public:
     void addfleet(int fleet_type, int fleet_team) {
         int i1 = 0;
         for(int i = 0; i < 2 + fleet_type; i++) {
-            if(fleet_team == 1) {
-                i1 = addship(rand() % 11 + 1, fleet_team, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+            if(fleet_team == 0) {
+                i1 = addship((rand() % 11) + 1, fleet_team, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+            } else if(fleet_team == 1) {
+                i1 = addship((rand() % 11) + 1, fleet_team, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
             } else if(fleet_team == 2) {
-                i1 = addship(rand() % 11 + 1, fleet_team, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
-            } else if(fleet_team == 3) {
-                i1 = addship(rand() % 11 + 1, fleet_team, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+                i1 = addship((rand() % 11) + 1, fleet_team, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
             }
         }
     }
     
     // Add a single ship to the battlefield
     int addship(int ship_type, char ship_team, RR_vec2 ship_pos, RR_vec2 ship_nrm, int ifrom) {
+        std::cout<<"addship: "<<ship_type<<", "<<int(ship_team)<<"\n";
         for(int i = ifrom; i < RR_BATTLE_MAX_UNITS; i++) if(!a[i].in_use) {
             a[i] = RR_unit(ship_type, ship_team, ship_pos, ship_nrm);
             return i + 1;

@@ -30,13 +30,13 @@ public:
         oldcam = cam;
         RR_vec2 v1;
         RR_vec2 vec[8];
-        vec[0] = RR_vec2(-2, -2);
+        vec[0] = RR_vec2(-3, -3);
         vec[1] = RR_vec2(0, -1);
-        vec[2] = RR_vec2(2, -2);
+        vec[2] = RR_vec2(3, -3);
         vec[3] = RR_vec2(1, 0);
-        vec[4] = RR_vec2(2, 2);
+        vec[4] = RR_vec2(3, 3);
         vec[5] = RR_vec2(0, 1);
-        vec[6] = RR_vec2(-2, 2);
+        vec[6] = RR_vec2(-3, 3);
         vec[7] = RR_vec2(-1, 0);
         int r = 150 * (zoom < 1.0 ? zoom : 1.0);
         int g = 200 * (zoom < 1.0 ? zoom : 1.0);

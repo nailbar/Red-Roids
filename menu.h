@@ -22,7 +22,7 @@ public:
     
     // Constructor
     RR_menu() {
-        for(int i = 0; i < RR_MENU_UNITS; i++) a[i] = RR_unit(1, 1, RR_vec2(rand() % RR_g.wid, rand() % RR_g.hgt));
+        for(int i = 0; i < RR_MENU_UNITS; i++) a[i] = RR_unit(1, 0, RR_vec2(rand() % RR_g.wid, rand() % RR_g.hgt));
         cursor = RR_unit_part(1, RR_vec2(RR_g.cntx, RR_g.cnty), 0);
         cursor_dir = RR_vec2(0);
         click = 0;
@@ -65,7 +65,7 @@ public:
                     vec = vec.normal(click_pos, a[i].pos);
                     a[i].spd = a[i].spd + vec * (400.0 - dis);
                 }
-                a[i].from_preset(rnd % 11 + 1, rnd % 3 + 1);
+                a[i].from_preset(rnd % 11 + 1, rnd % 3);
             }
             
             // Ships follow cursor
