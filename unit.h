@@ -17,7 +17,7 @@ public:
     RR_vec2 pos, nrm, spd, tmp_vec2;
     RR_unit_part p[RR_MAX_UNIT_PARTS];
     bool in_use, burn_eng, fire, guns;
-    float trn, trn2, size, thrust, weight, power, timeout, nearest_dis, self_destoy;
+    float trn, trn2, size, thrust, weight, power, power_gen, power_draw, timeout, nearest_dis, self_destoy;
     int trg, nearest_trg, test_trg;
     char team, type, mode;
     
@@ -94,6 +94,8 @@ RR_unit::RR_unit(unsigned char preset, char newteam, RR_vec2 newpos) {
     thrust = 0.0;
     weight = 1.0;
     power = 0.0;
+    power_gen = 0.0;
+    power_draw = 0.0;
     guns = 0;
     mode = 0;
     timeout = 1.0;
@@ -121,6 +123,8 @@ RR_unit::RR_unit(unsigned char preset, char newteam, RR_vec2 newpos, RR_vec2 new
     thrust = 0.0;
     weight = 1.0;
     power = 0.0;
+    power_gen = 0.0;
+    power_draw = 0.0;
     guns = 0;
     mode = 0;
     timeout = 1.0;
@@ -140,117 +144,94 @@ void RR_unit::from_preset(unsigned char preset, char newteam) {
     type = preset;
     team = newteam % 3;
     switch(preset) {
-    case 1: // Arrow light fighter
-        p[0] = RR_unit_part(2 + team, RR_vec2(0, 0), 1); // Small cockpit
-        p[1] = RR_unit_part(1, RR_vec2(3, 0), 0); // Hull
-        p[2] = RR_unit_part(0, RR_vec2(-11, 0), 1); // Engine
-        p[3] = RR_unit_part(12, RR_vec2(23, 0), 1); // Light blaster
+    case 1: // Scout 1
+        p[0] = RR_unit_part(2 + team, RR_vec2(-1, 0), 1); // Cockpit
+        p[1] = RR_unit_part(5, RR_vec2(4, 0), 4); // Hull
+        p[2] = RR_unit_part(0, RR_vec2(-13, 0), 4); // Thruster
+        p[3] = RR_unit_part(12, RR_vec2(28, 0), 1); // Blaster
+        p[4] = RR_unit_part(13, RR_vec2(0, 0), 0); // Core
         break;
-    case 2: // Bullet light fighter
-        p[0] = RR_unit_part(2 + team, RR_vec2(-6, 0), 2); // Small cockpit
-        p[1] = RR_unit_part(5, RR_vec2(0, 0), 2); // Hull
-        p[2] = RR_unit_part(6, RR_vec2(-15, 0), 0); // Hull
-        p[3] = RR_unit_part(0, RR_vec2(-27, 0), 2); // Engine
-        if(rand() % 100 < 20) { // Bonus ship with two blasters
-            p[4] = RR_unit_part(12, RR_vec2(-7, -10), 2); // Light blaster
-            p[5] = RR_unit_part(12, RR_vec2(-7, 10), 2); // Light blaster
-        } else p[4] = RR_unit_part(12, RR_vec2(22, 0), 1); // Light blaster
+    case 2: // Scout 2
+        p[0] = RR_unit_part(2 + team, RR_vec2(5, 0), 5); // Cockpit
+        p[1] = RR_unit_part(12, RR_vec2(14, 0), 0); // Blaster
+        p[2] = RR_unit_part(7, RR_vec2(5, 9), 5); // Wing
+        p[3] = RR_unit_part(8, RR_vec2(5, -9), 5); // Wing
+        p[4] = RR_unit_part(0, RR_vec2(-12, 0), 5); // Thruster
+        p[5] = RR_unit_part(13, RR_vec2(0, 0), 0); // Core
         break;
-    case 3: // Raptor light fighter
-        p[0] = RR_unit_part(2 + team, RR_vec2(-5, 0), 3); // Small cockpit
-        p[1] = RR_unit_part(7, RR_vec2(0, 10), 3); // Hull right
-        p[2] = RR_unit_part(8, RR_vec2(0, -10), 3); // Hull left
-        p[3] = RR_unit_part(0, RR_vec2(-11, 0), 0); // Engine
-        p[4] = RR_unit_part(12, RR_vec2(3, 0), 0); // Light blaster
+    case 3: // Light fighter 1
+        p[0] = RR_unit_part(2 + team, RR_vec2(-4, 0), 8); // Cockpit
+        p[1] = RR_unit_part(9, RR_vec2(16, 0), 8); // Hull
+        p[2] = RR_unit_part(10, RR_vec2(-7, 8), 8); // Wing
+        p[3] = RR_unit_part(11, RR_vec2(-7, -8), 8); // Wing
+        p[4] = RR_unit_part(0, RR_vec2(-13, 6), 2); // Thruster
+        p[5] = RR_unit_part(0, RR_vec2(-13, -6), 3); // Thruster
+        p[6] = RR_unit_part(12, RR_vec2(-15, 18), 2); // Blaster
+        p[7] = RR_unit_part(12, RR_vec2(-15, -18), 3); // Blaster
+        p[8] = RR_unit_part(13, RR_vec2(0, 0), 0); // Core
         break;
-    case 4: // Arrow medium fighter
-        p[0] = RR_unit_part(2, RR_vec2(-10, 0), 4); // Small cockpit
-        p[1] = RR_unit_part(1, RR_vec2(3, 0), 4); // Hull
-        p[2] = RR_unit_part(7, RR_vec2(-20, 12), 4); // Hull right
-        p[3] = RR_unit_part(8, RR_vec2(-20, -12), 4); // Hull left
-        p[4] = RR_unit_part(6, RR_vec2(-15, 0), 0); // Hull
-        p[5] = RR_unit_part(6, RR_vec2(-25, 0), 0); // Hull
-        p[6] = RR_unit_part(0, RR_vec2(-30, 10), 5); // Engine
-        p[7] = RR_unit_part(0, RR_vec2(-30, -10), 5); // Engine
-        p[8] = RR_unit_part(12, RR_vec2(-7, -13), 4); // Light blaster
-        p[9] = RR_unit_part(12, RR_vec2(-7, 13), 4); // Light blaster
-        if(rand() % 100 < 20) { // Bonus ship with three blasters
-            p[10] = RR_unit_part(12, RR_vec2(23, 0), 1); // Light blaster
-        }
+    case 4: // Light fighter 2
+        p[0] = RR_unit_part(2 + team, RR_vec2(-4, 0), 7); // Cockpit
+        p[1] = RR_unit_part(1, RR_vec2(11, 0), 7); // Hull
+        p[2] = RR_unit_part(7, RR_vec2(-13, 10), 7); // Wing
+        p[3] = RR_unit_part(8, RR_vec2(-13, -10), 7); // Wing
+        p[4] = RR_unit_part(0, RR_vec2(-12, 0), 7); // Thruster
+        p[5] = RR_unit_part(12, RR_vec2(-6, 15), 2); // Blaster
+        p[6] = RR_unit_part(12, RR_vec2(-6, -15), 3); // Blaster
+        p[7] = RR_unit_part(13, RR_vec2(0, 0), 0); // Core
         break;
-    case 5: // Bullet medium fighter
-        p[0] = RR_unit_part(2 + team, RR_vec2(-25, 0), 2); // Small cockpit
-        p[1] = RR_unit_part(9, RR_vec2(0, 0), 2); // Hull
-        p[2] = RR_unit_part(6, RR_vec2(-22, 0), 0); // Hull
-        p[3] = RR_unit_part(7, RR_vec2(-40, 9), 2); // Hull right
-        p[4] = RR_unit_part(8, RR_vec2(-40, -9), 2); // Hull left
-        p[5] = RR_unit_part(5, RR_vec2(-42, 0), 2); // Hull
-        p[6] = RR_unit_part(0, RR_vec2(-53, -7), 5); // Engine
-        p[7] = RR_unit_part(0, RR_vec2(-53, 7), 5); // Engine
-        p[8] = RR_unit_part(12, RR_vec2(-6, -12), 1); // Light blaster
-        p[9] = RR_unit_part(12, RR_vec2(-6, 12), 1); // Light blaster
+    case 5: // Medium fighter 1
+        p[0] = RR_unit_part(2 + team, RR_vec2(0, 0), 12); // Cockpit
+        p[1] = RR_unit_part(7, RR_vec2(26, 17), 3); // Wing
+        p[2] = RR_unit_part(8, RR_vec2(26, -17), 4); // Wing
+        p[3] = RR_unit_part(5, RR_vec2(8, 12), 12); // Hull
+        p[4] = RR_unit_part(5, RR_vec2(8, -12), 13); // Hull
+        p[5] = RR_unit_part(10, RR_vec2(-11, 17), 3); // Wing
+        p[6] = RR_unit_part(11, RR_vec2(-11, -17), 4); // Wing
+        p[7] = RR_unit_part(0, RR_vec2(-11, 6), 12); // Thruster
+        p[8] = RR_unit_part(0, RR_vec2(-11, -6), 13); // Thruster
+        p[9] = RR_unit_part(12, RR_vec2(12, 0), 0); // Blaster
+        p[10] = RR_unit_part(12, RR_vec2(33, 9), 3); // Blaster
+        p[11] = RR_unit_part(12, RR_vec2(33, -9), 4); // Blaster
+        p[12] = RR_unit_part(13, RR_vec2(1, 6), 13); // Core
+        p[13] = RR_unit_part(13, RR_vec2(1, -6), 0); // Core
         break;
-    case 6: // Raptor medium fighter
-        p[0] = RR_unit_part(2 + team, RR_vec2(-5, 0), 1); // Small cockpit
-        p[1] = RR_unit_part(5, RR_vec2(0, 0), 0); // Hull
-        p[2] = RR_unit_part(10, RR_vec2(-37, 14), 4); // Wing right
-        p[3] = RR_unit_part(11, RR_vec2(-37, -14), 5); // Wing left
-        p[4] = RR_unit_part(7, RR_vec2(-27, 14), 10); // Hull right
-        p[5] = RR_unit_part(8, RR_vec2(-27, -14), 9); // Hull left
-        p[6] = RR_unit_part(6, RR_vec2(-18, 0), 1); // Hull
-        p[7] = RR_unit_part(0, RR_vec2(-26, -6), 6); // Engine
-        p[8] = RR_unit_part(0, RR_vec2(-26, 6), 6); // Engine
-        p[9] = RR_unit_part(12, RR_vec2(-3, -10), 1); // Light blaster
-        p[10] = RR_unit_part(12, RR_vec2(-3, 10), 1); // Light blaster
+    case 6: // Medium fighter 2
+        p[0] = RR_unit_part(2 + team, RR_vec2(0, 0), 1); // Cockpit
+        p[1] = RR_unit_part(9, RR_vec2(-4, 0), 10); // Hull
+        p[2] = RR_unit_part(1, RR_vec2(26, 0), 11); // Hull
+        p[3] = RR_unit_part(5, RR_vec2(-1, 9), 1); // Hull
+        p[4] = RR_unit_part(5, RR_vec2(-1, -9), 1); // Hull
+        p[5] = RR_unit_part(0, RR_vec2(-23, 7), 1); // Thruster
+        p[6] = RR_unit_part(0, RR_vec2(-23, -7), 1); // Thruster
+        p[7] = RR_unit_part(12, RR_vec2(48, 0), 2); // Blaster
+        p[8] = RR_unit_part(12, RR_vec2(23, 11), 3); // Blaster
+        p[9] = RR_unit_part(12, RR_vec2(23, -11), 4); // Blaster
+        p[10] = RR_unit_part(13, RR_vec2(0, 0), 11); // Core
+        p[11] = RR_unit_part(13, RR_vec2(18, 0), 0); // Core
         break;
-    case 7: // Scout 1
-        p[0] = RR_unit_part(2 + team, RR_vec2(-5, 0), 5);
-        p[1] = RR_unit_part(7, RR_vec2(0, 8), 5);
-        p[2] = RR_unit_part(8, RR_vec2(0, -8), 5);
-        p[3] = RR_unit_part(0, RR_vec2(-12, 0), 5);
-        p[4] = RR_unit_part(12, RR_vec2(11, 0), 5);
-        p[5] = RR_unit_part(13, RR_vec2(0, 0), 0);
-        break;
-    case 8: // Scout 2
-        p[0] = RR_unit_part(2 + team, RR_vec2(1, 0), 5);
-        p[1] = RR_unit_part(1, RR_vec2(5, 0), 5);
-        p[3] = RR_unit_part(0, RR_vec2(-10, 0), 5);
-        p[4] = RR_unit_part(12, RR_vec2(29, 0), 5);
-        p[5] = RR_unit_part(13, RR_vec2(0, 0), 0);
-        break;
-    case 9: // Light fighter 1
-        p[0] = RR_unit_part(2 + team, RR_vec2(0, 0), 1);
-        p[1] = RR_unit_part(6, RR_vec2(0, 0), 10);
-        p[2] = RR_unit_part(5, RR_vec2(15, 0), 1);
-        p[3] = RR_unit_part(0, RR_vec2(-12, 0), 10);
-        p[5] = RR_unit_part(12, RR_vec2(6, -11), 1);
-        p[6] = RR_unit_part(12, RR_vec2(6, 11), 1);
-        p[10] = RR_unit_part(13, RR_vec2(0, 0), 0);
-        break;
-    case 10: // Light fighter 2
-        p[0] = RR_unit_part(2 + team, RR_vec2(-2, 0), 10);
-        p[1] = RR_unit_part(1, RR_vec2(18, 0), 10);
-        p[2] = RR_unit_part(7, RR_vec2(-4, 7), 10);
-        p[3] = RR_unit_part(8, RR_vec2(-4, -7), 10);
-        p[5] = RR_unit_part(12, RR_vec2(-2, 14), 2);
-        p[6] = RR_unit_part(12, RR_vec2(-2, -14), 3);
-        p[7] = RR_unit_part(0, RR_vec2(-11, 0), 10);
-        p[10] = RR_unit_part(13, RR_vec2(0, 0), 0);
-        break;
-    case 11: // Light fighter 3
-        p[0] = RR_unit_part(2 + team, RR_vec2(-2, 0), 1);
-        p[1] = RR_unit_part(9, RR_vec2(6, 0), 10);
-        p[5] = RR_unit_part(12, RR_vec2(1, 14), 1);
-        p[6] = RR_unit_part(12, RR_vec2(1, -14), 1);
-        p[7] = RR_unit_part(0, RR_vec2(-13, 0), 10);
-        p[10] = RR_unit_part(13, RR_vec2(0, 0), 0);
+    case 7: // Heavy fighter 1
+        p[0] = RR_unit_part(2 + team, RR_vec2(0, 0), 2); // Cockpit
+        p[1] = RR_unit_part(9, RR_vec2(17, 0), 2); // Hull
+        p[2] = RR_unit_part(6, RR_vec2(5, 0), 12); // Hull
+        p[3] = RR_unit_part(5, RR_vec2(-16, 15), 2); // Hull
+        p[4] = RR_unit_part(5, RR_vec2(-16, -15), 2); // Hull
+        p[5] = RR_unit_part(0, RR_vec2(-30, 15), 3); // Thruster
+        p[6] = RR_unit_part(0, RR_vec2(-30, -15), 4); // Thruster
+        p[7] = RR_unit_part(12, RR_vec2(9, 14), 3); // Blaster
+        p[8] = RR_unit_part(12, RR_vec2(9, 18), 3); // Blaster
+        p[9] = RR_unit_part(12, RR_vec2(9, -14), 4); // Blaster
+        p[10] = RR_unit_part(12, RR_vec2(9, -18), 4); // Blaster
+        p[11] = RR_unit_part(13, RR_vec2(9, 0), 0); // Core
+        p[12] = RR_unit_part(13, RR_vec2(-9, 0), 11); // Core
         break;
     default: // Pod
         p[0] = RR_unit_part(2 + team, RR_vec2(0, 0), 0); // Small cockpit
-        type = 0;
+        break;
     }
     
-    // Recalculate size
+    // Recalculate size, power, thrust, etc
+    power_draw = 0.0;
     recalculate();
 }
 
@@ -264,9 +245,9 @@ void RR_unit::recalculate() {
     guns = 0;
     thrust = 0.0;
     weight = 0.0;
-    power = 0.0;
+    power_gen = 0.0;
     float this_distance = 0;
-    float power_draw = 0.0;
+    bool fresh_ship = (power_draw <= 0.0);
     
     // Check for center
     for(int i = RR_MAX_UNIT_PARTS - 1; i >= 0; i--) if(p[i].in_use) {
@@ -286,8 +267,8 @@ void RR_unit::recalculate() {
         // Get thrust and weight for part
         thrust += p[i].thrust();
         weight += p[i].weight();
-        power += p[i].power();
-        power_draw += p[i].power_draw();
+        power_gen += p[i].power();
+        if(fresh_ship) power_draw += p[i].power_draw();
         if(p[i].weapon(true)) guns++;
     }
     
@@ -298,10 +279,13 @@ void RR_unit::recalculate() {
     }
     
     // Calculate power distribution
-    if(power_draw) power = power / power_draw;
+    power = 1.0; // Enough power
+    if(power_gen <= 0.0) power = 0.0; // No power
+    if(power_draw > power_gen) power = power_gen / power_draw; // Power draw more than power generation
+    if(thrust) thrust = thrust * power;
     
-    // No engines, no power, or no guns will result in self destruction
-    if(thrust / weight < 0.1 || power < 0.1 || guns == 0) if(self_destoy < 0) self_destoy = 1.0;
+    // If ship is too slow or has no guns it will self destruct
+    if(thrust / weight < 0.35 || guns == 0) if(self_destoy < 0) self_destoy = 1.0;
     
     // Recenter ship and calculate size
     offset = (nose_right + aft_left) / 2.0;

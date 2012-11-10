@@ -26,7 +26,7 @@ public:
     
     // Cool down weapon for reload
     void cool(float fspd, float cooling_power) {
-        if(load > 0.0) load -= (1.0 / 50.0) * cooling_power * fspd;
+        if(load > 0.0) load -= cooling_power * fspd;
     }
     
     // Draw the part on screen
@@ -371,11 +371,11 @@ public:
     // Get thrust of a part (only parts with thrusters return value)
     float thrust(int partid) {
         switch(partid) {
-        case 0: return 20.0; // Engine
+        case 0: return 22.0; // Engine
         case 1: return 0.0; // Hull
-        case 2: return 1.0; // Red small cockpit
-        case 3: return 1.0; // Green small cockpit
-        case 4: return 1.0; // Blue small cockpit
+        case 2: return 0.0; // Red small cockpit
+        case 3: return 0.0; // Green small cockpit
+        case 4: return 0.0; // Blue small cockpit
         case 5: return 0.0; // Hull
         case 6: return 0.0; // Hull
         case 7: return 0.0; // Hull right
@@ -397,9 +397,9 @@ public:
         switch(partid) {
         case 0: return 5.0; // Engine
         case 1: return 11.0; // Hull
-        case 2: return 6.0; // Red small cockpit
-        case 3: return 6.0; // Green small cockpit
-        case 4: return 6.0; // Blue small cockpit
+        case 2: return 4.0; // Red small cockpit
+        case 3: return 4.0; // Green small cockpit
+        case 4: return 4.0; // Blue small cockpit
         case 5: return 9.0; // Hull
         case 6: return 12.0; // Hull
         case 7: return 7.0; // Hull right
@@ -419,15 +419,18 @@ public:
     // Get power generation of a part
     float power(int partid) {
         switch(partid) {
-        case 1: return 30.0; // Hull
-        case 5: return 25.0; // Hull
-        case 6: return 28.0; // Hull
-        case 7: return 20.0; // Hull right
-        case 8: return 20.0; // Hull left
-        case 9: return 40.0; // Hull
-        case 10: return 25.0; // Wing right
-        case 11: return 25.0; // Wing left
-        case 13: return 40.0; // Light core
+        case 1: return 0.0; // Hull
+        case 2: return 4.0; // Red small cockpit
+        case 3: return 4.0; // Green small cockpit
+        case 4: return 4.0; // Blue small cockpit
+        case 5: return 0.0; // Hull
+        case 6: return 0.0; // Hull
+        case 7: return 0.0; // Hull right
+        case 8: return 0.0; // Hull left
+        case 9: return 0.0; // Hull
+        case 10: return 0.0; // Wing right
+        case 11: return 0.0; // Wing left
+        case 13: return 35.0; // Light core
         default: return 0.0;
         }
     }
@@ -438,7 +441,7 @@ public:
     // Get power draw of a part
     float power_draw(int partid) {
         switch(partid) {
-        case 0: return 0.5; // Engine
+        case 0: return 20.0; // Engine
         case 1: return 0.0; // Hull
         case 2: return 0.0; // Red small cockpit
         case 3: return 0.0; // Green small cockpit
@@ -450,7 +453,7 @@ public:
         case 9: return 0.0; // Hull
         case 10: return 0.0; // Wing right
         case 11: return 0.0; // Wing left
-        case 12: return 1.0; // Light blaster
+        case 12: return 10.0; // Light blaster
         case 13: return 0.0; // Light core
         default: return 0.0;
         }
@@ -471,7 +474,7 @@ public:
     // Start weapon reload
     void reload() {
         switch(type) {
-        case 12: load = 0.3; break; // Light blaster
+        case 12: load = 0.5; break; // Light blaster (2 shots per second)
         }
     }
 };

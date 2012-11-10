@@ -65,7 +65,7 @@ public:
                     vec = vec.normal(click_pos, a[i].pos);
                     a[i].spd = a[i].spd + vec * (400.0 - dis);
                 }
-                a[i].from_preset(rnd % 11 + 1, rnd % 3);
+                a[i].from_preset(rnd % 7 + 1, rnd % 3);
             }
             
             // Ships follow cursor

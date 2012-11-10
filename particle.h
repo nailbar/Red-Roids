@@ -155,7 +155,7 @@ public:
     float hitdamage() {
         switch(type) {
         case 1: // Light blast (max life 3 sec)
-            if(life > 2.95) return 0; // Prevent blast from hitting host
+            if(life > 2.9) return 0; // Prevent blast from hitting host
             return 7.0; // Enough to destroy a light thruster on first hit if lucky
         default: return 0;
         }

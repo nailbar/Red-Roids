@@ -56,7 +56,7 @@ public:
         teamR_pos = RR_vec2(0) * RR_BATTLE_FIELD_LIMIT;
         teamG_pos = RR_vec2(0.3 * M_PI * 2.0) * RR_BATTLE_FIELD_LIMIT;
         teamB_pos = RR_vec2(0.6 * M_PI * 2.0) * RR_BATTLE_FIELD_LIMIT;
-        wings = 0;
+        wings = 10;
         zoom_key = false;
         zoom_toggle = false;
         
@@ -176,6 +176,7 @@ public:
                 
                 // Draw target indicator
                 if(a[i].has_valid_target(a, RR_BATTLE_MAX_UNITS, i)) {
+std::cout<<"power: "<<a[a[i].trg].power<<", power_gen: "<<a[a[i].trg].power_gen<<", power_draw: "<<a[a[i].trg].power_draw<<", thrust: "<<a[a[i].trg].thrust<<", weight: "<<a[a[i].trg].weight<<", ratio: "<<a[a[i].trg].thrust/a[a[i].trg].weight<<"\n";
                     a[i].target_pointer(
                         win,
                         (a[i].pos - cam) * zoom + RR_vec2(RR_g.cntx, RR_g.cnty),
@@ -305,7 +306,7 @@ public:
                 fsizeG--;
                 addfleet(fleetG[fsizeG], 1);
             }
-            if(teamR > 0 && teamG > 0 && teamB > 0) reinforcements = RR_BATTLE_REINFORCEMENT_INTERVAL;
+            if(teamR > 0 && teamG > 0 && teamB > 0) reinforcements = RR_BATTLE_REINFORCEMENT_INTERVAL * ((rand() % 10000) / 10000.0);
         }
         
         // Target status indicator
@@ -379,18 +380,18 @@ public:
         int i1 = 0;
         for(int i = 0; i < 2 + fleet_type; i++) {
             if(fleet_team == 0) {
-                i1 = addship((rand() % 11) + 1, fleet_team, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+                i1 = addship((rand() % 7) + 1, fleet_team, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
             } else if(fleet_team == 1) {
-                i1 = addship((rand() % 11) + 1, fleet_team, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+                i1 = addship((rand() % 7) + 1, fleet_team, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
             } else if(fleet_team == 2) {
-                i1 = addship((rand() % 11) + 1, fleet_team, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+                i1 = addship((rand() % 7) + 1, fleet_team, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
             }
         }
     }
     
     // Add a single ship to the battlefield
     int addship(int ship_type, char ship_team, RR_vec2 ship_pos, RR_vec2 ship_nrm, int ifrom) {
-        std::cout<<"addship: "<<ship_type<<", "<<int(ship_team)<<"\n";
+//         std::cout<<"addship: "<<ship_type<<", "<<int(ship_team)<<"\n";
         for(int i = ifrom; i < RR_BATTLE_MAX_UNITS; i++) if(!a[i].in_use) {
             a[i] = RR_unit(ship_type, ship_team, ship_pos, ship_nrm);
             return i + 1;
