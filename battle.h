@@ -176,7 +176,7 @@ public:
                 else a[i].follow_target(a, RR_BATTLE_MAX_UNITS, i);
                 
                 // Find better target
-                if(keys[SDLK_t] || RR_g_vec2.distance(a[i].pos, a[a[i].trg].pos) > 1500.0) a[i].find_better_target(a, RR_BATTLE_MAX_UNITS, i);
+                if(keys[SDLK_t] || keys[SDLK_KP0] || RR_g_vec2.distance(a[i].pos, a[a[i].trg].pos) > 1500.0) a[i].find_better_target(a, RR_BATTLE_MAX_UNITS, i);
                 
                 // Draw target indicator
                 if(a[i].has_valid_target(a, RR_BATTLE_MAX_UNITS, i)) {

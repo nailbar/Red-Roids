@@ -7,15 +7,15 @@ sudo apt-get install build-essential libsdl-gfx1.2-dev
 
 Key       Action
 =====================================================
-ESC       Exits (First to Main menu, then completely)
-F1        Loops through debug modes
-I, W      Burn engines
-J, A      Rotate counter clockwise
-L, D      Rotate clockwise
-Q, SPACE  Fire blasters
-T         Find better target
-Z         Show entire battle field
-N         Switch ship
+ESC   BACKSPACE         Exits (First to Main menu, then completely)
+F1                      Loops through debug modes
+W     I       UP        Burn thrusters
+A     J       LEFT      Rotate counter clockwise
+D     L       RIGHT     Rotate clockwise
+Q     SPACE   SHIFT     Fire blasters
+T             NUMPAD_0  Find better target
+Z                       Toggle zoom view
+N                       Switch ship
 
 Credits:
 Martin Wikström
