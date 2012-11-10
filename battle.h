@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <iostream>
+// #include <iostream>
 
 #ifndef RR_BATTLE_H
 #define RR_BATTLE_H 1
@@ -21,7 +21,7 @@
 #endif
 
 #ifndef RR_BATTLE_REINFORCEMENT_INTERVAL
-#define RR_BATTLE_REINFORCEMENT_INTERVAL 20
+#define RR_BATTLE_REINFORCEMENT_INTERVAL 40
 #endif
 
 #include "text.h"
@@ -56,8 +56,8 @@ public:
         teamR_pos = RR_vec2(0) * RR_BATTLE_FIELD_LIMIT;
         teamG_pos = RR_vec2(0.3 * M_PI * 2.0) * RR_BATTLE_FIELD_LIMIT;
         teamB_pos = RR_vec2(0.6 * M_PI * 2.0) * RR_BATTLE_FIELD_LIMIT;
-        tech = RR_UNIT_MAX_TECH;
-        wings = 10;
+        tech = 2; //RR_UNIT_MAX_TECH;
+        wings = 1;
         zoom_key = false;
         zoom_toggle = false;
         
@@ -78,7 +78,8 @@ public:
         player_team = rand() % 3;
         reinforcements = 0.0;
         battle_timeout = 5.0;
-            
+        
+        if(tech < RR_UNIT_MAX_TECH) tech++;
         wings++;
         fsizeR = wings;
         fsizeG = wings;
@@ -177,7 +178,7 @@ public:
                 
                 // Draw target indicator
                 if(a[i].has_valid_target(a, RR_BATTLE_MAX_UNITS, i)) {
-std::cout<<"power: "<<a[a[i].trg].power<<", power_gen: "<<a[a[i].trg].power_gen<<", power_draw: "<<a[a[i].trg].power_draw<<", thrust: "<<a[a[i].trg].thrust<<", weight: "<<a[a[i].trg].weight<<", ratio: "<<a[a[i].trg].thrust/a[a[i].trg].weight<<"\n";
+// std::cout<<"power: "<<a[a[i].trg].power<<", power_gen: "<<a[a[i].trg].power_gen<<", power_draw: "<<a[a[i].trg].power_draw<<", thrust: "<<a[a[i].trg].thrust<<", weight: "<<a[a[i].trg].weight<<", ratio: "<<a[a[i].trg].thrust/a[a[i].trg].weight<<"\n";
                     a[i].target_pointer(
                         win,
                         (a[i].pos - cam) * zoom + RR_vec2(RR_g.cntx, RR_g.cnty),
