@@ -37,7 +37,7 @@ public:
     RR_vec2 cam, cam_trg, teamR_pos, teamG_pos, teamB_pos, top_left, bottom_right;
     double zoom, zoom_trg;
     float reinforcements, player_timeout, battle_timeout;
-    int next_particle, player, player_team, wings;
+    int next_particle, player, player_team, wings, tech;
     bool zoom_key, zoom_toggle;
     
     // Fleets
@@ -56,6 +56,7 @@ public:
         teamR_pos = RR_vec2(0) * RR_BATTLE_FIELD_LIMIT;
         teamG_pos = RR_vec2(0.3 * M_PI * 2.0) * RR_BATTLE_FIELD_LIMIT;
         teamB_pos = RR_vec2(0.6 * M_PI * 2.0) * RR_BATTLE_FIELD_LIMIT;
+        tech = RR_UNIT_MAX_TECH;
         wings = 10;
         zoom_key = false;
         zoom_toggle = false;
@@ -380,11 +381,11 @@ std::cout<<"power: "<<a[a[i].trg].power<<", power_gen: "<<a[a[i].trg].power_gen<
         int i1 = 0;
         for(int i = 0; i < 2 + fleet_type; i++) {
             if(fleet_team == 0) {
-                i1 = addship((rand() % 7) + 1, fleet_team, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+                i1 = addship((rand() % tech) + 1, fleet_team, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
             } else if(fleet_team == 1) {
-                i1 = addship((rand() % 7) + 1, fleet_team, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+                i1 = addship((rand() % tech) + 1, fleet_team, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
             } else if(fleet_team == 2) {
-                i1 = addship((rand() % 7) + 1, fleet_team, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+                i1 = addship((rand() % tech) + 1, fleet_team, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
             }
         }
     }

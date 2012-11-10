@@ -12,6 +12,10 @@
 #define RR_BOUNCE_DAMAGE 0.005
 #endif
 
+#ifndef RR_UNIT_MAX_TECH
+#define RR_UNIT_MAX_TECH 7
+#endif
+
 class RR_unit {
 public:
     RR_vec2 pos, nrm, spd, tmp_vec2;
@@ -197,14 +201,14 @@ void RR_unit::from_preset(unsigned char preset, char newteam) {
         p[13] = RR_unit_part(13, RR_vec2(1, -6), 0); // Core
         break;
     case 6: // Medium fighter 2
-        p[0] = RR_unit_part(2 + team, RR_vec2(0, 0), 1); // Cockpit
-        p[1] = RR_unit_part(9, RR_vec2(-4, 0), 10); // Hull
-        p[2] = RR_unit_part(1, RR_vec2(26, 0), 11); // Hull
-        p[3] = RR_unit_part(5, RR_vec2(-1, 9), 1); // Hull
-        p[4] = RR_unit_part(5, RR_vec2(-1, -9), 1); // Hull
-        p[5] = RR_unit_part(0, RR_vec2(-23, 7), 1); // Thruster
-        p[6] = RR_unit_part(0, RR_vec2(-23, -7), 1); // Thruster
-        p[7] = RR_unit_part(12, RR_vec2(48, 0), 2); // Blaster
+        p[0] = RR_unit_part(2 + team, RR_vec2(0, 0), 2); // Cockpit
+        p[1] = RR_unit_part(1, RR_vec2(26, 0), 11); // Hull
+        p[2] = RR_unit_part(9, RR_vec2(-4, 0), 10); // Hull
+        p[3] = RR_unit_part(5, RR_vec2(-1, 9), 2); // Hull
+        p[4] = RR_unit_part(5, RR_vec2(-1, -9), 2); // Hull
+        p[5] = RR_unit_part(0, RR_vec2(-23, 7), 2); // Thruster
+        p[6] = RR_unit_part(0, RR_vec2(-23, -7), 2); // Thruster
+        p[7] = RR_unit_part(12, RR_vec2(48, 0), 1); // Blaster
         p[8] = RR_unit_part(12, RR_vec2(23, 11), 3); // Blaster
         p[9] = RR_unit_part(12, RR_vec2(23, -11), 4); // Blaster
         p[10] = RR_unit_part(13, RR_vec2(0, 0), 11); // Core

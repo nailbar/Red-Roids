@@ -20,7 +20,7 @@ public:
         pos = newpos;
         in_use = true; // In use
         load = 0.0; // Loaded and ready if weapon
-        health = weight(newtype);
+        health = strengh(newtype);
         parent = newparent;
     }
     
@@ -37,7 +37,7 @@ public:
     ) {
         
         // Get damage color
-        float damage = 1.0 - health / weight(partid);
+        float damage = 1.0 - health / strengh(partid);
         unsigned char dcolr = int(damage > 0.5 ? 255 : 256 * damage * 2.0);
         unsigned char dcolg = int(damage < 0.5 ? 255 : 256 * (1.0 - damage) * 2.0);
         unsigned char dcolb = 0;
@@ -414,6 +414,30 @@ public:
     }
     float weight() {
         return weight(type);
+    }
+    
+    // Get strengh of a part
+    float strengh(int partid) {
+        switch(partid) {
+        case 0: return 5.0; // Engine
+        case 1: return 11.0; // Hull
+        case 2: return 2.0; // Red small cockpit
+        case 3: return 2.0; // Green small cockpit
+        case 4: return 2.0; // Blue small cockpit
+        case 5: return 9.0; // Hull
+        case 6: return 12.0; // Hull
+        case 7: return 7.0; // Hull right
+        case 8: return 7.0; // Hull left
+        case 9: return 15.0; // Hull
+        case 10: return 8.0; // Wing right
+        case 11: return 8.0; // Wing left
+        case 12: return 2.0; // Light blaster
+        case 13: return 0.2; // Light core
+        default: return 1.0;
+        }
+    }
+    float strengh() {
+        return strengh(type);
     }
     
     // Get power generation of a part
