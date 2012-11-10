@@ -143,7 +143,7 @@ int main(int argc, char* args[]) {
             
             // Draw menu items
             switch(menu.handle_menu(win, mpos)) {
-            case 1: battle = RR_battle(); gamemode = 2; break; // New instant battle
+            case 1: battle.next_battle(true); gamemode = 2; break; // New instant battle
             case 2: gamemode = 2; break; // Resume instant battle
             case 4: inloop = false; break; // Exit button
             }

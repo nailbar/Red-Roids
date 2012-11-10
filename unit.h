@@ -342,6 +342,9 @@ bool RR_unit::has_valid_target(RR_unit* a, int n, int i) {
     // Make sure target is not on same team
     if(team == a[trg].team) return false;
     
+    // Make sure target is a threat
+    if(a[trg].self_destoy > 0) return false;
+    
     // Target is valid
     return true;
 }
@@ -353,12 +356,12 @@ void RR_unit::find_nearest_target(RR_unit* a, int n, int i) {
     for(int u = 0; u < 20; u++) {
         test_trg++;
         if(test_trg >= n) test_trg = 0;
-        if(test_trg != i && a[test_trg].in_use && a[test_trg].team != team) break;
+        if(test_trg != i && a[test_trg].in_use && a[test_trg].team != team && a[test_trg].self_destoy < 0) break;
     }
     
     // Get distance to current nearest
     if(nearest_trg > -1 && nearest_trg < n && nearest_trg != i) {
-        if(a[nearest_trg].in_use && a[nearest_trg].team != team) {
+        if(a[nearest_trg].in_use && a[nearest_trg].team != team && a[nearest_trg].self_destoy < 0) {
             v1 = a[i].pos - a[nearest_trg].pos;
             nearest_dis = v1.x * v1.x + v1.y * v1.y;
         } else nearest_dis = -1;
@@ -366,7 +369,7 @@ void RR_unit::find_nearest_target(RR_unit* a, int n, int i) {
     
     // Get distance to test
     float f1 = -1;
-    if(test_trg != i && a[test_trg].in_use && a[test_trg].team != team) {
+    if(test_trg != i && a[test_trg].in_use && a[test_trg].team != team && a[test_trg].self_destoy < 0) {
         v1 = a[i].pos - a[test_trg].pos;
         f1 = v1.x * v1.x + v1.y * v1.y;
     }
@@ -383,6 +386,7 @@ void RR_unit::follow_target(RR_unit* a, int n, int i) {
     burn_eng = 0;
     fire = 0;
     trn = 0;
+    if(self_destoy > 0) return;
     
     // Avoid doing the same thing all the time
     if(timeout < 0.0) {
@@ -600,7 +604,11 @@ bool RR_unit::player_input(Uint8* keys) {
     else fire = false;
     
     // Return action or inaction
-    if(burn_eng || trn || fire) return true;
+    if(burn_eng || trn || fire) {
+        if(self_destoy > 0) burn_eng = 0;
+        return true;
+    }
+    if(self_destoy > 0) burn_eng = 0;
     return false;
 }
 
