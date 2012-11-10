@@ -168,7 +168,7 @@ public:
             a[i].find_nearest_target(a, RR_BATTLE_MAX_UNITS, i);
             
             // Player controls this ship
-            if(i == player) {
+            if(i == player && a[i].team == player_team) {
                 if(a[i].player_input(keys)) player_timeout = 15.0;
                 else if(player_timeout > 0.0) player_timeout -= fspd;
                 else a[i].follow_target(a, RR_BATTLE_MAX_UNITS, i);
