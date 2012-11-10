@@ -474,19 +474,21 @@ void RR_unit::move(float fspd) {
     timeout -= fspd;
     
     // Smooth turning
-    if(trn > 0.01) {
-        if(trn2 < trn) trn2 += (trn2 < 0.0 ? 6.0 : 2.0) * fspd;
-        if(trn2 > trn) trn2 = trn;
-    } else if(trn < -0.01) {
-        if(trn2 > trn) trn2 -= (trn2 > 0.0 ? 6.0 : 2.0) * fspd;
-        if(trn2 < trn) trn2 = trn;
-    } else {
-        if(trn2 < trn) {
-            trn2 += 6.0 * fspd;
+    if(self_destoy < 0) {
+        if(trn > 0.01) {
+            if(trn2 < trn) trn2 += (trn2 < 0.0 ? 6.0 : 2.0) * fspd;
             if(trn2 > trn) trn2 = trn;
-        } else if(trn2 > trn) {
-            trn2 -= 6.0 * fspd;
+        } else if(trn < -0.01) {
+            if(trn2 > trn) trn2 -= (trn2 > 0.0 ? 6.0 : 2.0) * fspd;
             if(trn2 < trn) trn2 = trn;
+        } else {
+            if(trn2 < trn) {
+                trn2 += 6.0 * fspd;
+                if(trn2 > trn) trn2 = trn;
+            } else if(trn2 > trn) {
+                trn2 -= 6.0 * fspd;
+                if(trn2 < trn) trn2 = trn;
+            }
         }
     }
     
@@ -495,10 +497,10 @@ void RR_unit::move(float fspd) {
     
     // Acceleration (thrust and weight taken into account)
     //  * High acceleration value lowered a lot by friction
-    if(burn_eng) spd = spd + nrm * (thrust / weight) * 600.0 * fspd;
+    if(burn_eng && self_destoy < 0) spd = spd + nrm * (thrust / weight) * 600.0 * fspd;
     
     // Friction in space \o/
-    spd = spd - spd * 0.8 * fspd;
+    if(self_destoy < 0) spd = spd - spd * 0.8 * fspd;
     
     // Move the ship
     pos = pos + spd * fspd;

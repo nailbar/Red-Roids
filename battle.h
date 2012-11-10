@@ -109,14 +109,14 @@ public:
         // Switch ship
         if(keys[SDLK_n]) player = rand() % RR_BATTLE_MAX_UNITS;
         
-        // Show map
+        // Show all ships
         if(keys[SDLK_z]) zoom_key = true;
         else if(zoom_key) {
             zoom_key = false;
             if(zoom_toggle) zoom_toggle = false;
             else zoom_toggle = true;
         }
-        if(zoom_toggle) {
+        if(zoom_toggle || a[player].team != player_team || !a[player].in_use) {
             cam_trg = (top_left + bottom_right) / 2.0;
             zoom_trg = (RR_g.wid / (bottom_right.x - top_left.x)) / 1.5;
             f1 = (RR_g.hgt / (bottom_right.y - top_left.y)) / 1.5;
@@ -129,9 +129,6 @@ public:
         
         // Draw starfield
         stars.draw(win, cam, zoom);
-        
-        // Darken background if zoom-out is in use
-//         if(zoom_toggle) boxRGBA(win, 0, 0, RR_g.wid, RR_g.hgt, 0, 0, 0, 200);
         
         // Loop through ships
         for(int i = 0; i < RR_BATTLE_MAX_UNITS; i++) if(a[i].in_use) {
