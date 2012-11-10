@@ -534,6 +534,9 @@ float RR_unit::bounce(RR_unit &other, bool keepoff, bool hulldamage) {
     double s;
     float f1;
     
+    // Sanity check
+    if(!other.in_use) return 0;
+    
     // Quick box-fit test first
     if(RR_g_vec2.box_distance(pos, other.pos) < size + other.size) {
         
