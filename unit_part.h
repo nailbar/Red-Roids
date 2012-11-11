@@ -348,17 +348,17 @@ public:
     float size(int partid) {
         switch(partid) {
         case 0: return 5.0; // Engine
-        case 1: return 11.0; // Hull
+        case 1: return 12.0; // Hull
         case 2: return 6.0; // Red small cockpit
         case 3: return 6.0; // Green small cockpit
         case 4: return 6.0; // Blue small cockpit
-        case 5: return 9.0; // Hull
+        case 5: return 11.0; // Hull
         case 6: return 12.0; // Hull
-        case 7: return 7.0; // Hull right
-        case 8: return 7.0; // Hull left
-        case 9: return 15.0; // Hull
-        case 10: return 8.0; // Wing right
-        case 11: return 8.0; // Wing left
+        case 7: return 10.0; // Hull right
+        case 8: return 10.0; // Hull left
+        case 9: return 17.0; // Hull
+        case 10: return 11.0; // Wing right
+        case 11: return 11.0; // Wing left
         case 12: return 4.0; // Light blaster
         case 13: return 6.0; // Light core
         default: return 1.0;

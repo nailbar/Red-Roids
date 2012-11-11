@@ -156,8 +156,8 @@ void RR_unit::from_preset(unsigned char preset, char newteam) {
         p[4] = RR_unit_part(13, RR_vec2(0, 0), 0); // Core
         break;
     case 2: // Scout 2
-        p[0] = RR_unit_part(2 + team, RR_vec2(5, 0), 5); // Cockpit
-        p[1] = RR_unit_part(12, RR_vec2(14, 0), 0); // Blaster
+        p[0] = RR_unit_part(2 + team, RR_vec2(1, 0), 5); // Cockpit
+        p[1] = RR_unit_part(12, RR_vec2(10, 0), 0); // Blaster
         p[2] = RR_unit_part(7, RR_vec2(5, 9), 5); // Wing
         p[3] = RR_unit_part(8, RR_vec2(5, -9), 5); // Wing
         p[4] = RR_unit_part(0, RR_vec2(-12, 0), 5); // Thruster
