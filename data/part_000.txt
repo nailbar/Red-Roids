@@ -1,0 +1,35 @@
+begin part
+    id: 0
+    name: Light thruster
+    type: thruster
+    thrust: 22
+    begin fire
+        position: -4, 0
+        size: -10, 4
+    end fire
+    begin polygon
+        color: 100, 110, 130, 0.2, 0.3
+        vector: -4, -5
+        vector: 4, -7
+        vector: 4, 7
+        vector: -4, 5
+    end polygon
+end part
+
+#            vec[0] = RR_vec2(-4, -5);
+#            vec[1] = RR_vec2(4, -7);
+#            vec[2] = RR_vec2(4, 7);
+#            vec[3] = RR_vec2(-4, 5);
+#            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.3);
+#            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 100, 110, 130, 0.2, 0.3);
+#            
+#            // Action 1: engine burn
+#            if(action & 1 && !showdmg) {
+#                vec[0] = RR_vec2(-4, -5);
+#                vec[1] = RR_vec2(-7 - (rand() % 7), -4);
+#                vec[2] = RR_vec2(-7 - (rand() % 7), 0);
+#                vec[3] = RR_vec2(-7 - (rand() % 7), 4);
+#                vec[4] = RR_vec2(-4, 5);
+#                position.draw_polygon(win, vec, 5, position, normal, RR_vec2(rand() % 1000), sun_dir, scale, 255, rand() % 255, 0, 0.2, 0.2);
+#            }
+#            break;
