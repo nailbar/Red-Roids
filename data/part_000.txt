@@ -15,8 +15,8 @@ begin part
         color_g: 110
         color_b: 130
         tilt_dir: 1.0
-        phong: 0.2
-        ambient: 0.3
+        ambient: 0.2
+        phong: 0.3
         vector: -4, -5
         vector: 4, -7
         vector: 4, 7
@@ -41,8 +41,8 @@ begin part
         color_g: 180
         color_b: 200
         tilt_dir: 0.35
-        phong: 0.2
-        ambient: 1.0
+        ambient: 0.2
+        phong: 1.0
         vector: 24, 0
         vector: -16, 0
         vector: -6, 12
@@ -52,8 +52,8 @@ begin part
         color_g: 180
         color_b: 200
         tilt_dir: -0.35
-        phong: 0.2
-        ambient: 1.0
+        ambient: 0.2
+        phong: 1.0
         vector: 24, 0
         vector: -16, 0
         vector: -6, -12
@@ -77,8 +77,8 @@ begin part
         color_g: 180
         color_b: 200
         tilt_dir: 1.0
-        phong: 0.2
-        ambient: 0.5
+        ambient: 0.2
+        phong: 0.5
         vector: -7, -2
         vector: -3, -4
         vector: -3, 4
@@ -89,8 +89,8 @@ begin part
         color_g: 0
         color_b: 0
         tilt_dir: 0.0
-        phong: 0.2
         ambient: 0.2
+        phong: 0.2
         vector: 7, -3
         vector: -3, -4
         vector: -3, 4
@@ -116,8 +116,8 @@ begin part
         color_g: 180
         color_b: 200
         tilt_dir: 1.0
-        phong: 0.2
-        ambient: 0.5
+        ambient: 0.2
+        phong: 0.5
         vector: -7, -2
         vector: -3, -4
         vector: -3, 4
@@ -128,8 +128,8 @@ begin part
         color_g: 200
         color_b: 0
         tilt_dir: 0.0
-        phong: 0.2
         ambient: 0.2
+        phong: 0.2
         vector: 7, -3
         vector: -3, -4
         vector: -3, 4
@@ -155,8 +155,8 @@ begin part
         color_g: 180
         color_b: 200
         tilt_dir: 1.0
-        phong: 0.2
-        ambient: 0.5
+        ambient: 0.2
+        phong: 0.5
         vector: -7, -2
         vector: -3, -4
         vector: -3, 4
@@ -167,8 +167,8 @@ begin part
         color_g: 0
         color_b: 255
         tilt_dir: 0.0
-        phong: 0.2
         ambient: 0.2
+        phong: 0.2
         vector: 7, -3
         vector: -3, -4
         vector: -3, 4
@@ -194,8 +194,8 @@ begin part
         color_g: 180
         color_b: 200
         tilt_dir: 0
-        phong: 0.4
-        ambient: 1.0
+        ambient: 0.4
+        phong: 1.0
         vector: -13, 0
         vector: 21, 4
         vector: 21, -4
@@ -205,8 +205,8 @@ begin part
         color_g: 180
         color_b: 200
         tilt_dir: 0.45
-        phong: 0.2
-        ambient: 1.0
+        ambient: 0.2
+        phong: 1.0
         vector: 21, 4
         vector: -13, 0
         vector: -9, 9
@@ -216,10 +216,358 @@ begin part
         color_g: 180
         color_b: 200
         tilt_dir: -0.45
-        phong: 0.2
-        ambient: 1.0
+        ambient: 0.2
+        phong: 1.0
         vector: 21, -4
         vector: -13, 0
         vector: -9, -9
+    end polygon
+end part
+
+begin part
+    name: Hull
+    type: hull
+    power: 0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 12.0
+    strength: 12.0
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 1
+        ambient: 0.6
+        phong: 1.0
+        vector: 10, 4
+        vector: 10, -4
+        vector: -10, -4
+        vector: -10, 4
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 0.5
+        ambient: 0.2
+        phong: 1.0
+        vector: 10, 4
+        vector: -10, 4
+        vector: -6, 12
+        vector: 6, 12
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: -0.5
+        ambient: 0.2
+        phong: 1.0
+        vector: 10, -4
+        vector: -10, -4
+        vector: -6, -12
+        vector: 6, -12
+    end polygon
+end part
+
+begin part
+    name: Hull
+    type: hull
+    power: 0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 7.0
+    strength: 7.0
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 0.45
+        ambient: 0.2
+        phong: 1.0
+        vector: 27, -4
+        vector: -13, -4
+        vector: -7, 5
+        vector: 0, 5
+    end polygon
+end part
+
+begin part
+    name: Hull
+    type: hull
+    power: 0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 7.0
+    strength: 7.0
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: -0.45
+        ambient: 0.2
+        phong: 1.0
+        vector: 27, 4
+        vector: -13, 4
+        vector: -7, -5
+        vector: 0, -5
+    end polygon
+end part
+
+begin part
+    name: Hull
+    type: hull
+    power: 0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 15.0
+    strength: 15.0
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 0
+        ambient: 0.4
+        phong: 1.0
+        vector: -19.5, 0
+        vector: 31.5, 6
+        vector: 31.5, -6
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 0.45
+        ambient: 0.2
+        phong: 1.0
+        vector: 31.5, 6
+        vector: -19.5, 0
+        vector: -13.5, 13.5
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: -0.45
+        ambient: 0.2
+        phong: 1.0
+        vector: 31.5, -6
+        vector: -19.5, 0
+        vector: -13.5, -13.5
+    end polygon
+end part
+
+begin part
+    name: Wing right
+    type: hull
+    power: 0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 8.0
+    strength: 8.0
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 0.41
+        ambient: 0.2
+        phong: 1.0
+        vector: 14, -3
+        vector: -25, 10
+        vector: -23, 12
+        vector: 8, 5
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: -0.57
+        ambient: 0.2
+        phong: 1.0
+        vector: 14, -3
+        vector: -25, 10
+        vector: 0, -7
+    end polygon
+end part
+
+begin part
+    name: Wing left
+    type: hull
+    power: 0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 8.0
+    strength: 8.0
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: -0.41
+        ambient: 0.2
+        phong: 1.0
+        vector: 14, 3
+        vector: -25, -10
+        vector: -23, -12
+        vector: 8, -5
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 0.57
+        ambient: 0.2
+        phong: 1.0
+        vector: 14, 3
+        vector: -25, -10
+        vector: 0, 7
+    end polygon
+end part
+
+begin part
+    name: Light blaster
+    type: weapon
+    power: 0
+    weapon: 1
+    reload: 0.5
+    thrust: 0
+    weight: 4.0
+    strength: 2.0
+    power_draw: 10.0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 100
+        color_g: 110
+        color_b: 130
+        tilt_dir: 0.5
+        ambient: 0.2
+        phong: 0.3
+        vector: -3, 0
+        vector: 5, 0
+        vector: 5, 1.5
+        vector: -3, 1.5
+    end polygon
+    begin polygon
+        color_r: 100
+        color_g: 110
+        color_b: 130
+        tilt_dir: -0.5
+        ambient: 0.2
+        phong: 0.3
+        vector: -3, -1.5
+        vector: 5, -1.5
+        vector: 5, 0
+        vector: -3, 0
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 1.0
+        ambient: 0.2
+        phong: 0.5
+        vector: -7, -2
+        vector: -3, -3
+        vector: -3, 3
+        vector: -7, 2
+    end polygon
+end part
+
+
+begin part
+    name: Light core
+    type: core
+    power: 35.0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 6.0
+    strength: 0.2
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 0
+        ambient: 0.2
+        phong: 0.2
+        vector: 0, 0
+        vector: 7, -6
+        vector: 10, -4
+        vector: 10, 4
+        vector: 7, 6
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 1.0
+        ambient: 0.2
+        phong: 0.2
+        vector: 0, 0
+        vector: -7, -6
+        vector: -10, -4
+        vector: -10, 4
+        vector: -7, 6
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: -0.5
+        ambient: 0.2
+        phong: 0.2
+        vector: 0, 0
+        vector: -7, -6
+        vector: 7, -6
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 0.5
+        ambient: 0.2
+        phong: 0.2
+        vector: 0, 0
+        vector: -7, 6
+        vector: 7, 6
+    end polygon
+    begin polygon
+        color_r: 224
+        color_g: 95
+        color_b: 0
+        tilt_dir: 0
+        ambient: 1.0
+        phong: 0.0
+        vector: -5, 4
+        vector: -5, -4
+        vector: 5, -4
+        vector: 5, 4
     end polygon
 end part

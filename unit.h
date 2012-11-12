@@ -217,7 +217,7 @@ void RR_unit::from_preset(unsigned char preset, char newteam) {
     case 7: // Heavy fighter 1
         p[0] = RR_unit_part(2 + team, RR_vec2(0, 0), 2); // Cockpit
         p[1] = RR_unit_part(9, RR_vec2(17, 0), 2); // Hull
-        p[2] = RR_unit_part(6, RR_vec2(5, 0), 12); // Hull
+        p[2] = RR_unit_part(6, RR_vec2(-5, 0), 12); // Hull
         p[3] = RR_unit_part(5, RR_vec2(-16, 15), 2); // Hull
         p[4] = RR_unit_part(5, RR_vec2(-16, -15), 2); // Hull
         p[5] = RR_unit_part(0, RR_vec2(-30, 15), 3); // Thruster

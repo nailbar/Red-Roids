@@ -158,7 +158,7 @@ public:
                             cout<<"    power: "<<d[curpart].power<<endl;
                         } else if((tmppos = line.find(string("weapon:"))) != int(string::npos)) {
                             d[curpart].weapon = atoi(line.substr(tmppos + 8).c_str());
-                            cout<<"    weapon: "<<d[curpart].weapon<<endl;
+                            cout<<"    weapon: "<<int(d[curpart].weapon)<<endl;
                         } else if((tmppos = line.find(string("reload:"))) != int(string::npos)) {
                             d[curpart].reload = atof(line.substr(tmppos + 8).c_str());
                             cout<<"    reload: "<<d[curpart].reload<<endl;
