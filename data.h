@@ -105,25 +105,25 @@ public:
                                 cout<<"    end polygon\n";
                                 in_polygon = 0;
                                 curpol++;
-                            } else if((tmppos = line.find(string("color_r:"))) != string::npos) {
+                            } else if((tmppos = line.find(string("color_r:"))) != int(int(string::npos))) {
                                 d[curpart].p[curpol].color_r = atoi(line.substr(tmppos + 8).c_str());
                                 cout<<"        color_r: "<<int(d[curpart].p[curpol].color_r)<<endl;
-                            } else if((tmppos = line.find(string("color_g:"))) != string::npos) {
+                            } else if((tmppos = line.find(string("color_g:"))) != int(string::npos)) {
                                 d[curpart].p[curpol].color_g = atoi(line.substr(tmppos + 8).c_str());
                                 cout<<"        color_g: "<<int(d[curpart].p[curpol].color_g)<<endl;
-                            } else if((tmppos = line.find(string("color_b:"))) != string::npos) {
+                            } else if((tmppos = line.find(string("color_b:"))) != int(string::npos)) {
                                 d[curpart].p[curpol].color_b = atoi(line.substr(tmppos + 8).c_str());
                                 cout<<"        color_b: "<<int(d[curpart].p[curpol].color_b)<<endl;
-                            } else if((tmppos = line.find(string("tilt_dir:"))) != string::npos) {
+                            } else if((tmppos = line.find(string("tilt_dir:"))) != int(string::npos)) {
                                 d[curpart].p[curpol].tilt_dir = atof(line.substr(tmppos + 9).c_str());
                                 cout<<"        tilt_dir: "<<d[curpart].p[curpol].tilt_dir<<endl;
-                            } else if((tmppos = line.find(string("phong:"))) != string::npos) {
+                            } else if((tmppos = line.find(string("phong:"))) != int(string::npos)) {
                                 d[curpart].p[curpol].phong = atof(line.substr(tmppos + 6).c_str());
                                 cout<<"        phong: "<<d[curpart].p[curpol].phong<<endl;
-                            } else if((tmppos = line.find(string("ambient:"))) != string::npos) {
+                            } else if((tmppos = line.find(string("ambient:"))) != int(string::npos)) {
                                 d[curpart].p[curpol].ambient = atof(line.substr(tmppos + 8).c_str());
                                 cout<<"        ambient: "<<d[curpart].p[curpol].ambient<<endl;
-                            } else if((tmppos = line.find(string("vector:"))) != string::npos) {
+                            } else if((tmppos = line.find(string("vector:"))) != int(string::npos)) {
                                 d[curpart].p[curpol].vectors[curvec].x = atof(line.substr(tmppos + 7).c_str());
                                 tmppos = line.find(string(","));
                                 d[curpart].p[curpol].vectors[curvec].y = atof(line.substr(tmppos + 1).c_str());
@@ -153,33 +153,33 @@ public:
                                 cout<<"    type: hull\n";
                                 d[curpart].type = 2;
                             }
-                        } else if((tmppos = line.find(string("power:"))) != string::npos) {
+                        } else if((tmppos = line.find(string("power:"))) != int(string::npos)) {
                             d[curpart].power = atof(line.substr(tmppos + 7).c_str());
                             cout<<"    power: "<<d[curpart].power<<endl;
-                        } else if((tmppos = line.find(string("weapon:"))) != string::npos) {
+                        } else if((tmppos = line.find(string("weapon:"))) != int(string::npos)) {
                             d[curpart].weapon = atoi(line.substr(tmppos + 8).c_str());
                             cout<<"    weapon: "<<d[curpart].weapon<<endl;
-                        } else if((tmppos = line.find(string("reload:"))) != string::npos) {
+                        } else if((tmppos = line.find(string("reload:"))) != int(string::npos)) {
                             d[curpart].reload = atof(line.substr(tmppos + 8).c_str());
                             cout<<"    reload: "<<d[curpart].reload<<endl;
-                        } else if((tmppos = line.find(string("thrust:"))) != string::npos) {
+                        } else if((tmppos = line.find(string("thrust:"))) != int(string::npos)) {
                             d[curpart].thrust = atof(line.substr(tmppos + 8).c_str());
                             cout<<"    thrust: "<<d[curpart].thrust<<endl;
-                        } else if((tmppos = line.find(string("weight:"))) != string::npos) {
+                        } else if((tmppos = line.find(string("weight:"))) != int(string::npos)) {
                             d[curpart].weight = atof(line.substr(tmppos + 8).c_str());
                             cout<<"    weight: "<<d[curpart].weight<<endl;
-                        } else if((tmppos = line.find(string("strength:"))) != string::npos) {
+                        } else if((tmppos = line.find(string("strength:"))) != int(string::npos)) {
                             d[curpart].strength = atof(line.substr(tmppos + 10).c_str());
                             cout<<"    strength: "<<d[curpart].strength<<endl;
-                        } else if((tmppos = line.find(string("power_draw:"))) != string::npos) {
+                        } else if((tmppos = line.find(string("power_draw:"))) != int(string::npos)) {
                             d[curpart].power_draw = atof(line.substr(tmppos + 12).c_str());
                             cout<<"    power_draw: "<<d[curpart].power_draw<<endl;
-                        } else if((tmppos = line.find(string("fire_pos:"))) != string::npos) {
+                        } else if((tmppos = line.find(string("fire_pos:"))) != int(string::npos)) {
                             d[curpart].fire_pos.x = atof(line.substr(tmppos + 10).c_str());
                             tmppos = line.find(string(","));
                             d[curpart].fire_pos.y = atof(line.substr(tmppos + 1).c_str());
                             cout<<"    fire_pos: "<<d[curpart].fire_pos.x<<", "<<d[curpart].fire_pos.y<<endl;
-                        } else if((tmppos = line.find(string("fire_size:"))) != string::npos) {
+                        } else if((tmppos = line.find(string("fire_size:"))) != int(string::npos)) {
                             d[curpart].fire_size.x = atof(line.substr(tmppos + 11).c_str());
                             tmppos = line.find(string(","));
                             d[curpart].fire_size.y = atof(line.substr(tmppos + 1).c_str());
