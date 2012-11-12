@@ -47,22 +47,63 @@ public:
         RR_vec2 vec[5];
         switch(partid) {
         case 0: // Engine
-            vec[0] = RR_vec2(-4, -5);
-            vec[1] = RR_vec2(4, -7);
-            vec[2] = RR_vec2(4, 7);
-            vec[3] = RR_vec2(-4, 5);
-            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.3);
-            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 100, 110, 130, 0.2, 0.3);
-            
-            // Action 1: engine burn
-            if(action & 1 && !showdmg) {
-                vec[0] = RR_vec2(-4, -5);
-                vec[1] = RR_vec2(-7 - (rand() % 7), -4);
-                vec[2] = RR_vec2(-7 - (rand() % 7), 0);
-                vec[3] = RR_vec2(-7 - (rand() % 7), 4);
-                vec[4] = RR_vec2(-4, 5);
-                position.draw_polygon(win, vec, 5, position, normal, RR_vec2(rand() % 1000), sun_dir, scale, 255, rand() % 255, 0, 0.2, 0.2);
+            for(int i = 0; i < RR_DATA_MAX_POLYGONS; i++) if(RR_g_data.d[0].p[i].polysize) {
+                if(showdmg) position.draw_polygon(
+                    win,
+                    RR_g_data.d[0].p[i].vectors,
+                    RR_g_data.d[0].p[i].polysize,
+                    position,
+                    normal,
+                    RR_vec2(RR_g_data.d[0].p[i].tilt_dir),
+                    sun_dir,
+                    scale,
+                    dcolr,
+                    dcolg,
+                    dcolb,
+                    RR_g_data.d[0].p[i].phong,
+                    RR_g_data.d[0].p[i].ambient
+                );
+                else position.draw_polygon(
+                    win,
+                    RR_g_data.d[0].p[i].vectors,
+                    RR_g_data.d[0].p[i].polysize,
+                    position,
+                    normal,
+                    RR_vec2(RR_g_data.d[0].p[i].tilt_dir),
+                    sun_dir,
+                    scale,
+                    RR_g_data.d[0].p[i].color_r,
+                    RR_g_data.d[0].p[i].color_g,
+                    RR_g_data.d[0].p[i].color_b,
+                    RR_g_data.d[0].p[i].phong,
+                    RR_g_data.d[0].p[i].ambient
+                );
             }
+            if(RR_g_data.d[0].type == 1 && action & 1 && !showdmg) {
+                vec[0] = RR_g_data.d[0].fire_pos + RR_vec2(0, RR_g_data.d[0].fire_size.y);
+                vec[1] = RR_g_data.d[0].fire_pos + RR_vec2(RR_g_data.d[0].fire_size.x * 0.6 * ((rand() % 10000) / 10000.0), RR_g_data.d[0].fire_size.y * 0.7);
+                vec[2] = RR_g_data.d[0].fire_pos + RR_vec2(RR_g_data.d[0].fire_size.x * ((rand() % 10000) / 10000.0), 0);
+                vec[3] = RR_g_data.d[0].fire_pos + RR_vec2(RR_g_data.d[0].fire_size.x * 0.6 * ((rand() % 10000) / 10000.0), -RR_g_data.d[0].fire_size.y * 0.7);
+                vec[4] = RR_g_data.d[0].fire_pos + RR_vec2(0, -RR_g_data.d[0].fire_size.y);
+                position.draw_polygon(win, vec, 5, position, normal, RR_vec2(rand() % 1000), sun_dir, scale, 255, rand() % 255, 0, 0.2, 0.2);
+                
+            }
+//             vec[0] = RR_vec2(-4, -5);
+//             vec[1] = RR_vec2(4, -7);
+//             vec[2] = RR_vec2(4, 7);
+//             vec[3] = RR_vec2(-4, 5);
+//             if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.3);
+//             else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 100, 110, 130, 0.2, 0.3);
+//             
+//             // Action 1: engine burn
+//             if(action & 1 && !showdmg) {
+//                 vec[0] = RR_vec2(-4, -5);
+//                 vec[1] = RR_vec2(-7 - (rand() % 7), -4);
+//                 vec[2] = RR_vec2(-7 - (rand() % 7), 0);
+//                 vec[3] = RR_vec2(-7 - (rand() % 7), 4);
+//                 vec[4] = RR_vec2(-4, 5);
+//                 position.draw_polygon(win, vec, 5, position, normal, RR_vec2(rand() % 1000), sun_dir, scale, 255, rand() % 255, 0, 0.2, 0.2);
+//             }
             break;
         case 1: // Hull
             
@@ -348,7 +389,7 @@ public:
     // Get size of a part
     float size(int partid) {
         switch(partid) {
-        case 0: return 5.0; // Engine
+        case 0: return RR_g_data.d[0].size; //5.0; // Engine
         case 1: return 12.0; // Hull
         case 2: return 6.0; // Red small cockpit
         case 3: return 6.0; // Green small cockpit
@@ -372,7 +413,7 @@ public:
     // Get thrust of a part (only parts with thrusters return value)
     float thrust(int partid) {
         switch(partid) {
-        case 0: return 22.0; // Engine
+        case 0: return RR_g_data.d[0].thrust; //22.0; // Engine
         case 1: return 0.0; // Hull
         case 2: return 0.0; // Red small cockpit
         case 3: return 0.0; // Green small cockpit
@@ -396,7 +437,7 @@ public:
     // Get weight of a part
     float weight(int partid) {
         switch(partid) {
-        case 0: return 5.0; // Engine
+        case 0: return RR_g_data.d[0].weight; //5.0; // Engine
         case 1: return 11.0; // Hull
         case 2: return 4.0; // Red small cockpit
         case 3: return 4.0; // Green small cockpit
@@ -420,7 +461,7 @@ public:
     // Get strengh of a part
     float strengh(int partid) {
         switch(partid) {
-        case 0: return 5.0; // Engine
+        case 0: return RR_g_data.d[0].strength; //5.0; // Engine
         case 1: return 11.0; // Hull
         case 2: return 2.0; // Red small cockpit
         case 3: return 2.0; // Green small cockpit
@@ -444,7 +485,7 @@ public:
     // Get power generation of a part
     float power(int partid) {
         switch(partid) {
-        case 1: return 0.0; // Hull
+        case 1: return RR_g_data.d[0].power; //0.0; // Hull
         case 2: return 4.0; // Red small cockpit
         case 3: return 4.0; // Green small cockpit
         case 4: return 4.0; // Blue small cockpit
@@ -466,7 +507,7 @@ public:
     // Get power draw of a part
     float power_draw(int partid) {
         switch(partid) {
-        case 0: return 20.0; // Engine
+        case 0: return RR_g_data.d[0].power_draw; //20.0; // Engine
         case 1: return 0.0; // Hull
         case 2: return 0.0; // Red small cockpit
         case 3: return 0.0; // Green small cockpit
@@ -491,6 +532,7 @@ public:
     unsigned char weapon(bool regardless) {
         if(load > 0.0 && !regardless) return 0;
         switch(type) {
+        case 0: return RR_g_data.d[0].weapon;
         case 12: return 1; // Light blaster
         default: return 0;
         }
@@ -499,6 +541,7 @@ public:
     // Start weapon reload
     void reload() {
         switch(type) {
+        case 0: load = RR_g_data.d[0].reload; break;
         case 12: load = 0.5; break; // Light blaster (2 shots per second)
         }
     }

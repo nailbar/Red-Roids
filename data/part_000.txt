@@ -8,7 +8,7 @@ begin part
         size: -10, 4
     end fire
     begin polygon
-        color: 100, 110, 130, 0.2, 0.3
+        color: 100, 110, 130, 1.0, 0.2, 0.3
         vector: -4, -5
         vector: 4, -7
         vector: 4, 7
