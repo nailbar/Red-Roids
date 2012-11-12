@@ -59,35 +59,6 @@ public:
         for(int i = 0; i < RR_DATA_MAX_PARTS; i++) {
             d[i].type = 0;
         }
-//         d[0].p[0].vectors[0] = RR_vec2(-4, -5);
-//         d[0].p[0].vectors[1] = RR_vec2(4, -7);
-//         d[0].p[0].vectors[2] = RR_vec2(4, 7);
-//         d[0].p[0].vectors[3] = RR_vec2(-4, 5);
-//         d[0].p[0].polysize = 4;
-//         d[0].p[0].color_r = 100;
-//         d[0].p[0].color_g = 110;
-//         d[0].p[0].color_b = 130;
-//         d[0].p[0].tilt_dir = 1.0;
-//         d[0].p[0].phong = 0.2;
-//         d[0].p[0].ambient = 0.3;
-//         d[0].p[1].polysize = 0;
-//         d[0].p[2].polysize = 0;
-//         d[0].p[3].polysize = 0;
-//         d[0].p[4].polysize = 0;
-//         d[0].type = 1; // Thruster
-//         d[0].size = 7;
-//         d[0].power = 0;
-//         d[0].weapon = 0;
-//         d[0].reload = 0;
-//         d[0].thrust = 22.0;
-//         d[0].weight = 5.0;
-//         d[0].strength = 5.0;
-//         d[0].power_draw = 20.0;;
-//         d[0].fire_pos = RR_vec2(-4, 0);
-//         d[0].fire_size = RR_vec2(-15, 5);
-        
-        
-//         cout<<"Loading data...\n";
         string line;
         char str[50];
         ifstream file;
@@ -178,6 +149,9 @@ public:
                             if(line.find(string("thruster")) != string::npos) {
                                 cout<<"    type: thruster\n";
                                 d[curpart].type = 1;
+                            } else if(line.find(string("hull")) != string::npos) {
+                                cout<<"    type: hull\n";
+                                d[curpart].type = 2;
                             }
                         } else if((tmppos = line.find(string("power:"))) != string::npos) {
                             d[curpart].power = atof(line.substr(tmppos + 7).c_str());

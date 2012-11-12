@@ -23,3 +23,39 @@ begin part
         vector: -4, 5
     end polygon
 end part
+
+begin part
+    name: Hull
+    type: hull
+    power: 0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 11.0
+    strength: 11.0
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 0.35
+        phong: 0.2
+        ambient: 1.0
+        vector: 24, 0
+        vector: -16, 0
+        vector: -6, 12
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: -0.35
+        phong: 0.2
+        ambient: 1.0
+        vector: 24, 0
+        vector: -16, 0
+        vector: -6, -12
+    end polygon
+end part
