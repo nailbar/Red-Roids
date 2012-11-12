@@ -24,7 +24,7 @@ using namespace std;
 //    and saves it in data nodes which can then be read
 //    on demand... Or something.
 
-struct RR_data_part_polyon {
+struct RR_data_part_polygon {
     RR_vec2 vectors[RR_DATA_MAX_POLYGON_SIZE];
     unsigned char polysize;
     unsigned char color_r;
@@ -35,7 +35,7 @@ struct RR_data_part_polyon {
     float ambient;
 };
 struct RR_data_part {
-    RR_data_part_polyon p[RR_DATA_MAX_POLYGONS];
+    RR_data_part_polygon p[RR_DATA_MAX_POLYGONS];
     char name[50];
     char type;
     float size;
@@ -53,67 +53,172 @@ struct RR_data_part {
 class RR_data {
 public:
     RR_data_part d[RR_DATA_MAX_PARTS];
+    int curpart;
     RR_data() {
-        d[0].p[0].vectors[0] = RR_vec2(-4, -5);
-        d[0].p[0].vectors[1] = RR_vec2(4, -7);
-        d[0].p[0].vectors[2] = RR_vec2(4, 7);
-        d[0].p[0].vectors[3] = RR_vec2(-4, 5);
-        d[0].p[0].polysize = 4;
-        d[0].p[0].color_r = 100;
-        d[0].p[0].color_g = 110;
-        d[0].p[0].color_b = 130;
-        d[0].p[0].tilt_dir = 1.0;
-        d[0].p[0].phong = 0.2;
-        d[0].p[0].ambient = 0.3;
-        d[0].p[1].polysize = 0;
-        d[0].p[2].polysize = 0;
-        d[0].p[3].polysize = 0;
-        d[0].p[4].polysize = 0;
-        d[0].type = 1; // Thruster
-        d[0].size = 7;
-        d[0].power = 0;
-        d[0].weapon = 0;
-        d[0].reload = 0;
-        d[0].thrust = 22.0;
-        d[0].weight = 5.0;
-        d[0].strength = 5.0;
-        d[0].power_draw = 20.0;;
-        d[0].fire_pos = RR_vec2(-4, 0);
-        d[0].fire_size = RR_vec2(-15, 5);
+        curpart = 0;
+        for(int i = 0; i < RR_DATA_MAX_PARTS; i++) {
+            d[i].type = 0;
+        }
+//         d[0].p[0].vectors[0] = RR_vec2(-4, -5);
+//         d[0].p[0].vectors[1] = RR_vec2(4, -7);
+//         d[0].p[0].vectors[2] = RR_vec2(4, 7);
+//         d[0].p[0].vectors[3] = RR_vec2(-4, 5);
+//         d[0].p[0].polysize = 4;
+//         d[0].p[0].color_r = 100;
+//         d[0].p[0].color_g = 110;
+//         d[0].p[0].color_b = 130;
+//         d[0].p[0].tilt_dir = 1.0;
+//         d[0].p[0].phong = 0.2;
+//         d[0].p[0].ambient = 0.3;
+//         d[0].p[1].polysize = 0;
+//         d[0].p[2].polysize = 0;
+//         d[0].p[3].polysize = 0;
+//         d[0].p[4].polysize = 0;
+//         d[0].type = 1; // Thruster
+//         d[0].size = 7;
+//         d[0].power = 0;
+//         d[0].weapon = 0;
+//         d[0].reload = 0;
+//         d[0].thrust = 22.0;
+//         d[0].weight = 5.0;
+//         d[0].strength = 5.0;
+//         d[0].power_draw = 20.0;;
+//         d[0].fire_pos = RR_vec2(-4, 0);
+//         d[0].fire_size = RR_vec2(-15, 5);
         
         
 //         cout<<"Loading data...\n";
-//         string line;
-//         char str[50];
-//         ifstream file;
-//         for(int i = 0; i < 1000; i++) {
-//             sprintf(str, "data/part_%03d.txt", i);
-//             file.open(str);
-//             if(file.is_open()) {
-//                 cout<<"Reading file "<<str<<endl;
-//                 while(file.good()) {
-//                     getline(file, line);
-//                     cout<<line<<endl;
-//                 }
-//                 file.close();
-//             } else {
-//                 cout<<"File "<<str<<" not found. Breaking loop.\n";
-//                 break;
-//             }
-//     // Test
-//     string row;
-//     ifstream file("test.txt");
-//     if(file.is_open()) {
-//         while(file.good()) {
-//             getline(file, row);
-//             cout<<row<<endl;
-//         }
-//         file.close();
-//     } else cout<<"Could not open file bwaaah!\n";
-//         }
+        string line;
+        char str[50];
+        ifstream file;
+        char type_handle = 0;
+        bool in_polygon = 0;
+        int curpol = 0;
+        int curvec = 0;
+        int tmppos = 0;
+        for(int i = 0; i < 1000; i++) {
+            sprintf(str, "data/part_%03d.txt", i);
+            file.open(str);
+            if(file.is_open()) {
+                cout<<"Reading file "<<str<<endl;
+                while(file.good()) {
+                    getline(file, line);
+                    
+                    // Look for beginning
+                    if(type_handle == 0) {
+                        if(line.find(string("begin part")) != string::npos) {
+                            d[curpart].type = 0;
+                            d[curpart].size = 1;
+                            d[curpart].power = 0;
+                            d[curpart].weapon = 0;
+                            d[curpart].reload = 0;
+                            d[curpart].thrust = 0;
+                            d[curpart].weight = 0;
+                            d[curpart].strength = 0;
+                            d[curpart].power_draw = 0;
+                            d[curpart].fire_pos = RR_vec2();
+                            d[curpart].fire_size = RR_vec2();
+                            for(int i = 0; i < RR_DATA_MAX_POLYGONS; i++) d[curpart].p[i].polysize = 0;
+                            cout<<"begin part\n";
+                            type_handle = 1;
+                            curpol = 0;
+                            in_polygon = 0;
+                        }
+                    } else if(type_handle == 1) {
+                        if(line.find(string("end part")) != string::npos) {
+                            cout<<"end part\n";
+                            type_handle = 0;
+                            curpart++;
+                        } else if(in_polygon) {
+                            if(line.find(string("end polygon")) != string::npos) {
+                                cout<<"    end polygon\n";
+                                in_polygon = 0;
+                                curpol++;
+                            } else if((tmppos = line.find(string("color_r:"))) != string::npos) {
+                                d[curpart].p[curpol].color_r = atoi(line.substr(tmppos + 8).c_str());
+                                cout<<"        color_r: "<<int(d[curpart].p[curpol].color_r)<<endl;
+                            } else if((tmppos = line.find(string("color_g:"))) != string::npos) {
+                                d[curpart].p[curpol].color_g = atoi(line.substr(tmppos + 8).c_str());
+                                cout<<"        color_g: "<<int(d[curpart].p[curpol].color_g)<<endl;
+                            } else if((tmppos = line.find(string("color_b:"))) != string::npos) {
+                                d[curpart].p[curpol].color_b = atoi(line.substr(tmppos + 8).c_str());
+                                cout<<"        color_b: "<<int(d[curpart].p[curpol].color_b)<<endl;
+                            } else if((tmppos = line.find(string("tilt_dir:"))) != string::npos) {
+                                d[curpart].p[curpol].tilt_dir = atof(line.substr(tmppos + 9).c_str());
+                                cout<<"        tilt_dir: "<<d[curpart].p[curpol].tilt_dir<<endl;
+                            } else if((tmppos = line.find(string("phong:"))) != string::npos) {
+                                d[curpart].p[curpol].phong = atof(line.substr(tmppos + 6).c_str());
+                                cout<<"        phong: "<<d[curpart].p[curpol].phong<<endl;
+                            } else if((tmppos = line.find(string("ambient:"))) != string::npos) {
+                                d[curpart].p[curpol].ambient = atof(line.substr(tmppos + 8).c_str());
+                                cout<<"        ambient: "<<d[curpart].p[curpol].ambient<<endl;
+                            } else if((tmppos = line.find(string("vector:"))) != string::npos) {
+                                d[curpart].p[curpol].vectors[curvec].x = atof(line.substr(tmppos + 7).c_str());
+                                tmppos = line.find(string(","));
+                                d[curpart].p[curpol].vectors[curvec].y = atof(line.substr(tmppos + 1).c_str());
+                                cout<<"        vector: "<<d[curpart].p[curpol].vectors[curvec].x<<", "<<d[curpart].p[curpol].vectors[curvec].y<<endl;
+                                if(abs(d[curpart].p[curpol].vectors[curvec].x) > d[curpart].size) d[curpart].size = abs(d[curpart].p[curpol].vectors[curvec].x);
+                                if(abs(d[curpart].p[curpol].vectors[curvec].y) > d[curpart].size) d[curpart].size = abs(d[curpart].p[curpol].vectors[curvec].y);
+                                curvec++;
+                                d[curpart].p[curpol].polysize++;
+                            }
+                        } else if(line.find(string("begin polygon")) != string::npos) {
+                            cout<<"    begin polygon\n";
+                            in_polygon = 1;
+                            curvec = 0;
+                            d[curpart].p[curpol].polysize = 0;
+                            d[curpart].p[curpol].color_r = 255;
+                            d[curpart].p[curpol].color_g = 255;
+                            d[curpart].p[curpol].color_b = 255;
+                            d[curpart].p[curpol].tilt_dir = 0;
+                            d[curpart].p[curpol].phong = 0;
+                            d[curpart].p[curpol].ambient = 0.5;
+                            d[curpart].size = 1.0;
+                        } else if(line.find(string("type:")) != string::npos) {
+                            if(line.find(string("thruster")) != string::npos) {
+                                cout<<"    type: thruster\n";
+                                d[curpart].type = 1;
+                            }
+                        } else if((tmppos = line.find(string("power:"))) != string::npos) {
+                            d[curpart].power = atof(line.substr(tmppos + 7).c_str());
+                            cout<<"    power: "<<d[curpart].power<<endl;
+                        } else if((tmppos = line.find(string("weapon:"))) != string::npos) {
+                            d[curpart].weapon = atoi(line.substr(tmppos + 8).c_str());
+                            cout<<"    weapon: "<<d[curpart].weapon<<endl;
+                        } else if((tmppos = line.find(string("reload:"))) != string::npos) {
+                            d[curpart].reload = atof(line.substr(tmppos + 8).c_str());
+                            cout<<"    reload: "<<d[curpart].reload<<endl;
+                        } else if((tmppos = line.find(string("thrust:"))) != string::npos) {
+                            d[curpart].thrust = atof(line.substr(tmppos + 8).c_str());
+                            cout<<"    thrust: "<<d[curpart].thrust<<endl;
+                        } else if((tmppos = line.find(string("weight:"))) != string::npos) {
+                            d[curpart].weight = atof(line.substr(tmppos + 8).c_str());
+                            cout<<"    weight: "<<d[curpart].weight<<endl;
+                        } else if((tmppos = line.find(string("strength:"))) != string::npos) {
+                            d[curpart].strength = atof(line.substr(tmppos + 10).c_str());
+                            cout<<"    strength: "<<d[curpart].strength<<endl;
+                        } else if((tmppos = line.find(string("power_draw:"))) != string::npos) {
+                            d[curpart].power_draw = atof(line.substr(tmppos + 12).c_str());
+                            cout<<"    power_draw: "<<d[curpart].power_draw<<endl;
+                        } else if((tmppos = line.find(string("fire_pos:"))) != string::npos) {
+                            d[curpart].fire_pos.x = atof(line.substr(tmppos + 10).c_str());
+                            tmppos = line.find(string(","));
+                            d[curpart].fire_pos.y = atof(line.substr(tmppos + 1).c_str());
+                            cout<<"    fire_pos: "<<d[curpart].fire_pos.x<<", "<<d[curpart].fire_pos.y<<endl;
+                        } else if((tmppos = line.find(string("fire_size:"))) != string::npos) {
+                            d[curpart].fire_size.x = atof(line.substr(tmppos + 11).c_str());
+                            tmppos = line.find(string(","));
+                            d[curpart].fire_size.y = atof(line.substr(tmppos + 1).c_str());
+                            cout<<"    fire_size: "<<d[curpart].fire_size.x<<", "<<d[curpart].fire_size.y<<endl;
+                        }
+                    }
+//                     cout<<"***"<<line<<endl;
+                }
+                file.close();
+            } else break;
+        }
     }
     ~RR_data() {
-        cout<<"Unloading data...\n";
     }
 } RR_g_data;
 
