@@ -121,86 +121,86 @@ public:
 //             if(showdmg)position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.1), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
 //             else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.1), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
 //             break;
-        case 2: // Red small cockpit
-            
-            // Cockpit rear
-            vec[0] = RR_vec2(-7, -2);
-            vec[1] = RR_vec2(-3, -4);
-            vec[2] = RR_vec2(-3, 4);
-            vec[3] = RR_vec2(-7, 2);
-            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.5);
-            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.2, 0.5);
-            
-            // Cockpit front
-            vec[0] = RR_vec2(7, -3);
-            vec[1] = RR_vec2(-3, -4);
-            vec[2] = RR_vec2(-3, 4);
-            vec[3] = RR_vec2(7, 3);
-            vec[4] = RR_vec2(10, 0);
-            if(showdmg) position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.2);
-            else position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, 255, 0, 0, 0.2, 0.2);
-            break;
-        case 3: // Green small cockpit
-            
-            // Cockpit rear
-            vec[0] = RR_vec2(-7, -2);
-            vec[1] = RR_vec2(-3, -4);
-            vec[2] = RR_vec2(-3, 4);
-            vec[3] = RR_vec2(-7, 2);
-            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.5);
-            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.2, 0.5);
-            
-            // Cockpit front
-            vec[0] = RR_vec2(7, -3);
-            vec[1] = RR_vec2(-3, -4);
-            vec[2] = RR_vec2(-3, 4);
-            vec[3] = RR_vec2(7, 3);
-            vec[4] = RR_vec2(10, 0);
-            if(showdmg) position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.2);
-            else position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, 0, 200, 0, 0.2, 0.2);
-            break;
-        case 4: // Blue small cockpit
-            
-            // Cockpit rear
-            vec[0] = RR_vec2(-7, -2);
-            vec[1] = RR_vec2(-3, -4);
-            vec[2] = RR_vec2(-3, 4);
-            vec[3] = RR_vec2(-7, 2);
-            if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, dcolr, dcolg, dcolb, 0.1, 0.5);
-            else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.1, 0.5);
-            
-            // Cockpit front
-            vec[0] = RR_vec2(7, -3);
-            vec[1] = RR_vec2(-3, -4);
-            vec[2] = RR_vec2(-3, 4);
-            vec[3] = RR_vec2(7, 3);
-            vec[4] = RR_vec2(10, 0);
-            if(showdmg) position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, dcolr, dcolg, dcolb, 0.6, 0.2);
-            else position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, 0, 0, 255, 0.6, 0.2);
-            break;
-        case 5: // Hull
-
-            // Front
-            vec[0] = RR_vec2(-13, 0);
-            vec[1] = RR_vec2(21, 4);
-            vec[2] = RR_vec2(21, -4);
-            if(showdmg) position.draw_polygon(win, vec, 3, position, normal, RR_vec2(0), sun_dir, scale, dcolr, dcolg, dcolb, 0.4, 1.0);
-            else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(0), sun_dir, scale, 180, 180, 200, 0.4, 1.0);
-            
-            // Right side
-            vec[0] = RR_vec2(21, 4);
-            vec[1] = RR_vec2(-13, 0);
-            vec[2] = RR_vec2(-9, 9);
-            if(showdmg) position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.4), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
-            else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
-            
-            // Left side
-            vec[0] = RR_vec2(21, -4);
-            vec[1] = RR_vec2(-13, 0);
-            vec[2] = RR_vec2(-9, -9);
-            if(showdmg) position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.4), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
-            else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
-            break;
+//         case 2: // Red small cockpit
+//             
+//             // Cockpit rear
+//             vec[0] = RR_vec2(-7, -2);
+//             vec[1] = RR_vec2(-3, -4);
+//             vec[2] = RR_vec2(-3, 4);
+//             vec[3] = RR_vec2(-7, 2);
+//             if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.5);
+//             else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.2, 0.5);
+//             
+//             // Cockpit front
+//             vec[0] = RR_vec2(7, -3);
+//             vec[1] = RR_vec2(-3, -4);
+//             vec[2] = RR_vec2(-3, 4);
+//             vec[3] = RR_vec2(7, 3);
+//             vec[4] = RR_vec2(10, 0);
+//             if(showdmg) position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.2);
+//             else position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, 255, 0, 0, 0.2, 0.2);
+//             break;
+//         case 3: // Green small cockpit
+//             
+//             // Cockpit rear
+//             vec[0] = RR_vec2(-7, -2);
+//             vec[1] = RR_vec2(-3, -4);
+//             vec[2] = RR_vec2(-3, 4);
+//             vec[3] = RR_vec2(-7, 2);
+//             if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.5);
+//             else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.2, 0.5);
+//             
+//             // Cockpit front
+//             vec[0] = RR_vec2(7, -3);
+//             vec[1] = RR_vec2(-3, -4);
+//             vec[2] = RR_vec2(-3, 4);
+//             vec[3] = RR_vec2(7, 3);
+//             vec[4] = RR_vec2(10, 0);
+//             if(showdmg) position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 0.2);
+//             else position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, 0, 200, 0, 0.2, 0.2);
+//             break;
+//         case 4: // Blue small cockpit
+//             
+//             // Cockpit rear
+//             vec[0] = RR_vec2(-7, -2);
+//             vec[1] = RR_vec2(-3, -4);
+//             vec[2] = RR_vec2(-3, 4);
+//             vec[3] = RR_vec2(-7, 2);
+//             if(showdmg) position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, dcolr, dcolg, dcolb, 0.1, 0.5);
+//             else position.draw_polygon(win, vec, 4, position, normal, RR_vec2(M_PI), sun_dir, scale, 180, 180, 200, 0.1, 0.5);
+//             
+//             // Cockpit front
+//             vec[0] = RR_vec2(7, -3);
+//             vec[1] = RR_vec2(-3, -4);
+//             vec[2] = RR_vec2(-3, 4);
+//             vec[3] = RR_vec2(7, 3);
+//             vec[4] = RR_vec2(10, 0);
+//             if(showdmg) position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, dcolr, dcolg, dcolb, 0.6, 0.2);
+//             else position.draw_polygon(win, vec, 5, position, normal, RR_vec2(0), sun_dir, scale, 0, 0, 255, 0.6, 0.2);
+//             break;
+//         case 5: // Hull
+// 
+//             // Front
+//             vec[0] = RR_vec2(-13, 0);
+//             vec[1] = RR_vec2(21, 4);
+//             vec[2] = RR_vec2(21, -4);
+//             if(showdmg) position.draw_polygon(win, vec, 3, position, normal, RR_vec2(0), sun_dir, scale, dcolr, dcolg, dcolb, 0.4, 1.0);
+//             else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(0), sun_dir, scale, 180, 180, 200, 0.4, 1.0);
+//             
+//             // Right side
+//             vec[0] = RR_vec2(21, 4);
+//             vec[1] = RR_vec2(-13, 0);
+//             vec[2] = RR_vec2(-9, 9);
+//             if(showdmg) position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.4), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
+//             else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+//             
+//             // Left side
+//             vec[0] = RR_vec2(21, -4);
+//             vec[1] = RR_vec2(-13, 0);
+//             vec[2] = RR_vec2(-9, -9);
+//             if(showdmg) position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.4), sun_dir, scale, dcolr, dcolg, dcolb, 0.2, 1.0);
+//             else position.draw_polygon(win, vec, 3, position, normal, RR_vec2(-1.4), sun_dir, scale, 180, 180, 200, 0.2, 1.0);
+//             break;
         case 6: // Hull
             
             // Middle
@@ -393,10 +393,10 @@ public:
         } else switch(partid) {
 //         case 0: return 5.0; // Engine
 //         case 1: return 12.0; // Hull
-        case 2: return 6.0; // Red small cockpit
-        case 3: return 6.0; // Green small cockpit
-        case 4: return 6.0; // Blue small cockpit
-        case 5: return 11.0; // Hull
+//         case 2: return 6.0; // Red small cockpit
+//         case 3: return 6.0; // Green small cockpit
+//         case 4: return 6.0; // Blue small cockpit
+//         case 5: return 11.0; // Hull
         case 6: return 12.0; // Hull
         case 7: return 10.0; // Hull right
         case 8: return 10.0; // Hull left
@@ -419,10 +419,10 @@ public:
         } else switch(partid) {
 //         case 0: return 22.0; // Engine
 //         case 1: return 0.0; // Hull
-        case 2: return 0.0; // Red small cockpit
-        case 3: return 0.0; // Green small cockpit
-        case 4: return 0.0; // Blue small cockpit
-        case 5: return 0.0; // Hull
+//         case 2: return 0.0; // Red small cockpit
+//         case 3: return 0.0; // Green small cockpit
+//         case 4: return 0.0; // Blue small cockpit
+//         case 5: return 0.0; // Hull
         case 6: return 0.0; // Hull
         case 7: return 0.0; // Hull right
         case 8: return 0.0; // Hull left
@@ -445,10 +445,10 @@ public:
         } else switch(partid) {
 //         case 0: return 5.0; // Engine
 //         case 1: return 11.0; // Hull
-        case 2: return 4.0; // Red small cockpit
-        case 3: return 4.0; // Green small cockpit
-        case 4: return 4.0; // Blue small cockpit
-        case 5: return 9.0; // Hull
+//         case 2: return 4.0; // Red small cockpit
+//         case 3: return 4.0; // Green small cockpit
+//         case 4: return 4.0; // Blue small cockpit
+//         case 5: return 9.0; // Hull
         case 6: return 12.0; // Hull
         case 7: return 7.0; // Hull right
         case 8: return 7.0; // Hull left
@@ -471,10 +471,10 @@ public:
         } else switch(partid) {
 //         case 0: return 5.0; // Engine
 //         case 1: return 11.0; // Hull
-        case 2: return 2.0; // Red small cockpit
-        case 3: return 2.0; // Green small cockpit
-        case 4: return 2.0; // Blue small cockpit
-        case 5: return 9.0; // Hull
+//         case 2: return 2.0; // Red small cockpit
+//         case 3: return 2.0; // Green small cockpit
+//         case 4: return 2.0; // Blue small cockpit
+//         case 5: return 9.0; // Hull
         case 6: return 12.0; // Hull
         case 7: return 7.0; // Hull right
         case 8: return 7.0; // Hull left
@@ -497,9 +497,9 @@ public:
         } else switch(partid) {
 //         case 1: return 0.0; // Hull
 //         case 2: return 4.0; // Red small cockpit
-        case 3: return 4.0; // Green small cockpit
-        case 4: return 4.0; // Blue small cockpit
-        case 5: return 0.0; // Hull
+//         case 3: return 4.0; // Green small cockpit
+//         case 4: return 4.0; // Blue small cockpit
+//         case 5: return 0.0; // Hull
         case 6: return 0.0; // Hull
         case 7: return 0.0; // Hull right
         case 8: return 0.0; // Hull left
@@ -521,10 +521,10 @@ public:
         } else switch(partid) {
 //         case 0: return 20.0; // Engine
 //         case 1: return 0.0; // Hull
-        case 2: return 0.0; // Red small cockpit
-        case 3: return 0.0; // Green small cockpit
-        case 4: return 0.0; // Blue small cockpit
-        case 5: return 0.0; // Hull
+//         case 2: return 0.0; // Red small cockpit
+//         case 3: return 0.0; // Green small cockpit
+//         case 4: return 0.0; // Blue small cockpit
+//         case 5: return 0.0; // Hull
         case 6: return 0.0; // Hull
         case 7: return 0.0; // Hull right
         case 8: return 0.0; // Hull left

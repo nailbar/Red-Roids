@@ -59,3 +59,167 @@ begin part
         vector: -6, -12
     end polygon
 end part
+
+begin part
+    name: Red cockpit
+    type: cockpit
+    power: 4.0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 4.0
+    strength: 2.0
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 1.0
+        phong: 0.2
+        ambient: 0.5
+        vector: -7, -2
+        vector: -3, -4
+        vector: -3, 4
+        vector: -7, 2
+    end polygon
+    begin polygon
+        color_r: 255
+        color_g: 0
+        color_b: 0
+        tilt_dir: 0.0
+        phong: 0.2
+        ambient: 0.2
+        vector: 7, -3
+        vector: -3, -4
+        vector: -3, 4
+        vector: 7, 3
+        vector: 10, 0
+    end polygon
+end part
+
+begin part
+    name: Green cockpit
+    type: cockpit
+    power: 4.0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 4.0
+    strength: 2.0
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 1.0
+        phong: 0.2
+        ambient: 0.5
+        vector: -7, -2
+        vector: -3, -4
+        vector: -3, 4
+        vector: -7, 2
+    end polygon
+    begin polygon
+        color_r: 0
+        color_g: 200
+        color_b: 0
+        tilt_dir: 0.0
+        phong: 0.2
+        ambient: 0.2
+        vector: 7, -3
+        vector: -3, -4
+        vector: -3, 4
+        vector: 7, 3
+        vector: 10, 0
+    end polygon
+end part
+
+begin part
+    name: Blue cockpit
+    type: cockpit
+    power: 4.0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 4.0
+    strength: 2.0
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 1.0
+        phong: 0.2
+        ambient: 0.5
+        vector: -7, -2
+        vector: -3, -4
+        vector: -3, 4
+        vector: -7, 2
+    end polygon
+    begin polygon
+        color_r: 0
+        color_g: 0
+        color_b: 255
+        tilt_dir: 0.0
+        phong: 0.2
+        ambient: 0.2
+        vector: 7, -3
+        vector: -3, -4
+        vector: -3, 4
+        vector: 7, 3
+        vector: 10, 0
+    end polygon
+end part
+
+begin part
+    name: Hull
+    type: hull
+    power: 0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 9.0
+    strength: 9.0
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 0
+        phong: 0.4
+        ambient: 1.0
+        vector: -13, 0
+        vector: 21, 4
+        vector: 21, -4
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 0.45
+        phong: 0.2
+        ambient: 1.0
+        vector: 21, 4
+        vector: -13, 0
+        vector: -9, 9
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: -0.45
+        phong: 0.2
+        ambient: 1.0
+        vector: 21, -4
+        vector: -13, 0
+        vector: -9, -9
+    end polygon
+end part
