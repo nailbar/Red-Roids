@@ -539,6 +539,12 @@ float RR_unit::bounce(RR_unit &other, bool keepoff, bool hulldamage) {
     
     // Quick box-fit test first
     if(RR_g_vec2.box_distance(pos, other.pos) < size + other.size) {
+        RR_vec2 v_closest, v_current; // Intersection point
+        int i1_closest = -1; // Closest part on this unit
+        int i2_closest = -1; // Closest part on that unit
+        float f_closest, f_current; // Distance between parts
+        RR_vec2 l1a, l1b, l2a, l2b; // Real coordinates for lines
+        int l1max, l2max; // Number of lines
         
         // Check if any part is actually touching
         for(int i = 0; i < RR_MAX_UNIT_PARTS; i++) if(p[i].in_use) {
@@ -546,6 +552,30 @@ float RR_unit::bounce(RR_unit &other, bool keepoff, bool hulldamage) {
             for(int u = 0; u < RR_MAX_UNIT_PARTS; u++) if(other.p[u].in_use) {
                 p2 = other.pos + other.nrm * other.p[u].pos.x + other.nrm.extrude() * other.p[u].pos.y; // Real pos
                 n = RR_g_vec2.normal(p1, p2); // Bounce direction
+                
+                // Quick box-fit test for parts
+                if(RR_g_vec2.box_distance(p1, p2) < p[i].size() + other.p[u].size()) {
+//                     unit_part::intersect()
+                    
+//                     // Number of lines per polygon
+//                     l1max = RR_g_data.d[p[i].type].p[i].polysize;
+//                     l2max = RR_g_data.d[other.p[u].type].p[i].polysize;
+//                     for(int pol1 = 0; pol1 < 
+//                     for(int line1 = 0; line1 < l1max; line1++) for(int line2 = 0; line2 < l2max; line2++) {
+//                         
+//                         // Real coordinates for line 1
+//                         if(line1 == 0) l1a = RR_g_vec2.rotate(RR_g_data.d[p[i].type].p[i].vector[l1max - 1], nrm) + p1;
+//                         else l1b = RR_g_vec2.rotate(RR_g_data.d[p[i].type].p[i].vector[line1 - 1], nrm) + p1;
+//                         l1b = RR_g_vec2.rotate(RR_g_data.d[p[i].type].p[i].vector[line1], nrm) + p1;
+//                         
+//                         // Real coordinates for line 2
+//                         if(line2 == 0) l2a = RR_g_vec2.rotate(RR_g_data.d[other.p[u].type].p[i].vector[l2max - 1], nrm) + p1;
+//                         else l2b = RR_g_vec2.rotate(RR_g_data.d[other.p[u].type].p[i].vector[line1 - 1], nrm) + p1;
+//                         l2b = RR_g_vec2.rotate(RR_g_data.d[other.p[u].type].p[i].vector[line1], nrm) + p1;
+//                         
+//                     }
+//                     for(int i1_line = 0; i1_line < RR_g_data.d[p[i].type].p[i].polysize
+                }
                 
                 // Part touches
                 if(RR_g_vec2.dot(n, p2 - p1) < p[i].size() + other.p[u].size()) {

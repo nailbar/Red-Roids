@@ -559,6 +559,10 @@ public:
 //         case 12: load = 0.5; break; // Light blaster (2 shots per second)
         }
     }
+    
+    // Check if two polygons intersect and calculate where they intersect
+    bool intersect() {
+    }
 };
 
 #endif // RR_UNIT_PART_H
