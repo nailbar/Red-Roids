@@ -530,9 +530,14 @@ void RR_unit::draw(SDL_Surface* win, RR_vec2 position, RR_vec2 normal, float sca
 
 // Check if another unit is too close and bounce on it
 float RR_unit::bounce(RR_unit &other, bool keepoff, bool hulldamage) {
-    RR_vec2 p1, p2, n, v1;
-    double s;
-    float f1, inter_dis;
+//     RR_vec2 p1, p2, n, v1;
+//     double s;
+//     float f1;
+    
+    RR_vec2 p1, p2, inter_nrm, inter_pos, top_nrm, top_pos;
+    float inter_dis, top_dis, rel_spd, weight_imp;
+    int top_i, top_u;
+    bool touches = false;
     
     // Sanity check
     if(!other.in_use) return 0;
@@ -540,52 +545,119 @@ float RR_unit::bounce(RR_unit &other, bool keepoff, bool hulldamage) {
     // Quick box-fit test first
     if(RR_g_vec2.box_distance(pos, other.pos) < size + other.size) {
         
-        // Check if any part is actually touching
+        // Loop through parts of unit 1
         for(int i = 0; i < RR_MAX_UNIT_PARTS; i++) if(p[i].in_use) {
-            p1 = pos + nrm * p[i].pos.x + nrm.extrude() * p[i].pos.y; // Real position of part
+            
+            // Calculate real position of part
+            p1 = pos + nrm * p[i].pos.x + nrm.extrude() * p[i].pos.y;
+            
+            // Loop through parts of unit 1
             for(int u = 0; u < RR_MAX_UNIT_PARTS; u++) if(other.p[u].in_use) {
-                p2 = other.pos + other.nrm * other.p[u].pos.x + other.nrm.extrude() * other.p[u].pos.y; // Real pos
-                n = RR_g_vec2.normal(p1, p2); // Bounce direction
                 
-                // Part touches
-                if(p[i].intersect(p[i].type, p2, nrm, other.p[u].type, p2, other.nrm, v1, inter_dis, tmp_vec2)) {
-//                 if(RR_g_vec2.dot(n, p2 - p1) < p[i].size() + other.p[u].size()) {
+                // Calculate real position of part
+                p2 = other.pos + other.nrm * other.p[u].pos.x + other.nrm.extrude() * other.p[u].pos.y;
+                
+                // Test if part touches
+                if(p[i].intersect(p[i].type, p1, nrm, other.p[u].type, p2, other.nrm, inter_nrm, inter_dis, inter_pos)) {
                     
-                    // Get relative speed
-                    s = RR_g_vec2.dot(n, spd) + RR_g_vec2.dot(n, RR_vec2() - other.spd);
-                    f1 = (weight + other.weight) / 100.0;
-                    if(s > 0.0) {
-                        spd = spd - n * s * (2.0 / (weight + other.weight) * other.weight);
-                        other.spd = other.spd + n * s * (2.0 / (weight + other.weight) * weight);
-                        
-                        // Exact spot that touches
-//                         tmp_vec2 = (p1 + n * p[i].size() + p2 - n * other.p[u].size()) / 2.0;
-                        
-                        // Move ships away from each other
-                        if(keepoff) {
-//                             pos = pos - n * ((p[i].size() + other.p[u].size()) / 2.0);
-//                             other.pos = other.pos + n * ((p[i].size() + other.p[u].size()) / 2.0);
-                            pos = pos - n * (inter_dis / 2.0);
-                            other.pos = other.pos + n * (inter_dis / 2.0);
-                        }
-                        
-                        // Damage and optionally destroy part
-                        if(hulldamage) {
-                            p[i].health -= ((rand() % 10000) / 10000.0) * s * RR_BOUNCE_DAMAGE * f1;
-                            if(p[i].health <= 0.0) {
-                                p[i].in_use = false;
-                                recalculate();
-                            }
-                            other.p[u].health -= ((rand() % 10000) / 10000.0) * s * RR_BOUNCE_DAMAGE * f1;
-                            if(other.p[u].health <= 0.0) {
-                                other.p[u].in_use = false;
-                                other.recalculate();
-                            }
-                        }
+                    // Save part references if overlap is highest so far
+                    if(inter_dis > top_dis || !touches) {
+                        top_dis = inter_dis;
+                        top_i = i;
+                        top_u = u;
+                        top_pos = inter_pos;
+                        top_nrm = inter_nrm;
+                        touches = true;
                     }
-                    return s * f1;
                 }
+                
+                
+                
+//                 n = RR_g_vec2.normal(p1, p2); // Bounce direction
+//                 
+//                 // Part touches
+//                 if(p[i].intersect(p[i].type, p2, nrm, other.p[u].type, p2, other.nrm, v1, inter_dis, tmp_vec2)) {
+// //                 if(RR_g_vec2.dot(n, p2 - p1) < p[i].size() + other.p[u].size()) {
+//                     
+//                     // Get relative speed
+//                     s = RR_g_vec2.dot(n, spd) + RR_g_vec2.dot(n, RR_vec2() - other.spd);
+//                     f1 = (weight + other.weight) / 100.0;
+//                     if(s > 0.0) {
+//                         spd = spd - n * s * (2.0 / (weight + other.weight) * other.weight);
+//                         other.spd = other.spd + n * s * (2.0 / (weight + other.weight) * weight);
+//                         
+//                         // Exact spot that touches
+// //                         tmp_vec2 = (p1 + n * p[i].size() + p2 - n * other.p[u].size()) / 2.0;
+//                         
+//                         // Move ships away from each other
+//                         if(keepoff) {
+// //                             pos = pos - n * ((p[i].size() + other.p[u].size()) / 2.0);
+// //                             other.pos = other.pos + n * ((p[i].size() + other.p[u].size()) / 2.0);
+//                             pos = pos - n * (inter_dis / 2.0);
+//                             other.pos = other.pos + n * (inter_dis / 2.0);
+//                         }
+//                         
+//                         // Damage and optionally destroy part
+//                         if(hulldamage) {
+//                             p[i].health -= ((rand() % 10000) / 10000.0) * s * RR_BOUNCE_DAMAGE * f1;
+//                             if(p[i].health <= 0.0) {
+//                                 p[i].in_use = false;
+//                                 recalculate();
+//                             }
+//                             other.p[u].health -= ((rand() % 10000) / 10000.0) * s * RR_BOUNCE_DAMAGE * f1;
+//                             if(other.p[u].health <= 0.0) {
+//                                 other.p[u].in_use = false;
+//                                 other.recalculate();
+//                             }
+//                         }
+//                     }
+//                     return s * f1;
+//                 }
             }
+        }
+        
+        // If touching parts have been found
+        if(touches) {
+            
+            // Calculate relative velocity
+            rel_spd = RR_g_vec2.dot(top_nrm, spd) + RR_g_vec2.dot(top_nrm, RR_vec2() - other.spd);
+            
+            // Calculate weight impact
+            weight_imp = (weight + other.weight) / 100.0;
+            
+            // If the parts forces are towards each other
+            if(rel_spd > 0.0) {
+                
+                // Bounce units (reverse velocities in bounce direction)
+                spd = spd - top_nrm * rel_spd * (2.0 / (weight + other.weight) * other.weight);
+                other.spd = other.spd + top_nrm * rel_spd * (2.0 / (weight + other.weight) * weight);
+                
+                // Move units away from each other
+                if(keepoff) {
+                    pos = pos - top_nrm * (top_dis * 0.5);
+                    other.pos = other.pos + top_nrm * (top_dis * 0.5);
+                }
+                
+                // Damage and optionally destroy part
+                if(hulldamage) {
+                    p[top_i].health -= ((rand() % 10000) / 10000.0) * rel_spd * RR_BOUNCE_DAMAGE * weight_imp;
+                    if(p[top_i].health <= 0.0) {
+                        p[top_i].in_use = false;
+                        recalculate();
+                    }
+                    other.p[top_u].health -= ((rand() % 10000) / 10000.0) * rel_spd * RR_BOUNCE_DAMAGE * weight_imp;
+                    if(other.p[top_u].health <= 0.0) {
+                        other.p[top_u].in_use = false;
+                        other.recalculate();
+                    }
+                }
+                
+                // Position where sparks and pieces will appear
+                tmp_vec2 = top_pos;
+            }
+            
+            // Return force of impact
+            return rel_spd * weight_imp;
         }
     }
     

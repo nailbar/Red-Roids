@@ -180,7 +180,6 @@ public:
                 
                 // Draw target indicator
                 if(a[i].has_valid_target(a, RR_BATTLE_MAX_UNITS, i)) {
-// std::cout<<"power: "<<a[a[i].trg].power<<", power_gen: "<<a[a[i].trg].power_gen<<", power_draw: "<<a[a[i].trg].power_draw<<", thrust: "<<a[a[i].trg].thrust<<", weight: "<<a[a[i].trg].weight<<", ratio: "<<a[a[i].trg].thrust/a[a[i].trg].weight<<"\n";
                     a[i].target_pointer(
                         win,
                         (a[i].pos - cam) * zoom + RR_vec2(RR_g.cntx, RR_g.cnty),
@@ -218,7 +217,7 @@ public:
             }
             
             // Some bouncing
-            for(int u = i + 1; u < RR_BATTLE_MAX_UNITS; u++) if((i2 = a[i].bounce(a[u], true, true))) {
+            for(int u = i + 1; u < RR_BATTLE_MAX_UNITS; u++) if((i2 = a[i].bounce(a[u], true, true)) > 0) {
                 i1 = 0;
                 for(int k = 0; k < i2 * 0.01; k++) for(int j = i1; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
                     if(rand() % 100 < 30) b[j] = RR_particle(0, a[i].tmp_vec2); // Sparks
@@ -365,20 +364,24 @@ public:
         
 //         // Test part intersection
 //         static float partrot = 0.0;
-//         partrot += fspd * 0.2;
+//         partrot += fspd;
 //         RR_unit_part testpart;
 //         RR_vec2 inter_nrm, inter_pos;
+//         RR_vec2 pos1 = RR_vec2(150, 150);
+//         RR_vec2 pos2 = RR_vec2(180, 150);
 //         float inter_dis;
 //         bool touching = testpart.intersect(
-//             1, RR_vec2(150, 150), RR_vec2(0 - partrot * 0.8),
-//             9, RR_vec2(180, 150), a[player].nrm,
+//             1, pos1, RR_vec2(0 - partrot * 0.8),
+//             9, pos2, a[player].nrm,
 //             inter_nrm, inter_dis, inter_pos
 //         );
-//         testpart.draw(win, RR_vec2(150, 150) * 2.0, RR_vec2(0 - partrot * 0.8), 2.0, 1, 0, RR_vec2(0), touching);
-//         testpart.draw(win, RR_vec2(180, 150) * 2.0, a[player].nrm, 2.0, 9, 0, RR_vec2(0), touching);
+//         RR_vec2 pos1b = pos1 - inter_nrm * inter_dis * 0.5;
+//         RR_vec2 pos2b = pos2 + inter_nrm * inter_dis * 0.5;
+//         testpart.draw(win, pos1b * 2.0, RR_vec2(0 - partrot * 0.8), 2.0, 1, 0, RR_vec2(0), touching);
+//         testpart.draw(win, pos2b * 2.0, a[player].nrm, 2.0, 9, 0, RR_vec2(0), touching);
 //         if(touching) boxRGBA(win, inter_pos.x * 2 - 1, inter_pos.y * 2 - 1, inter_pos.x * 2 + 1, inter_pos.y * 2 + 1, 255, 255, 0, 255);
-//         boxRGBA(win, 149 * 2, 149 * 2, 151 * 2, 151 * 2, 0, 255, 0, 255);
-//         boxRGBA(win, 179 * 2, 149 * 2, 181 * 2, 151 * 2, 0, 255, 0, 255);
+//         boxRGBA(win, pos1.x * 2 - 1, pos1.y * 2 - 1, pos1.x * 2 + 1, pos1.y * 2 + 1, 0, 255, 0, 255);
+//         boxRGBA(win, pos2.x * 2 - 1, pos2.y * 2 - 1, pos2.x * 2 + 1, pos2.y * 2 + 1, 0, 255, 0, 255);
         
         // Done
         return 0;

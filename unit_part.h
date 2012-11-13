@@ -616,9 +616,11 @@ public:
         }
         
         // Calculate overlap
-        inter_nrm = n1;
-        inter_dis = d1 - d2;
-        inter_pos = part1_pos + inter_nrm * (d2 + inter_dis * 0.5);
+        if(intersecting) {
+            inter_nrm = n1;
+            inter_dis = d1 - d2;
+            inter_pos = part1_pos + inter_nrm * (d2 + inter_dis * 0.5);
+        }
         
         // Return true if any parts were touching
         return intersecting;
