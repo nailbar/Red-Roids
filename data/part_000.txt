@@ -1,4 +1,4 @@
-begin part
+begin part 0
     name: Light thruster
     type: thruster
     power: 0
@@ -24,7 +24,7 @@ begin part
     end polygon
 end part
 
-begin part
+begin part 1
     name: Hull
     type: hull
     power: 0
@@ -60,7 +60,7 @@ begin part
     end polygon
 end part
 
-begin part
+begin part 2
     name: Red cockpit
     type: cockpit
     power: 4.0
@@ -99,7 +99,7 @@ begin part
     end polygon
 end part
 
-begin part
+begin part 3
     name: Green cockpit
     type: cockpit
     power: 4.0
@@ -138,7 +138,7 @@ begin part
     end polygon
 end part
 
-begin part
+begin part 4
     name: Blue cockpit
     type: cockpit
     power: 4.0
@@ -177,7 +177,7 @@ begin part
     end polygon
 end part
 
-begin part
+begin part 5
     name: Hull
     type: hull
     power: 0
@@ -224,7 +224,7 @@ begin part
     end polygon
 end part
 
-begin part
+begin part 6
     name: Hull
     type: hull
     power: 0
@@ -274,7 +274,7 @@ begin part
     end polygon
 end part
 
-begin part
+begin part 7
     name: Hull
     type: hull
     power: 0
@@ -300,7 +300,7 @@ begin part
     end polygon
 end part
 
-begin part
+begin part 8
     name: Hull
     type: hull
     power: 0
@@ -326,7 +326,7 @@ begin part
     end polygon
 end part
 
-begin part
+begin part 9
     name: Hull
     type: hull
     power: 0
@@ -373,7 +373,7 @@ begin part
     end polygon
 end part
 
-begin part
+begin part 10
     name: Wing right
     type: hull
     power: 0
@@ -410,7 +410,7 @@ begin part
     end polygon
 end part
 
-begin part
+begin part 11
     name: Wing left
     type: hull
     power: 0
@@ -447,7 +447,7 @@ begin part
     end polygon
 end part
 
-begin part
+begin part 12
     name: Light blaster
     type: weapon
     power: 0
@@ -498,7 +498,7 @@ begin part
 end part
 
 
-begin part
+begin part 13
     name: Light core
     type: core
     power: 35.0

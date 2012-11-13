@@ -77,7 +77,8 @@ public:
                     
                     // Look for beginning
                     if(type_handle == 0) {
-                        if(line.find(string("begin part")) != string::npos) {
+                        if((tmppos = line.find(string("begin part"))) != int(string::npos)) {
+                            curpart = atoi(line.substr(tmppos + 11).c_str());
                             d[curpart].type = 0;
                             d[curpart].size = 1;
                             d[curpart].power = 0;
@@ -90,7 +91,7 @@ public:
                             d[curpart].fire_pos = RR_vec2();
                             d[curpart].fire_size = RR_vec2();
                             for(int i = 0; i < RR_DATA_MAX_POLYGONS; i++) d[curpart].p[i].polysize = 0;
-                            cout<<"begin part\n";
+                            cout<<"begin part "<<curpart<<endl;
                             type_handle = 1;
                             curpol = 0;
                             in_polygon = 0;
@@ -99,7 +100,6 @@ public:
                         if(line.find(string("end part")) != string::npos) {
                             cout<<"end part\n";
                             type_handle = 0;
-                            curpart++;
                         } else if(in_polygon) {
                             if(line.find(string("end polygon")) != string::npos) {
                                 cout<<"    end polygon\n";

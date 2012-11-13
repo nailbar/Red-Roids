@@ -45,7 +45,7 @@ public:
         
         // Draw parts
         RR_vec2 vec[5];
-        if(partid < RR_g_data.curpart) {
+        if(partid < RR_DATA_MAX_PARTS) {
             for(int i = 0; i < RR_DATA_MAX_POLYGONS; i++) if(RR_g_data.d[partid].p[i].polysize) {
                 if(showdmg) position.draw_polygon(
                     win,
@@ -388,7 +388,7 @@ public:
     
     // Get size of a part
     float size(int partid) {
-        if(partid < RR_g_data.curpart) {
+        if(partid < RR_DATA_MAX_PARTS) {
             return RR_g_data.d[partid].size;
         } else switch(partid) {
 //         case 0: return 5.0; // Engine
@@ -414,7 +414,7 @@ public:
     
     // Get thrust of a part (only parts with thrusters return value)
     float thrust(int partid) {
-        if(partid < RR_g_data.curpart) {
+        if(partid < RR_DATA_MAX_PARTS) {
             return RR_g_data.d[partid].thrust;
         } else switch(partid) {
 //         case 0: return 22.0; // Engine
@@ -440,7 +440,7 @@ public:
     
     // Get weight of a part
     float weight(int partid) {
-        if(partid < RR_g_data.curpart) {
+        if(partid < RR_DATA_MAX_PARTS) {
             return RR_g_data.d[partid].weight;
         } else switch(partid) {
 //         case 0: return 5.0; // Engine
@@ -466,7 +466,7 @@ public:
     
     // Get strengh of a part
     float strengh(int partid) {
-        if(partid < RR_g_data.curpart) {
+        if(partid < RR_DATA_MAX_PARTS) {
             return RR_g_data.d[partid].strength;
         } else switch(partid) {
 //         case 0: return 5.0; // Engine
@@ -492,7 +492,7 @@ public:
     
     // Get power generation of a part
     float power(int partid) {
-        if(partid < RR_g_data.curpart) {
+        if(partid < RR_DATA_MAX_PARTS) {
             return RR_g_data.d[partid].power;
         } else switch(partid) {
 //         case 1: return 0.0; // Hull
@@ -516,7 +516,7 @@ public:
     
     // Get power draw of a part
     float power_draw(int partid) {
-        if(partid < RR_g_data.curpart) {
+        if(partid < RR_DATA_MAX_PARTS) {
             return RR_g_data.d[partid].power_draw;
         } else switch(partid) {
 //         case 0: return 20.0; // Engine
@@ -543,7 +543,7 @@ public:
     // Get weapon type if loaded
     unsigned char weapon(bool regardless) {
         if(load > 0.0 && !regardless) return 0;
-        if(type < RR_g_data.curpart) {
+        if(type < RR_DATA_MAX_PARTS) {
             return RR_g_data.d[type].weapon;
         } else switch(type) {
 //         case 12: return 1; // Light blaster
@@ -553,7 +553,7 @@ public:
     
     // Start weapon reload
     void reload() {
-        if(type < RR_g_data.curpart) {
+        if(type < RR_DATA_MAX_PARTS) {
             load = RR_g_data.d[type].reload;
 //         } else switch(type) {
 //         case 12: load = 0.5; break; // Light blaster (2 shots per second)
@@ -561,8 +561,41 @@ public:
     }
     
     // Check if a line intersects a part
-//     bool intersect() {
-//     }
+    bool intersect(int part_id, RR_vec2 part_pos, RR_vec2 part_nrm, RR_vec2 line_v1, RR_vec2 line_v2, RR_vec2 &inter_pos, float &inter_dis) {
+        RR_vec2 l1a, l1b, v1;
+        bool intersecting = false;
+        float f1;
+        
+        // Calculate normal for line
+        RR_vec2 line_nrm = RR_g_vec2.normal(line_v1, line_v2);
+        inter_dis = -1;
+        
+        // For each polygon in part
+        for(int pol1 = 0; pol1 < RR_DATA_MAX_POLYGONS; pol1++) if(RR_g_data.d[part_id].p[pol1].polysize) {
+            
+            // For each line in part
+            for(int lin1 = 0; lin1 < RR_g_data.d[part_id].p[pol1].polysize; lin1++) {
+                
+                // Calculate real position of line
+                if(lin1 > 0) l1a = RR_g_vec2.rotate(RR_g_data.d[part_id].p[pol1].vectors[lin1 - 1], part_nrm) + part_pos;
+                else l1a = RR_g_vec2.rotate(RR_g_data.d[part_id].p[pol1].vectors[RR_g_data.d[part_id].p[pol1].polysize - 1], part_nrm) + part_pos;
+                l1b = RR_g_vec2.rotate(RR_g_data.d[part_id].p[pol1].vectors[lin1], part_nrm) + part_pos;
+                
+                // Are lines intersecting?
+                if(!intersecting) if(RR_g_vec2.intersect(l1a, l1b, line_v1, line_v2, v1)) {
+                    intersecting = true;
+                    f1 = RR_g_vec2.dot(line_nrm, v1 - line_v1);
+                    if(inter_dis < 0 || f1 < inter_dis) {
+                        inter_pos = v1;
+                        inter_dis = f1;
+                    }
+                }
+            }
+        }
+        
+        // Return true if any parts were touching
+        return intersecting;
+    }
     
     // Check if two parts intersect and calculate where they intersect
     bool intersect(int part1_id, RR_vec2 part1_pos, RR_vec2 part1_nrm, int part2_id, RR_vec2 part2_pos, RR_vec2 part2_nrm, RR_vec2 &inter_nrm, float &inter_dis, RR_vec2 &inter_pos) {

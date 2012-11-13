@@ -6,7 +6,7 @@
 class RR_particle {
 public:
     unsigned char type, subtype;
-    RR_vec2 pos, spd, nrm;
+    RR_vec2 pos, lpos, spd, nrm;
     bool in_use;
     float life;
     
@@ -19,6 +19,7 @@ public:
         case 0: // Spark (max life 3 sec)
             type = newtype;
             pos = newpos;
+            lpos = newpos;
             spd = RR_g_vec2.rad_random() * 70.0;
             nrm = RR_g_vec2.random();
             in_use = 1;
@@ -27,6 +28,7 @@ public:
         case 2: // Hull fragment (max life 3 sec)
             type = newtype;
             pos = newpos;
+            lpos = newpos;
             spd = RR_g_vec2.rad_random() * 70.0;
             nrm = RR_g_vec2.random();
             in_use = 1;
@@ -35,6 +37,7 @@ public:
         case 3: // Blast light
             type = newtype;
             pos = newpos;
+            lpos = newpos;
             in_use = 1;
             life = 0.25 + (rand() % 1250) / 10000.0;
             break;
@@ -45,6 +48,7 @@ public:
         case 1: // Light blast (3 seconds)
             type = newtype;
             pos = newpos + newnrm * 4.0; // Out of Light blaster barrel
+            lpos = pos;
             spd = newspd + newnrm * 600.0; // Speed of blast plus speed of host
             nrm = newnrm;
             in_use = 1;
@@ -58,6 +62,7 @@ public:
             type = newtype;
             subtype = newsubtype;
             pos = newpos;
+            lpos = pos;
             spd = newspd + RR_g_vec2.rad_random() * 50.0;
             nrm = newnrm;
             in_use = 1;
@@ -117,6 +122,7 @@ public:
     
     // Move particle
     void move(float fspd) {
+        lpos = pos;
         switch(type) {
         case 0: // Spark (max life 3 sec)
             life -= fspd;
@@ -163,53 +169,55 @@ public:
     
     // Hit ships
     void hitships(RR_unit* a, int amax, RR_particle* b, int bmax, int current) {
-        RR_vec2 p1, n1, p2;
-        float d1, d2;
-        int i1;
+        RR_vec2 p1, n1, p2, inter_pos, top_pos;
+        float inter_dis;
+        int top_i, top_u;
+        float top_dis = -1;
         
         // Skip this if not a hitting particle
         if(hitdamage() <= 0.0) return;
         for(int i = 0; i < amax; i++) if(a[i].in_use) if(RR_g_vec2.box_distance(pos, a[i].pos) < a[i].size) {
             
             // Ship is close enough to possibly be hit -> Hit check each part of ship
-            d1 = 10000.0;
-            i1 = -1;
             for(int u = 0; u < RR_MAX_UNIT_PARTS; u++) if(a[i].p[u].in_use) {
-                p1 = a[i].pos + a[i].nrm * a[i].p[u].pos.x + a[i].nrm.extrude() * a[i].p[u].pos.y; // Part position
-                n1 = RR_g_vec2.normal(p1, pos); // Hit direction
-                d2 = n1.dot(pos - p1); // Distance from part to particle
                 
-                // Particle hits part and this part is closer than any other part it also have hit
-                if(d2 < a[i].p[u].size() + 3.0 && d2 < d1) {
-                    d1 = d2;
-                    i1 = u;
-                    p2 = p1 + n1 * a[i].p[u].size();
+                // Calculate part position
+                p1 = a[i].pos + a[i].nrm * a[i].p[u].pos.x + a[i].nrm.extrude() * a[i].p[u].pos.y;
+                
+                // Test if part is hit
+                if(a[i].p[u].intersect(a[i].p[u].type, p1, a[i].nrm, pos, lpos + (lpos - pos) * 2.0, inter_pos, inter_dis)) {
+                    if(top_dis < 0 || inter_dis < top_dis) {
+                        top_dis = inter_dis;
+                        top_pos = inter_pos;
+                        top_i = i;
+                        top_u = u;
+                    }
                 }
             }
             
             // Did any part get hit?
-            if(i1 > -1) {
+            if(top_dis > 0) {
                 in_use = false; // Particle is no more
                 
                 // Damage and optionally destroy part
-                a[i].p[i1].health -= ((rand() % 10000) / 10000.0) * hitdamage();
-                if(a[i].p[i1].health <= 0.0) {
-                    a[i].p[i1].in_use = false;
-                    a[i].recalculate();
+                a[top_i].p[top_u].health -= ((rand() % 10000) / 10000.0) * hitdamage();
+                if(a[top_i].p[top_u].health <= 0.0) {
+                    a[top_i].p[top_u].in_use = false;
+                    a[top_i].recalculate();
                 }
                 
                 // Generate sparks and small parts
                 for(int k = 0; k < 15; k++) for(int j = current; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
-                    if(k == 0) b[j] = RR_particle(3, p2); // Light pulse
-                    else if(!a[i].p[i1].in_use && k == 1) b[j] = RR_particle( // Destroyed part
+                    if(k == 0) b[j] = RR_particle(3, top_pos); // Light pulse
+                    else if(!a[top_i].p[top_u].in_use && k == 1) b[j] = RR_particle( // Destroyed part
                         4,
-                        a[i].pos + a[i].nrm * a[i].p[i1].pos.x + a[i].nrm.extrude() * a[i].p[i1].pos.y,
-                        a[i].nrm,
-                        a[i].spd,
-                        a[i].p[i1].type
+                        a[top_i].pos + a[top_i].nrm * a[top_i].p[top_u].pos.x + a[top_i].nrm.extrude() * a[top_i].p[top_u].pos.y,
+                        a[top_i].nrm,
+                        a[top_i].spd,
+                        a[top_i].p[top_u].type
                     );
-                    else if(rand() % 100 < 80) b[j] = RR_particle(0, p2); // Sparks
-                    else b[j] = RR_particle(2, p2); // Fragments
+                    else if(rand() % 100 < 80) b[j] = RR_particle(0, top_pos); // Sparks
+                    else b[j] = RR_particle(2, top_pos); // Fragments
                     current = j + 1;
                     break;
                 }

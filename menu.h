@@ -73,7 +73,7 @@ public:
             
             // Some bouncing
             for(int u = i + 1; u < RR_MENU_UNITS; u++) {
-                a[i].bounce(a[u], false, false);
+                a[i].bounce(a[u], true, false);
             }
             
             // Move ships
