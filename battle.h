@@ -363,33 +363,22 @@ public:
             if(battle_timeout <= 0.0) next_battle();
         }
         
-//         // Dev testing
-//         RR_unit unitx;
-//         unitx.from_preset(11);
-//         unitx.draw(win, RR_vec2(300, 300), a[0].nrm, 3.0);
-//         RR_unit_part partx;
-//         for(int i = 0; i < 30; i++) partx.draw(
-//             win, RR_vec2(300, 100 + i * 30), RR_vec2(0), 1.0,
-//             i, // Part
-//             0, RR_vec2(0), false
+//         // Test part intersection
+//         static float partrot = 0.0;
+//         partrot += fspd * 0.2;
+//         RR_unit_part testpart;
+//         RR_vec2 inter_nrm, inter_pos;
+//         float inter_dis;
+//         bool touching = testpart.intersect(
+//             1, RR_vec2(150, 150), RR_vec2(0 - partrot * 0.8),
+//             9, RR_vec2(180, 150), a[player].nrm,
+//             inter_nrm, inter_dis, inter_pos
 //         );
-    
-//         // Intersecting lines test
-//         RR_vec2 test_l1a = RR_vec2(100, 100);
-//         RR_vec2 test_l1b = RR_vec2(400, 200);
-//         RR_vec2 test_l2a = RR_vec2(300, 100);
-//         RR_vec2 test_l2b = RR_vec2(200, 300);
-//         RR_vec2 test_v = RR_vec2(0, 0);
-//         lineRGBA(win, test_l1a.x, test_l1a.y, test_l1b.x, test_l1b.y, 255, 0, 0, 255);
-//         lineRGBA(win, test_l2a.x, test_l2a.y, test_l2b.x, test_l2b.y, 0, 200, 0, 255);
-//         RR_g_vec2.intersect(test_l1a, test_l1b, test_l2a, test_l2b, &test_v);
-//         lineRGBA(win, 0, 0, test_v.x, test_v.y, 100, 0, 255, 255);
-//         test_l2a = RR_vec2(300, 100);
-//         test_l2b = RR_vec2(400, 200 + a[player].nrm.y * 200.0);
-//         test_v = RR_vec2(0, 0);
-//         lineRGBA(win, test_l2a.x, test_l2a.y, test_l2b.x, test_l2b.y, 100, 200, 0, 255);
-//         RR_g_vec2.intersect(test_l1a, test_l1b, test_l2a, test_l2b, &test_v);
-//         lineRGBA(win, 0, 0, test_v.x, test_v.y, 100, 100, 100, 255);
+//         testpart.draw(win, RR_vec2(150, 150) * 2.0, RR_vec2(0 - partrot * 0.8), 2.0, 1, 0, RR_vec2(0), touching);
+//         testpart.draw(win, RR_vec2(180, 150) * 2.0, a[player].nrm, 2.0, 9, 0, RR_vec2(0), touching);
+//         if(touching) boxRGBA(win, inter_pos.x * 2 - 1, inter_pos.y * 2 - 1, inter_pos.x * 2 + 1, inter_pos.y * 2 + 1, 255, 255, 0, 255);
+//         boxRGBA(win, 149 * 2, 149 * 2, 151 * 2, 151 * 2, 0, 255, 0, 255);
+//         boxRGBA(win, 179 * 2, 149 * 2, 181 * 2, 151 * 2, 0, 255, 0, 255);
         
         // Done
         return 0;

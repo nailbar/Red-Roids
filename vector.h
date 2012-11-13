@@ -105,7 +105,7 @@ public:
     }
     
     // Return if two lines intersect and calculate the intersection point
-    bool intersect(RR_vec2 l1a, RR_vec2 l1b, RR_vec2 l2a, RR_vec2 l2b, RR_vec2* v) {
+    bool intersect(RR_vec2 l1a, RR_vec2 l1b, RR_vec2 l2a, RR_vec2 l2b, RR_vec2 &v) {
         
         // Make all coordinates relative to l1a
         RR_vec2 v_l1a = RR_vec2(0, 0);
@@ -130,10 +130,10 @@ public:
         RR_vec2 l2_nrm = normal(l2a, l2b);
         
         // Calculate the intersection point
-        *v = l2a + l2_nrm * (l2_dis * ((0 - l2a_dot) / (l2b_dot - l2a_dot)));
+        v = l2a + l2_nrm * (l2_dis * ((0 - l2a_dot) / (l2b_dot - l2a_dot)));
         
         // Check if intersection point is outside of l1
-        RR_vec2 v_v = *v - l1a;
+        RR_vec2 v_v = v - l1a;
         double v_dot = dot(l1_nrm, v_v);
         double l1_dis = distance(l1a, l1b);
         if(v_dot < 0) return false;

@@ -560,26 +560,68 @@ public:
         }
     }
     
+    // Check if a line intersects a part
+//     bool intersect() {
+//     }
+    
     // Check if two parts intersect and calculate where they intersect
-    bool intersect() {
-        // Awesome meta-code:
-        // Calculate real position of parts
+    bool intersect(int part1_id, RR_vec2 part1_pos, RR_vec2 part1_nrm, int part2_id, RR_vec2 part2_pos, RR_vec2 part2_nrm, RR_vec2 &inter_nrm, float &inter_dis, RR_vec2 &inter_pos) {
+        RR_vec2 l1a, l1b, l2a, l2b, v1, n1;
+        bool intersecting = false;
+        double d1, d2, dtemp;
+        bool first = true;
+        
         // Quick box-fit test if parts are even near
+        if(RR_g_vec2.box_distance(part1_pos, part2_pos) > size(part1_id) + size(part2_id)) return false;
+        
+        // Get the normal from part1 to part2
+        n1 = RR_g_vec2.normal(part1_pos, part2_pos);
+        
         // For each polygon in part 1
-        // Calculate real position of polygon
-        // For each polygon in part 2
-        // Calculate real position of polygon
-        // Quick box-fit test if polygons are even near
-        // For each line in part 1
-        // Calculate real position of line
-        // For each line in part 2
-        // Calculate real position of line
-        // Are lines intersecting?
-        // Is this the first intersecting line?
-        // Is this intersection point closer than the closest so far?
-        // Set what parts are touching
-        // Set where the parts are touching
-        // After all is looped: return true if any parts were touching
+        for(int pol1 = 0; pol1 < RR_DATA_MAX_POLYGONS; pol1++) if(RR_g_data.d[part1_id].p[pol1].polysize) {
+            
+            // For each polygon in part 2
+            for(int pol2 = 0; pol2 < RR_DATA_MAX_POLYGONS; pol2++) if(RR_g_data.d[part2_id].p[pol2].polysize) {
+                
+                // For each line in part 1
+                for(int lin1 = 0; lin1 < RR_g_data.d[part1_id].p[pol1].polysize; lin1++) {
+                    
+                    // Calculate real position of line
+                    if(lin1 > 0) l1a = RR_g_vec2.rotate(RR_g_data.d[part1_id].p[pol1].vectors[lin1 - 1], part1_nrm) + part1_pos;
+                    else l1a = RR_g_vec2.rotate(RR_g_data.d[part1_id].p[pol1].vectors[RR_g_data.d[part1_id].p[pol1].polysize - 1], part1_nrm) + part1_pos;
+                    l1b = RR_g_vec2.rotate(RR_g_data.d[part1_id].p[pol1].vectors[lin1], part1_nrm) + part1_pos;
+                    
+                    // Find the vector furthest away from part1 in direction towards part2
+                    dtemp = RR_g_vec2.dot(n1, l1b - part1_pos);
+                    if(first || dtemp > d1) d1 = dtemp;
+                    
+                    // For each line in part 2
+                    for(int lin2 = 0; lin2 < RR_g_data.d[part2_id].p[pol2].polysize; lin2++) {
+                        
+                        // Calculate real position of line
+                        if(lin2 > 0) l2a = RR_g_vec2.rotate(RR_g_data.d[part2_id].p[pol2].vectors[lin2 - 1], part2_nrm) + part2_pos;
+                        else l2a = RR_g_vec2.rotate(RR_g_data.d[part2_id].p[pol2].vectors[RR_g_data.d[part2_id].p[pol2].polysize - 1], part2_nrm) + part2_pos;
+                        l2b = RR_g_vec2.rotate(RR_g_data.d[part2_id].p[pol2].vectors[lin2], part2_nrm) + part2_pos;
+                        
+                        // Find the vector furthest away from part2 in direction from part1 towards part2
+                        dtemp = RR_g_vec2.dot(n1, l2b - part1_pos);
+                        if(first || dtemp < d2) d2 = dtemp;
+                        first = false;
+                        
+                        // Are lines intersecting?
+                        if(!intersecting) if(RR_g_vec2.intersect(l1a, l1b, l2a, l2b, v1)) intersecting = true;
+                    }
+                }
+            }
+        }
+        
+        // Calculate overlap
+        inter_nrm = n1;
+        inter_dis = d1 - d2;
+        inter_pos = part1_pos + inter_nrm * (d2 + inter_dis * 0.5);
+        
+        // Return true if any parts were touching
+        return intersecting;
     }
 };
 
