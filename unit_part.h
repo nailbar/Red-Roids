@@ -560,8 +560,26 @@ public:
         }
     }
     
-    // Check if two polygons intersect and calculate where they intersect
+    // Check if two parts intersect and calculate where they intersect
     bool intersect() {
+        // Awesome meta-code:
+        // Calculate real position of parts
+        // Quick box-fit test if parts are even near
+        // For each polygon in part 1
+        // Calculate real position of polygon
+        // For each polygon in part 2
+        // Calculate real position of polygon
+        // Quick box-fit test if polygons are even near
+        // For each line in part 1
+        // Calculate real position of line
+        // For each line in part 2
+        // Calculate real position of line
+        // Are lines intersecting?
+        // Is this the first intersecting line?
+        // Is this intersection point closer than the closest so far?
+        // Set what parts are touching
+        // Set where the parts are touching
+        // After all is looped: return true if any parts were touching
     }
 };
 
