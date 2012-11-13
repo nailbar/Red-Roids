@@ -373,6 +373,23 @@ public:
 //             i, // Part
 //             0, RR_vec2(0), false
 //         );
+    
+//         // Intersecting lines test
+//         RR_vec2 test_l1a = RR_vec2(100, 100);
+//         RR_vec2 test_l1b = RR_vec2(400, 200);
+//         RR_vec2 test_l2a = RR_vec2(300, 100);
+//         RR_vec2 test_l2b = RR_vec2(200, 300);
+//         RR_vec2 test_v = RR_vec2(0, 0);
+//         lineRGBA(win, test_l1a.x, test_l1a.y, test_l1b.x, test_l1b.y, 255, 0, 0, 255);
+//         lineRGBA(win, test_l2a.x, test_l2a.y, test_l2b.x, test_l2b.y, 0, 200, 0, 255);
+//         RR_g_vec2.intersect(test_l1a, test_l1b, test_l2a, test_l2b, &test_v);
+//         lineRGBA(win, 0, 0, test_v.x, test_v.y, 100, 0, 255, 255);
+//         test_l2a = RR_vec2(300, 100);
+//         test_l2b = RR_vec2(400, 200 + a[player].nrm.y * 200.0);
+//         test_v = RR_vec2(0, 0);
+//         lineRGBA(win, test_l2a.x, test_l2a.y, test_l2b.x, test_l2b.y, 100, 200, 0, 255);
+//         RR_g_vec2.intersect(test_l1a, test_l1b, test_l2a, test_l2b, &test_v);
+//         lineRGBA(win, 0, 0, test_v.x, test_v.y, 100, 100, 100, 255);
         
         // Done
         return 0;

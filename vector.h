@@ -20,6 +20,8 @@ public:
         x = cos(radians);
         y = sin(radians);
     }
+    
+    // Overloaded operators
     RR_vec2 operator+(RR_vec2 v) {
         return RR_vec2(x + v.x, y + v.y);
     }
@@ -100,6 +102,45 @@ public:
     double distance(RR_vec2 from, RR_vec2 to) {
         RR_vec2 v1 = to - from;
         return sqrt(v1.x * v1.x + v1.y * v1.y);
+    }
+    
+    // Return if two lines intersect and calculate the intersection point
+    bool intersect(RR_vec2 l1a, RR_vec2 l1b, RR_vec2 l2a, RR_vec2 l2b, RR_vec2* v) {
+        
+        // Make all coordinates relative to l1a
+        RR_vec2 v_l1a = RR_vec2(0, 0);
+        RR_vec2 v_l1b = l1b - l1a;
+        RR_vec2 v_l2a = l2a - l1a;
+        RR_vec2 v_l2b = l2b - l1a;
+        
+        // Get normal and extruded normal for l1
+        RR_vec2 l1_nrm = normal(v_l1a, v_l1b);
+        RR_vec2 l1_ext = l1_nrm.extrude();
+        
+        // Get dot values for l2
+        double l2a_dot = dot(l1_ext, v_l2a);
+        double l2b_dot = dot(l1_ext, v_l2b);
+        
+        // Check if l2a and l2b is on different sides of l1
+        if(l2a_dot < 0 && l2b_dot < 0) return false;
+        if(l2a_dot > 0 && l2b_dot > 0) return false;
+        
+        // Get distance and normal between l2 ends
+        double l2_dis = distance(l2a, l2b);
+        RR_vec2 l2_nrm = normal(l2a, l2b);
+        
+        // Calculate the intersection point
+        *v = l2a + l2_nrm * (l2_dis * ((0 - l2a_dot) / (l2b_dot - l2a_dot)));
+        
+        // Check if intersection point is outside of l1
+        RR_vec2 v_v = *v - l1a;
+        double v_dot = dot(l1_nrm, v_v);
+        double l1_dis = distance(l1a, l1b);
+        if(v_dot < 0) return false;
+        if(v_dot > l1_dis) return false;
+        
+        // All checkes passed, we have an intersection
+        return true;
     }
     
     // Draw a translated polygon
