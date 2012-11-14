@@ -54,6 +54,15 @@ public:
             in_use = 1;
             life = 3.0;
             break;
+        case 2: // Light blast (3 seconds)
+            type = newtype;
+            pos = newpos + newnrm * 4.0; // Out of Light blaster barrel
+            lpos = pos;
+            spd = newspd + newnrm * 600.0; // Speed of blast plus speed of host
+            nrm = newnrm;
+            in_use = 1;
+            life = 3.0;
+            break;
         }
     }
     RR_particle(unsigned char newtype, RR_vec2 newpos, RR_vec2 newnrm, RR_vec2 newspd, unsigned char newsubtype) {

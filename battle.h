@@ -394,11 +394,11 @@ public:
         for(int i = 0; i < 2 + fleet_type; i++) {
             added++;
             if(fleet_team == 0) {
-                i1 = addship((rand() % techR) + 1, fleet_team, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
+                i1 = addship(/*(rand() % techR) + 1*/ 8, fleet_team, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);
             } else if(fleet_team == 1) {
-                i1 = addship((rand() % techG) + 1, fleet_team, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
+                i1 = addship(/*(rand() % techG) + 1*/ 8, fleet_team, teamG_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamG_pos, RR_vec2()), i1);
             } else if(fleet_team == 2) {
-                i1 = addship((rand() % techB) + 1, fleet_team, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
+                i1 = addship(/*(rand() % techB) + 1*/ 8, fleet_team, teamB_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamB_pos, RR_vec2()), i1);
             }
         }
         return added;

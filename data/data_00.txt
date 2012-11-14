@@ -500,7 +500,6 @@ begin part 12
     end polygon
 end part
 
-
 begin part 13
     name: Light core
     type: core
@@ -572,5 +571,249 @@ begin part 13
         vector: -5, -4
         vector: 5, -4
         vector: 5, 4
+    end polygon
+end part
+
+begin part 14
+    name: Hull
+    type: hull
+    power: 0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 14.0
+    strength: 18.0
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 1
+        ambient: 0.6
+        phong: 0.5
+        vector: 16, 4
+        vector: 16, -4
+        vector: -16, -4
+        vector: -16, 4
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 0.5
+        ambient: 0.2
+        phong: 1.0
+        vector: 16, 4
+        vector: -16, 4
+        vector: -12, 9
+        vector: 12, 9
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: -0.5
+        ambient: 0.2
+        phong: 1.0
+        vector: 16, -4
+        vector: -16, -4
+        vector: -12, -9
+        vector: 12, -9
+    end polygon
+end part
+
+begin part 15
+    name: Left Wing
+    type: hull
+    power: 0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 9.0
+    strength: 14.0
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: -0.5
+        ambient: 0.2
+        phong: 1.0
+        vector: 6, 9
+        vector: -9, 9
+        vector: -11, 3
+        vector: 6, -18
+        vector: 12, -18
+    end polygon
+end part
+
+begin part 16
+    name: Right Wing
+    type: hull
+    power: 0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 9.0
+    strength: 14.0
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 0.5
+        ambient: 0.2
+        phong: 1.0
+        vector: 6, -9
+        vector: -9, -9
+        vector: -11, -3
+        vector: 6, 18
+        vector: 12, 18
+    end polygon
+end part
+
+begin part 17
+    name: Medium core
+    type: core
+    power: 65.0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 10.0
+    strength: 0.2
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 0
+        ambient: 0.2
+        phong: 0.2
+        vector: -7, 0
+        vector: 8, -6
+        vector: 13, -4
+        vector: 13, 4
+        vector: 8, 6
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 1.0
+        ambient: 0.2
+        phong: 0.2
+        vector: 7, 0
+        vector: -8, -6
+        vector: -13, -4
+        vector: -13, 4
+        vector: -8, 6
+    end polygon
+    begin polygon
+        color_r: 224
+        color_g: 95
+        color_b: 0
+        tilt_dir: 0
+        ambient: 1.0
+        phong: 0.0
+        vector: -7, 4
+        vector: -7, -4
+        vector: 7, -4
+        vector: 7, 4
+    end polygon
+end part
+
+begin part 18
+    name: Medium blaster
+    type: weapon
+    power: 0
+    weapon: 1
+    reload: 0.2
+    thrust: 0
+    weight: 5.0
+    strength: 3.0
+    power_draw: 20.0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 100
+        color_g: 110
+        color_b: 130
+        tilt_dir: 0.5
+        ambient: 0.2
+        phong: 0.3
+        vector: -4, 0
+        vector: 7, 0
+        vector: 7, 2
+        vector: -4, 2
+    end polygon
+    begin polygon
+        color_r: 100
+        color_g: 110
+        color_b: 130
+        tilt_dir: -0.5
+        ambient: 0.2
+        phong: 0.3
+        vector: -4, -2
+        vector: 7, -2
+        vector: 7, 0
+        vector: -4, 0
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 1.0
+        ambient: 0.2
+        phong: 0.5
+        vector: -8, -2
+        vector: -4, -4
+        vector: -4, 4
+        vector: -8, 2
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 0
+        ambient: 0.2
+        phong: 0.5
+        vector: 7, -2
+        vector: 10, -1
+        vector: 10, 1
+        vector: 7, 2
+    end polygon
+end part
+
+begin part 19
+    name: Medium thruster
+    type: thruster
+    power: 0
+    weapon: 0
+    reload: 0
+    thrust: 50.0
+    weight: 9.0
+    strength: 10.0
+    power_draw: 35.0
+    fire_pos: -5, 0
+    fire_size: -25, 5
+    begin polygon
+        color_r: 100
+        color_g: 110
+        color_b: 130
+        tilt_dir: 1.0
+        ambient: 0.2
+        phong: 0.3
+        vector: -5, -5
+        vector: 5, -8
+        vector: 5, 8
+        vector: -5, 5
     end polygon
 end part

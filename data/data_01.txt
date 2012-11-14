@@ -491,3 +491,62 @@ begin unit 7
         parent: 11
     end upart
 end unit
+
+begin unit 8
+    name: Gen 2 Light fighter
+    type: fighter
+    begin upart 0
+        type: 2
+        increment: team
+        vector: 10, 0
+        parent: 0
+    end upart
+    begin upart 4
+        type: 9
+        increment: 0
+        vector: 25, 0
+        parent: 0
+    end upart
+    begin upart 5
+        type: 15
+        increment: 0
+        vector: -8, -17
+        parent: 0
+    end upart
+    begin upart 6
+        type: 16
+        increment: 0
+        vector: -8, 17
+        parent: 0
+    end upart
+    begin upart 7
+        type: 14
+        increment: 0
+        vector: 0, 0
+        parent: 0
+    end upart
+    begin upart 8
+        type: 18
+        increment: 0
+        vector: 5, -22
+        parent: 0
+    end upart
+    begin upart 9
+        type: 18
+        increment: 0
+        vector: 5, 22
+        parent: 0
+    end upart
+    begin upart 10
+        type: 19
+        increment: 0
+        vector: -18, 0
+        parent: 0
+    end upart
+    begin upart 11
+        type: 17
+        increment: 0
+        vector: 0, 0
+        parent: 0
+    end upart
+end unit

@@ -13,7 +13,7 @@
 #endif
 
 #ifndef RR_UNIT_MAX_TECH
-#define RR_UNIT_MAX_TECH 7
+#define RR_UNIT_MAX_TECH 8
 #endif
 
 class RR_unit {
