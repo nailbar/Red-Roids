@@ -147,6 +147,21 @@ void RR_unit::from_preset(unsigned char preset, char newteam) {
     // Construct unit
     type = preset;
     team = newteam % 3;
+    if(preset < RR_DATA_MAX_UNITS) if(RR_g_data.u[preset].type > 0) {
+        for(int i = 0; i < RR_DATA_MAX_UNIT_PARTS; i++) if(RR_g_data.u[preset].p[i].in_use) {
+            p[i] = RR_unit_part(
+                RR_g_data.u[preset].p[i].type + (RR_g_data.u[preset].p[i].increment ? team : 0),
+                RR_g_data.u[preset].p[i].pos,
+                RR_g_data.u[preset].p[i].parent
+            );
+        }
+        
+        // Recalculate size, power, thrust, etc
+        power_draw = 0.0;
+        recalculate();
+        return;
+    }
+    
     switch(preset) {
     case 1: // Scout 1
         p[0] = RR_unit_part(2 + team, RR_vec2(-1, 0), 1); // Cockpit
@@ -154,6 +169,9 @@ void RR_unit::from_preset(unsigned char preset, char newteam) {
         p[2] = RR_unit_part(0, RR_vec2(-13, 0), 4); // Thruster
         p[3] = RR_unit_part(12, RR_vec2(28, 0), 1); // Blaster
         p[4] = RR_unit_part(13, RR_vec2(0, 0), 0); // Core
+        p[5] = RR_unit_part(13, RR_vec2(0, 10), 0); // Core
+        p[6] = RR_unit_part(13, RR_vec2(0, 20), 0); // Core
+        p[7] = RR_unit_part(13, RR_vec2(0, 30), 0); // Core
         break;
     case 2: // Scout 2
         p[0] = RR_unit_part(2 + team, RR_vec2(1, 0), 5); // Cockpit

@@ -1,2 +1,37 @@
 # Default unit descriptions
+# Unit 0 is default
 
+begin unit 1
+    name: Scout 1
+    type: fighter
+    begin upart 0
+        type: 2
+        increment: team
+        vector: -1, 0
+        parent: 1
+    end upart
+    begin upart 1
+        type: 5
+        increment: 0
+        vector: 4, 0
+        parent: 4
+    end upart
+    begin upart 2
+        type: 0
+        increment: 0
+        vector: -13, 0
+        parent: 4
+    end upart
+    begin upart 3
+        type: 12
+        increment: 0
+        vector: 28, 0
+        parent: 1
+    end upart
+    begin upart 4
+        type: 13
+        increment: 0
+        vector: 0, 0
+        parent: 0
+    end upart
+end unit
