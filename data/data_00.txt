@@ -1,3 +1,6 @@
+# Default part descriptions
+# These parts are required for default units
+
 begin part 0
     name: Light thruster
     type: thruster
