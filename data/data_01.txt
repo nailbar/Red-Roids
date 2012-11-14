@@ -1,6 +1,59 @@
 # Default unit descriptions
 # Unit 0 is default
 
+begin unit 0
+    name: Lamer
+    type: fighter
+    begin upart 0
+        type: 2
+        increment: team
+        vector: 21, 0
+        parent: 3
+    end upart
+    begin upart 1
+        type: 6
+        increment: 0
+        vector: -12, 0
+        parent: 7
+    end upart
+    begin upart 2
+        type: 6
+        increment: 0
+        vector: 0, 0
+        parent: 7
+    end upart
+    begin upart 3
+        type: 6
+        increment: 0
+        vector: 12, 0
+        parent: 7
+    end upart
+    begin upart 4
+        type: 0
+        increment: 0
+        vector: -24, 0
+        parent: 1
+    end upart
+    begin upart 5
+        type: 12
+        increment: 0
+        vector: 22, 9
+        parent: 3
+    end upart
+    begin upart 6
+        type: 12
+        increment: 0
+        vector: 22, -9
+        parent: 3
+    end upart
+    begin upart 7
+        type: 13
+        increment: 0
+        vector: 0, 0
+        parent: 0
+    end upart
+end unit
+
 begin unit 1
     name: Scout 1
     type: fighter
@@ -33,5 +86,408 @@ begin unit 1
         increment: 0
         vector: 0, 0
         parent: 0
+    end upart
+end unit
+
+
+begin unit 2
+    name: Scout 2
+    type: fighter
+    begin upart 0
+        type: 2
+        increment: team
+        vector: 1, 0
+        parent: 5
+    end upart
+    begin upart 1
+        type: 12
+        increment: 0
+        vector: 10, 0
+        parent: 0
+    end upart
+    begin upart 2
+        type: 7
+        increment: 0
+        vector: 5, 9
+        parent: 5
+    end upart
+    begin upart 3
+        type: 8
+        increment: 0
+        vector: 5, -9
+        parent: 5
+    end upart
+    begin upart 4
+        type: 0
+        increment: 0
+        vector: -12, 0
+        parent: 5
+    end upart
+    begin upart 5
+        type: 13
+        increment: 0
+        vector: 0, 0
+        parent: 0
+    end upart
+end unit
+
+begin unit 3
+    name: Light fighter 1
+    type: fighter
+    begin upart 0
+        type: 2
+        increment: team
+        vector: -4, 0
+        parent: 8
+    end upart
+    begin upart 1
+        type: 9
+        increment: 0
+        vector: 16, 0
+        parent: 8
+    end upart
+    begin upart 2
+        type: 10
+        increment: 0
+        vector: -7, 8
+        parent: 8
+    end upart
+    begin upart 3
+        type: 11
+        increment: 0
+        vector: -7, -8
+        parent: 8
+    end upart
+    begin upart 4
+        type: 0
+        increment: 0
+        vector: -13, 6
+        parent: 2
+    end upart
+    begin upart 5
+        type: 0
+        increment: 0
+        vector: -13, -6
+        parent: 3
+    end upart
+    begin upart 6
+        type: 12
+        increment: 0
+        vector: -15, 18
+        parent: 2
+    end upart
+    begin upart 7
+        type: 12
+        increment: 0
+        vector: -15, -18
+        parent: 3
+    end upart
+    begin upart 8
+        type: 13
+        increment: 0
+        vector: 0, 0
+        parent: 0
+    end upart
+end unit
+
+begin unit 4
+    name: Light fighter 2
+    type: fighter
+    begin upart 0
+        type: 2
+        increment: team
+        vector: -4, 0
+        parent: 7
+    end upart
+    begin upart 1
+        type: 1
+        increment: 0
+        vector: 11, 0
+        parent: 7
+    end upart
+    begin upart 2
+        type: 7
+        increment: 0
+        vector: -13, 10
+        parent: 7
+    end upart
+    begin upart 3
+        type: 8
+        increment: 0
+        vector: -13, -10
+        parent: 7
+    end upart
+    begin upart 4
+        type: 0
+        increment: 0
+        vector: -12, 0
+        parent: 7
+    end upart
+    begin upart 5
+        type: 12
+        increment: 0
+        vector: -6, 15
+        parent: 2
+    end upart
+    begin upart 6
+        type: 12
+        increment: 0
+        vector: -6, -15
+        parent: 3
+    end upart
+    begin upart 7
+        type: 13
+        increment: 0
+        vector: 0, 0
+        parent: 0
+    end upart
+end unit
+
+begin unit 5
+    name: Medium fighter 1
+    type: fighter
+    begin upart 0
+        type: 2
+        increment: team
+        vector: 0, 0
+        parent: 12
+    end upart
+    begin upart 1
+        type: 7
+        increment: 0
+        vector: 26, 17
+        parent: 3
+    end upart
+    begin upart 2
+        type: 8
+        increment: 0
+        vector: 26, -17
+        parent: 4
+    end upart
+    begin upart 3
+        type: 5
+        increment: 0
+        vector: 8, 12
+        parent: 12
+    end upart
+    begin upart 4
+        type: 5
+        increment: 0
+        vector: 8, -12
+        parent: 13
+    end upart
+    begin upart 5
+        type: 10
+        increment: 0
+        vector: -11, 17
+        parent: 3
+    end upart
+    begin upart 6
+        type: 11
+        increment: 0
+        vector: -11, -17
+        parent: 4
+    end upart
+    begin upart 7
+        type: 0
+        increment: 0
+        vector: -11, 6
+        parent: 12
+    end upart
+    begin upart 8
+        type: 0
+        increment: 0
+        vector: -11, -6
+        parent: 13
+    end upart
+    begin upart 9
+        type: 12
+        increment: 0
+        vector: 12, 0
+        parent: 0
+    end upart
+    begin upart 10
+        type: 12
+        increment: 0
+        vector: 33, 9
+        parent: 3
+    end upart
+    begin upart 11
+        type: 12
+        increment: 0
+        vector: 33, -9
+        parent: 4
+    end upart
+    begin upart 12
+        type: 13
+        increment: 0
+        vector: 1, 6
+        parent: 13
+    end upart
+    begin upart 13
+        type: 13
+        increment: 0
+        vector: 1, -6
+        parent: 0
+    end upart
+end unit
+
+begin unit 6
+    name: Medium fighter 2
+    type: fighter
+    begin upart 0
+        type: 2
+        increment: team
+        vector: 0, 0
+        parent: 2
+    end upart
+    begin upart 1
+        type: 1
+        increment: 0
+        vector: 26, 0
+        parent: 11
+    end upart
+    begin upart 2
+        type: 9
+        increment: 0
+        vector: -4, 0
+        parent: 10
+    end upart
+    begin upart 3
+        type: 5
+        increment: 0
+        vector: -1, 9
+        parent: 2
+    end upart
+    begin upart 4
+        type: 5
+        increment: 0
+        vector: -1, -9
+        parent: 2
+    end upart
+    begin upart 5
+        type: 0
+        increment: 0
+        vector: -23, 7
+        parent: 2
+    end upart
+    begin upart 6
+        type: 0
+        increment: 0
+        vector: -23, -7
+        parent: 2
+    end upart
+    begin upart 7
+        type: 12
+        increment: 0
+        vector: 48, 0
+        parent: 1
+    end upart
+    begin upart 8
+        type: 12
+        increment: 0
+        vector: 23, 11
+        parent: 3
+    end upart
+    begin upart 9
+        type: 12
+        increment: 0
+        vector: 23, -11
+        parent: 4
+    end upart
+    begin upart 10
+        type: 13
+        increment: 0
+        vector: 0, 0
+        parent: 11
+    end upart
+    begin upart 11
+        type: 13
+        increment: 0
+        vector: 18, 0
+        parent: 0
+    end upart
+end unit
+
+begin unit 7
+    name: Heavy fighter 1
+    type: fighter
+    begin upart 0
+        type: 2
+        increment: team
+        vector: 0, 0
+        parent: 2
+    end upart
+    begin upart 1
+        type: 9
+        increment: 0
+        vector: 17, 0
+        parent: 2
+    end upart
+    begin upart 2
+        type: 6
+        increment: 0
+        vector: -5, 0
+        parent: 12
+    end upart
+    begin upart 3
+        type: 5
+        increment: 0
+        vector: -16, 15
+        parent: 2
+    end upart
+    begin upart 4
+        type: 5
+        increment: 0
+        vector: -16, -15
+        parent: 2
+    end upart
+    begin upart 5
+        type: 0
+        increment: 0
+        vector: -30, 15
+        parent: 3
+    end upart
+    begin upart 6
+        type: 0
+        increment: 0
+        vector: -30, -15
+        parent: 4
+    end upart
+    begin upart 7
+        type: 12
+        increment: 0
+        vector: 9, 14
+        parent: 3
+    end upart
+    begin upart 8
+        type: 12
+        increment: 0
+        vector: 9, 18
+        parent: 3
+    end upart
+    begin upart 9
+        type: 12
+        increment: 0
+        vector: 9, -14
+        parent: 4
+    end upart
+    begin upart 10
+        type: 12
+        increment: 0
+        vector: 9, -18
+        parent: 4
+    end upart
+    begin upart 11
+        type: 13
+        increment: 0
+        vector: 9, 0
+        parent: 0
+    end upart
+    begin upart 12
+        type: 13
+        increment: 0
+        vector: -9, 0
+        parent: 11
     end upart
 end unit

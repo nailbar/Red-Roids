@@ -220,7 +220,7 @@ public:
                         }
                     } else if(type_handle == 2) {
                         if(line.find(string("end unit")) != string::npos) {
-                            switch(d[curunit].type) {
+                            switch(u[curunit].type) {
                             case 1: cout<<" (Type Fighter"; break;
                             default: cout<<" (Type Unknown";
                             }
