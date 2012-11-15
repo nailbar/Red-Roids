@@ -39,6 +39,7 @@ public:
     float reinforcements, player_timeout, battle_timeout;
     int next_particle, player, player_team, wings;
     bool zoom_key, zoom_toggle;
+    char battle_mode;
     
     // Fleets
     unsigned char fleetR[RR_BATTLE_MAX_FLEET];
@@ -59,6 +60,7 @@ public:
         zoom_key = false;
         zoom_toggle = false;
         player_team = rand() % 3;
+        battle_mode = 0;
         
         // Init the battle
         next_battle();
@@ -79,20 +81,49 @@ public:
         player = rand() % RR_BATTLE_MAX_UNITS;
         reinforcements = RR_BATTLE_REINFORCEMENT_INTERVAL;
         battle_timeout = 5.0;
-        if(random_team) player_team = rand() % 3;
+        if(random_team) {
+            player_team = rand() % 3;
         
-//         if(tech < RR_UNIT_MAX_TECH) tech++;
-//         wings = (rand() % (RR_BATTLE_MAX_FLEET - 1)) + 1;
-        fsizeR = (rand() % 10) + 1;
-        fsizeG = (rand() % 10) + 1;
-        fsizeB = (rand() % 10) + 1;
-        techR = (rand() % (RR_UNIT_MAX_TECH - 2)) + 2;
-        techG = (rand() % (RR_UNIT_MAX_TECH - 2)) + 2;
-        techB = (rand() % (RR_UNIT_MAX_TECH - 2)) + 2;
-        for(int i = 0; i < RR_BATTLE_MAX_FLEET; i++) {
-            if(i < fsizeR) fleetR[i] = rand() % 6;
-            if(i < fsizeG) fleetG[i] = rand() % 6;
-            if(i < fsizeB) fleetB[i] = rand() % 6;
+            // Set battle mode
+            battle_mode = rand() % 2;
+        }
+        switch(battle_mode) {
+            
+        // 1 = survival (Survive increasingly difficult attacks)
+        case 1:
+            techR = 2;
+            techG = 2;
+            techB = 2;
+            fsizeR = RR_BATTLE_MAX_FLEET;
+            fsizeG = RR_BATTLE_MAX_FLEET;
+            fsizeB = RR_BATTLE_MAX_FLEET;
+            for(int i = 0; i < RR_BATTLE_MAX_FLEET; i++) {
+                if(i < fsizeR) fleetR[i] = RR_BATTLE_MAX_FLEET - i;
+                if(i < fsizeG) fleetG[i] = RR_BATTLE_MAX_FLEET - i;
+                if(i < fsizeB) fleetB[i] = RR_BATTLE_MAX_FLEET - i;
+            }
+            
+            // Add player
+            switch(player_team) {
+            case 0: techR = RR_g_data.maxunit - 1; addfleet(1, player_team); break;
+            case 1: techG = RR_g_data.maxunit - 1; addfleet(1, player_team); break;
+            case 2: techB = RR_g_data.maxunit - 1; addfleet(1, player_team); break;
+            }
+            break;
+        
+        // 0 = normal skirmish (three random fleets attacking each other)
+        default:
+            fsizeR = (rand() % 10) + 1;
+            fsizeG = (rand() % 10) + 1;
+            fsizeB = (rand() % 10) + 1;
+            techR = (rand() % (RR_g_data.maxunit - 2)) + 2;
+            techG = (rand() % (RR_g_data.maxunit - 2)) + 2;
+            techB = (rand() % (RR_g_data.maxunit - 2)) + 2;
+            for(int i = 0; i < RR_BATTLE_MAX_FLEET; i++) {
+                if(i < fsizeR) fleetR[i] = rand() % 6 + 2;
+                if(i < fsizeG) fleetG[i] = rand() % 6 + 2;
+                if(i < fsizeB) fleetB[i] = rand() % 6 + 2;
+            }
         }
     }
     
@@ -290,29 +321,8 @@ public:
             b[i].hitships(a, RR_BATTLE_MAX_UNITS, b, RR_BATTLE_MAX_PARTICLES, i);
         } else if(next_particle == 0) next_particle = i;
         
-        // Spawn reinforcements
-        if(reinforcements <= 0.0 || (teamR < 4 && fsizeR) || (teamG < 4 && fsizeG) || (teamB < 4 && fsizeB)) {
-            if(teamR < teamG && teamR < teamB && fsizeR) {
-                fsizeR--;
-                teamR += addfleet(fleetR[fsizeR], 0);
-            } else if(teamG < teamB && fsizeG) {
-                fsizeG--;
-                teamG += addfleet(fleetG[fsizeG], 1);
-            } else if(fsizeB) {
-                fsizeB--;
-                teamB += addfleet(fleetB[fsizeB], 2);
-            } else if(fsizeR) {
-                fsizeR--;
-                teamR += addfleet(fleetR[fsizeR], 0);
-            } else if(fsizeG) {
-                fsizeG--;
-                teamG += addfleet(fleetG[fsizeG], 1);
-            }
-            if(teamR > 0 && teamG > 0 && teamB > 0) reinforcements = RR_BATTLE_REINFORCEMENT_INTERVAL * ((rand() % 10000) / 10000.0);
-        } else reinforcements -= fspd;
-        
         // Target status indicator
-        char str[50];
+        char str[128];
         f1 = RR_g.wid / 1000.0;
         if(a[player].in_use && a[player].team == player_team) {
             a[player].draw(
@@ -343,23 +353,69 @@ public:
             }
         }
         
-        // Team status indicators
-        RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 120, 160, 205, "Ships on field:\nReinforcements:");
-        sprintf(str, "                 %d\n                 %d", teamR, fsizeR);
-        RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 255, 0, 0, str);
-        sprintf(str, "                    %d\n                    %d", teamG, fsizeG);
-        RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 0, 200, 0, str);
-        sprintf(str, "                       %d\n                       %d", teamB, fsizeB);
-        RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 50, 100, 255, str);
-        if(fsizeR || fsizeG || fsizeB) {
-            sprintf(str, "\n                          %d", int(reinforcements));
-            RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 150, 150, 150, str);
-        }
-        
-        // Next battle
-        if(teamR + teamG < 1 || teamR + teamB < 1 || teamB + teamG < 1) {
-            battle_timeout -= fspd;
-            if(battle_timeout <= 0.0) next_battle();
+        // Spawn reinforcements
+        switch(battle_mode) {
+        case 1:
+            
+            // Next battle if player is dead
+            if((teamR < 1 && player_team == 0) || (teamG < 1 && player_team == 1) || (teamB < 1 && player_team == 2)) {
+                battle_timeout -= fspd;
+                if(battle_timeout <= 0.0) next_battle();
+            
+            // Next wave if enemies are dead
+            } else if(teamG < 1 && player_team == 0 && fsizeG > 0) {
+                fsizeG--;
+                teamG += addfleet(fleetG[fsizeG], 1);
+                if(techG < RR_g_data.maxunit) techG++;
+            } else if(teamB < 1 && player_team == 1 && fsizeB > 0) {
+                fsizeB--;
+                teamB += addfleet(fleetG[fsizeB], 2);
+                if(techB < RR_g_data.maxunit) techB++;
+            } else if(teamR < 1 && player_team == 2 && fsizeR > 0) {
+                fsizeR--;
+                teamR += addfleet(fleetR[fsizeR], 0);
+                if(techR < RR_g_data.maxunit) techR++;
+            }
+            break;
+        default:
+            if(reinforcements <= 0.0 || (teamR < 4 && fsizeR) || (teamG < 4 && fsizeG) || (teamB < 4 && fsizeB)) {
+                if(teamR < teamG && teamR < teamB && fsizeR) {
+                    fsizeR--;
+                    teamR += addfleet(fleetR[fsizeR], 0);
+                } else if(teamG < teamB && fsizeG) {
+                    fsizeG--;
+                    teamG += addfleet(fleetG[fsizeG], 1);
+                } else if(fsizeB) {
+                    fsizeB--;
+                    teamB += addfleet(fleetB[fsizeB], 2);
+                } else if(fsizeR) {
+                    fsizeR--;
+                    teamR += addfleet(fleetR[fsizeR], 0);
+                } else if(fsizeG) {
+                    fsizeG--;
+                    teamG += addfleet(fleetG[fsizeG], 1);
+                }
+                if(teamR > 0 && teamG > 0 && teamB > 0) reinforcements = RR_BATTLE_REINFORCEMENT_INTERVAL * ((rand() % 10000) / 10000.0);
+            } else reinforcements -= fspd;
+            
+            // Team status indicators
+            RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 120, 160, 205, "Ships on field:\nReinforcements:");
+            sprintf(str, "                 %d\n                 %d", teamR, fsizeR);
+            RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 255, 0, 0, str);
+            sprintf(str, "                    %d\n                    %d", teamG, fsizeG);
+            RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 0, 200, 0, str);
+            sprintf(str, "                       %d\n                       %d", teamB, fsizeB);
+            RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 50, 100, 255, str);
+            if(fsizeR || fsizeG || fsizeB) {
+                sprintf(str, "\n                          %d", int(reinforcements));
+                RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 150, 150, 150, str);
+            }
+            
+            // Next battle
+            if(teamR + teamG < 1 || teamR + teamB < 1 || teamB + teamG < 1) {
+                battle_timeout -= fspd;
+                if(battle_timeout <= 0.0) next_battle();
+            }
         }
         
 //         // Test part intersection
@@ -391,7 +447,7 @@ public:
     int addfleet(int fleet_type, int fleet_team) {
         int i1 = 0;
         int added = 0;
-        for(int i = 0; i < 2 + fleet_type; i++) {
+        for(int i = 0; i < fleet_type; i++) {
             added++;
             if(fleet_team == 0) {
                 i1 = addship((rand() % techR) + 1, fleet_team, teamR_pos + RR_g_vec2.box_random() * 500.0, RR_g_vec2.normal(teamR_pos, RR_vec2()), i1);

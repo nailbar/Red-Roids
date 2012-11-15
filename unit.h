@@ -12,10 +12,6 @@
 #define RR_BOUNCE_DAMAGE 0.005
 #endif
 
-#ifndef RR_UNIT_MAX_TECH
-#define RR_UNIT_MAX_TECH 8
-#endif
-
 class RR_unit {
 public:
     RR_vec2 pos, nrm, spd, tmp_vec2;

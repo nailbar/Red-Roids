@@ -75,9 +75,12 @@ public:
     RR_data_part d[RR_DATA_MAX_PARTS];
     RR_data_unit u[RR_DATA_MAX_UNITS];
     int curpart, curunit;
+    int maxpart, maxunit;
     RR_data() {
         curpart = 0;
         curunit = 0;
+        maxpart = 0;
+        maxunit = 0;
         for(int i = 0; i < RR_DATA_MAX_PARTS; i++) {
             d[i].type = 0;
         }
@@ -109,6 +112,7 @@ public:
                     if(type_handle == 0) {
                         if((tmppos = line.find(string("begin part"))) != int(string::npos)) {
                             curpart = atoi(line.substr(tmppos + 11).c_str());
+                            if(curpart > maxpart) maxpart = curpart;
                             d[curpart].type = 0;
                             d[curpart].size = 1;
                             d[curpart].power = 0;
@@ -127,6 +131,7 @@ public:
                             in_polygon = 0;
                         } else if((tmppos = line.find(string("begin unit"))) != int(string::npos)) {
                             curunit = atoi(line.substr(tmppos + 11).c_str());
+                            if(curunit > maxunit) maxunit = curunit;
                             u[curunit].type = 0;
                             cout<<"  * Loading unit: #"<<curunit;
                             type_handle = 2;
@@ -200,6 +205,7 @@ public:
                         } else if((tmppos = line.find(string("weapon:"))) != int(string::npos)) {
                             d[curpart].weapon = atoi(line.substr(tmppos + 8).c_str());
                             switch(d[curpart].weapon) {
+                            case 0: d[curpart].weapon = 0; break;
                             case 1: d[curpart].weapon = 1; break;
                             case 2: d[curpart].weapon = 5; break;
                             default: cout<<"Unknown weapon type: "<<d[curpart].weapon<<endl;
