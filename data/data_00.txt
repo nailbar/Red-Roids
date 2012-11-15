@@ -734,8 +734,8 @@ begin part 18
     name: Medium blaster
     type: weapon
     power: 0
-    weapon: 1
-    reload: 0.2
+    weapon: 2
+    reload: 0.5
     thrust: 0
     weight: 5.0
     strength: 3.0

@@ -499,51 +499,51 @@ begin unit 8
         type: 2
         increment: team
         vector: 10, 0
-        parent: 0
+        parent: 4
     end upart
-    begin upart 4
+    begin upart 1
         type: 9
         increment: 0
         vector: 25, 0
-        parent: 0
+        parent: 4
     end upart
-    begin upart 5
+    begin upart 2
         type: 15
         increment: 0
-        vector: -8, -17
-        parent: 0
+        vector: -2, -17
+        parent: 4
     end upart
-    begin upart 6
+    begin upart 3
         type: 16
         increment: 0
         vector: -8, 17
-        parent: 0
+        parent: 4
     end upart
-    begin upart 7
+    begin upart 4
         type: 14
         increment: 0
         vector: 0, 0
-        parent: 0
+        parent: 8
     end upart
-    begin upart 8
+    begin upart 5
         type: 18
         increment: 0
         vector: 5, -22
-        parent: 0
+        parent: 2
     end upart
-    begin upart 9
+    begin upart 6
         type: 18
         increment: 0
         vector: 5, 22
-        parent: 0
+        parent: 3
     end upart
-    begin upart 10
+    begin upart 7
         type: 19
         increment: 0
         vector: -18, 0
-        parent: 0
+        parent: 4
     end upart
-    begin upart 11
+    begin upart 8
         type: 17
         increment: 0
         vector: 0, 0

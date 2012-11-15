@@ -199,6 +199,11 @@ public:
                             d[curpart].power = atof(line.substr(tmppos + 7).c_str());
                         } else if((tmppos = line.find(string("weapon:"))) != int(string::npos)) {
                             d[curpart].weapon = atoi(line.substr(tmppos + 8).c_str());
+                            switch(d[curpart].weapon) {
+                            case 1: d[curpart].weapon = 1; break;
+                            case 2: d[curpart].weapon = 5; break;
+                            default: cout<<"Unknown weapon type: "<<d[curpart].weapon<<endl;
+                            }
                         } else if((tmppos = line.find(string("reload:"))) != int(string::npos)) {
                             d[curpart].reload = atof(line.substr(tmppos + 8).c_str());
                         } else if((tmppos = line.find(string("thrust:"))) != int(string::npos)) {
