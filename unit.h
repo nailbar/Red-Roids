@@ -540,6 +540,7 @@ void RR_unit::move(float fspd) {
 
 // Draw the unit on screen
 void RR_unit::draw(SDL_Surface* win, RR_vec2 position, RR_vec2 normal, float scale, RR_vec2 sun_dir, bool showdmg) {
+    RR_g.t[RR_T_UNIT_DRAW]++;
     
     // Loop through all parts
     for(int i = RR_MAX_UNIT_PARTS - 1; i >= 0; i--) if(p[i].in_use) {
@@ -558,6 +559,7 @@ void RR_unit::draw(SDL_Surface* win, RR_vec2 position, RR_vec2 normal, float sca
 
 // Check if another unit is too close and bounce on it
 float RR_unit::bounce(RR_unit &other, bool keepoff, bool hulldamage) {
+    RR_g.t[RR_T_UNIT_BOUNCE]++;
     RR_vec2 p1, p2, inter_nrm, inter_pos, top_nrm, top_pos;
     float inter_dis, top_dis, rel_spd, weight_imp;
     int top_i, top_u;

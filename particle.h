@@ -104,6 +104,7 @@ public:
     
     // Draw the particle on screen
     void draw(SDL_Surface* win, RR_vec2 position, RR_vec2 normal, float scale) {
+        RR_g.t[RR_T_PARTICLE_DRAW]++;
         RR_vec2 vec[6];
         RR_unit_part p;
         switch(type) {

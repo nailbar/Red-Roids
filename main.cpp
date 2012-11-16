@@ -6,6 +6,10 @@
 #define RR_MAX_DEBUG_MODE 4
 #endif
 
+#define RR_T_UNIT_DRAW 0
+#define RR_T_UNIT_BOUNCE 1
+#define RR_T_PARTICLE_DRAW 2
+
 // Practical globals
 struct RR_practical_globals {
     short wid, hgt, cntx, cnty;
@@ -19,6 +23,7 @@ struct RR_practical_globals {
     //  * 3 = Part sizes
     //  * 4 = Maximum speed
     char debugmode;
+    int t[20]; // Function tickers
     
     // Constructor
     RR_practical_globals() {
@@ -130,6 +135,7 @@ int main(int argc, char* args[]) {
         boxRGBA(win, -5, -5, RR_g.wid + 5, RR_g.hgt + 5, 0, 0, 0, 255);
         
         // Select game mode
+        for(int i = 0; i < 20; i++) RR_g.t[i] = 0;
         switch(gamemode) {
             
         // Menu
@@ -162,6 +168,9 @@ int main(int argc, char* args[]) {
         
         //Swap double buffer
         SDL_Flip(win);
+        
+        // Function ticker debug
+        cout<<"Draw Unit: "<<RR_g.t[RR_T_UNIT_DRAW]<<", Bounce Units: "<<RR_g.t[RR_T_UNIT_BOUNCE]<<", Particle Draw: "<<RR_g.t[RR_T_PARTICLE_DRAW]<<endl;
     }
     
     //Clean up
