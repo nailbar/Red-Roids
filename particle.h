@@ -43,6 +43,28 @@ public:
             break;
         }
     }
+    RR_particle(unsigned char newtype, RR_vec2 newpos, RR_vec2 newspddir) {
+        switch(newtype) {
+        case 0: // Spark (max life 3 sec)
+            type = newtype;
+            pos = newpos;
+            lpos = newpos;
+            spd = newspddir * 70.0;
+            nrm = RR_g_vec2.random();
+            in_use = 1;
+            life = (rand() % 3000) / 1000.0;
+            break;
+        case 2: // Hull fragment (max life 3 sec)
+            type = newtype;
+            pos = newpos;
+            lpos = newpos;
+            spd = newspddir * 70.0;
+            nrm = RR_g_vec2.random();
+            in_use = 1;
+            life = (rand() % 4000) / 1000.0;
+            break;
+        }
+    }
     RR_particle(unsigned char newtype, RR_vec2 newpos, RR_vec2 newnrm, RR_vec2 newspd) {
         switch(newtype) {
         case 1: // Light blast (3 seconds)
@@ -226,33 +248,37 @@ public:
                     }
                 }
             }
+        }
+        
+        // Did any ship get hit?
+        if(top_dis > 0) {
+            in_use = false; // Particle is no more
             
-            // Did any part get hit?
-            if(top_dis > 0) {
-                in_use = false; // Particle is no more
-                
-                // Damage and optionally destroy part
-                a[top_i].p[top_u].health -= ((rand() % 10000) / 10000.0) * hitdamage();
-                if(a[top_i].p[top_u].health <= 0.0) {
-                    a[top_i].p[top_u].in_use = false;
-                    a[top_i].recalculate();
-                }
-                
-                // Generate sparks and small parts
-                for(int k = 0; k < 15; k++) for(int j = current; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
-                    if(k == 0) b[j] = RR_particle(3, top_pos); // Light pulse
-                    else if(!a[top_i].p[top_u].in_use && k == 1) b[j] = RR_particle( // Destroyed part
-                        4,
-                        a[top_i].pos + a[top_i].nrm * a[top_i].p[top_u].pos.x + a[top_i].nrm.extrude() * a[top_i].p[top_u].pos.y,
-                        a[top_i].nrm,
-                        a[top_i].spd,
-                        a[top_i].p[top_u].type
-                    );
-                    else if(rand() % 100 < 80) b[j] = RR_particle(0, top_pos); // Sparks
-                    else b[j] = RR_particle(2, top_pos); // Fragments
-                    current = j + 1;
-                    break;
-                }
+            // Damage and optionally destroy part
+            a[top_i].p[top_u].health -= ((rand() % 10000) / 10000.0) * hitdamage();
+            if(a[top_i].p[top_u].health <= 0.0) {
+                a[top_i].p[top_u].in_use = false;
+                a[top_i].recalculate();
+            }
+            
+            // Calculate direction of explosion
+            p1 = a[top_i].pos + a[top_i].nrm * a[top_i].p[top_u].pos.x + a[top_i].nrm.extrude() * a[top_i].p[top_u].pos.y;
+            n1 = RR_g_vec2.normal(p1, top_pos);
+            
+            // Generate sparks and small parts
+            for(int k = 0; k < 15; k++) for(int j = current; j < RR_BATTLE_MAX_PARTICLES; j++) if(!b[j].in_use) {
+                if(k == 0) b[j] = RR_particle(3, top_pos); // Light pulse
+                else if(!a[top_i].p[top_u].in_use && k == 1) b[j] = RR_particle( // Destroyed part
+                    4,
+                    p1,
+                    a[top_i].nrm,
+                    a[top_i].spd,
+                    a[top_i].p[top_u].type
+                );
+                else if(rand() % 100 < 80) b[j] = RR_particle(0, top_pos, n1 + RR_g_vec2.rad_random()); // Sparks
+                else b[j] = RR_particle(2, top_pos, n1 + RR_g_vec2.rad_random()); // Fragments
+                current = j + 1;
+                break;
             }
         }
     }
