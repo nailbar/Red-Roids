@@ -224,6 +224,7 @@ public:
     
     // Hit ships
     void hitships(RR_unit* a, int amax, RR_particle* b, int bmax, int current) {
+        RR_g.t[RR_T_PARTICLE_HIT]++;
         RR_vec2 p1, n1, p2, inter_pos, top_pos;
         float inter_dis;
         int top_i, top_u;
@@ -231,21 +232,26 @@ public:
         
         // Skip this if not a hitting particle
         if(hitdamage() <= 0.0) return;
-        for(int i = 0; i < amax; i++) if(a[i].in_use) if(RR_g_vec2.box_distance(pos, a[i].pos) < a[i].size) {
+        for(int i = 0; i < amax; i++) if(a[i].in_use) {
             
-            // Ship is close enough to possibly be hit -> Hit check each part of ship
-            for(int u = 0; u < RR_MAX_UNIT_PARTS; u++) if(a[i].p[u].in_use) {
+            // Quick test
+            if(RR_g_vec2.box_distance(pos, a[i].pos) < a[i].size) {
+                RR_g.t[RR_T_PARTICLE_HIT2]++;
                 
-                // Calculate part position
-                p1 = a[i].pos + a[i].nrm * a[i].p[u].pos.x + a[i].nrm.extrude() * a[i].p[u].pos.y;
-                
-                // Test if part is hit
-                if(a[i].p[u].intersect(a[i].p[u].type, p1, a[i].nrm, pos, lpos + (lpos - pos) * 2.0, inter_pos, inter_dis)) {
-                    if(top_dis < 0 || inter_dis < top_dis) {
-                        top_dis = inter_dis;
-                        top_pos = inter_pos;
-                        top_i = i;
-                        top_u = u;
+                // Ship is close enough to possibly be hit -> Hit check each part of ship
+                for(int u = 0; u < RR_MAX_UNIT_PARTS; u++) if(a[i].p[u].in_use) {
+                    
+                    // Calculate part position
+                    p1 = a[i].pos + a[i].nrm * a[i].p[u].pos.x + a[i].nrm.extrude() * a[i].p[u].pos.y;
+                    
+                    // Test if part is hit
+                    if(a[i].p[u].intersect(a[i].p[u].type, p1, a[i].nrm, pos, lpos + (lpos - pos) * 2.0, inter_pos, inter_dis)) {
+                        if(top_dis < 0 || inter_dis < top_dis) {
+                            top_dis = inter_dis;
+                            top_pos = inter_pos;
+                            top_i = i;
+                            top_u = u;
+                        }
                     }
                 }
             }

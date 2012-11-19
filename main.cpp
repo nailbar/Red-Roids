@@ -9,6 +9,9 @@
 #define RR_T_UNIT_DRAW 0
 #define RR_T_UNIT_BOUNCE 1
 #define RR_T_PARTICLE_DRAW 2
+#define RR_T_PARTICLE_HIT 3
+#define RR_T_UNIT_BOUNCE2 4
+#define RR_T_PARTICLE_HIT2 5
 
 // Practical globals
 struct RR_practical_globals {
@@ -170,7 +173,7 @@ int main(int argc, char* args[]) {
         SDL_Flip(win);
         
         // Function ticker debug
-        cout<<"Draw Unit: "<<RR_g.t[RR_T_UNIT_DRAW]<<", Bounce Units: "<<RR_g.t[RR_T_UNIT_BOUNCE]<<", Particle Draw: "<<RR_g.t[RR_T_PARTICLE_DRAW]<<endl;
+//         cout<<"Draw Unit: "<<RR_g.t[RR_T_UNIT_DRAW]<<", Bounce Units: "<<RR_g.t[RR_T_UNIT_BOUNCE]<<", "<<RR_g.t[RR_T_UNIT_BOUNCE2]<<", Particle Draw: "<<RR_g.t[RR_T_PARTICLE_DRAW]<<", Particle Hit: "<<RR_g.t[RR_T_PARTICLE_HIT]<<", "<<RR_g.t[RR_T_PARTICLE_HIT2]<<", FPS: "<<int(1.0 / fspd)<<endl;
     }
     
     //Clean up
