@@ -1,5 +1,4 @@
 #include <stdio.h>
-// #include <iostream>
 
 #ifndef RR_BATTLE_H
 #define RR_BATTLE_H 1
@@ -116,9 +115,9 @@ public:
             fsizeR = (rand() % 10) + 1;
             fsizeG = (rand() % 10) + 1;
             fsizeB = (rand() % 10) + 1;
-            techR = (rand() % (RR_g_data.maxunit - 2)) + 2;
-            techG = (rand() % (RR_g_data.maxunit - 2)) + 2;
-            techB = (rand() % (RR_g_data.maxunit - 2)) + 2;
+            techR = rand() % RR_g_data.maxunit + 1;
+            techG = rand() % RR_g_data.maxunit + 1;
+            techB = rand() % RR_g_data.maxunit + 1;
             for(int i = 0; i < RR_BATTLE_MAX_FLEET; i++) {
                 if(i < fsizeR) fleetR[i] = rand() % 6 + 2;
                 if(i < fsizeG) fleetG[i] = rand() % 6 + 2;
@@ -351,6 +350,24 @@ public:
                 sprintf(str, "Distance: %d", int(RR_g_vec2.distance(a[player].pos, a[a[player].trg].pos) * 0.01));
                 RR_g_text.draw(win, RR_vec2(RR_g.wid - 100 * f1, RR_g.hgt - 20 * f1), 2.0 * f1, 120, 160, 205, str);
             }
+            
+            // Show nearest friends
+            for(int m = 0; m < RR_UNIT_MATES; m++) {
+                cout<<a[player].mate_id[m]<<", ";
+                if(a[player].mate_id[m] >= 0 && a[player].mate_id[m] < RR_BATTLE_MAX_UNITS) {
+                    if(a[a[player].mate_id[m]].in_use && a[a[player].mate_id[m]].team == a[player].team) {
+                        
+                        RR_g_text.draw(win, (a[a[player].mate_id[m]].pos - cam) * zoom + RR_vec2(RR_g.cntx, RR_g.cnty), 2, 120, 160, 205, "MATE");
+//                         a[a[player].mate_id[m]].target_indicator(
+//                             win,
+//                             (a[a[player].mate_id[m]].pos - cam) * zoom + RR_vec2(RR_g.cntx, RR_g.cnty),
+//                             a[a[player].mate_id[m]].size,
+//                             zoom
+//                         );
+                        
+                    }
+                }
+            } cout<<endl;
         }
         
         // Spawn reinforcements
@@ -399,12 +416,12 @@ public:
             } else reinforcements -= fspd;
             
             // Team status indicators
-            RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 120, 160, 205, "Ships on field:\nReinforcements:");
-            sprintf(str, "                 %d\n                 %d", teamR, fsizeR);
+            RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 120, 160, 205, "Ships on field:\nReinforcements:\nTech level:");
+            sprintf(str, "                 %d\n                 %d\n                 %d", teamR, fsizeR, techR);
             RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 255, 0, 0, str);
-            sprintf(str, "                    %d\n                    %d", teamG, fsizeG);
+            sprintf(str, "                    %d\n                    %d\n                    %d", teamG, fsizeG, techG);
             RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 0, 200, 0, str);
-            sprintf(str, "                       %d\n                       %d", teamB, fsizeB);
+            sprintf(str, "                       %d\n                       %d\n                       %d", teamB, fsizeB, techB);
             RR_g_text.draw(win, RR_vec2(10, 10), 2.0 * f1, 50, 100, 255, str);
             if(fsizeR || fsizeG || fsizeB) {
                 sprintf(str, "\n                          %d", int(reinforcements));

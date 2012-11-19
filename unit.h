@@ -12,6 +12,10 @@
 #define RR_BOUNCE_DAMAGE 0.005
 #endif
 
+#ifndef RR_UNIT_MATES
+#define RR_UNIT_MATES 5
+#endif
+
 #define RR_UNIT_AI 5
 
 class RR_unit {
@@ -20,8 +24,8 @@ public:
     RR_unit_part p[RR_MAX_UNIT_PARTS];
     bool in_use, burn_eng, fire, guns;
     float trn, trn2, size, thrust, weight, power, power_gen, power_draw, timeout, nearest_dis, self_destoy;
-    float ai[RR_UNIT_AI];
-    int trg, nearest_trg, test_trg;
+    float ai[RR_UNIT_AI], mate_dis[RR_UNIT_MATES];
+    int trg, nearest_trg, test_trg, mate_id[RR_UNIT_MATES];
     char team, type, mode;
     
     // Constructor
@@ -295,35 +299,88 @@ bool RR_unit::has_valid_target(RR_unit* a, int n, int i) {
     return true;
 }
 
-// Look for nearest target
+// Look for nearest target and nearest friends
 void RR_unit::find_nearest_target(RR_unit* a, int n, int i) {
     RR_vec2 v1;
+    float f1, f2, f3;
+    int i1;
     if(test_trg < 0 || test_trg >= n) test_trg = 0;
     for(int u = 0; u < 20; u++) {
         test_trg++;
         if(test_trg >= n) test_trg = 0;
-        if(test_trg != i && a[test_trg].in_use && a[test_trg].team != team && a[test_trg].self_destoy < 0) break;
+        if(test_trg != i && a[test_trg].in_use && a[test_trg].self_destoy < 0) break;
     }
     
     // Get distance to current nearest
     if(nearest_trg > -1 && nearest_trg < n && nearest_trg != i) {
         if(a[nearest_trg].in_use && a[nearest_trg].team != team && a[nearest_trg].self_destoy < 0) {
-            v1 = a[i].pos - a[nearest_trg].pos;
+            v1 = pos - a[nearest_trg].pos;
             nearest_dis = v1.x * v1.x + v1.y * v1.y;
         } else nearest_dis = -1;
     } else nearest_dis = -1;
     
-    // Get distance to test
-    float f1 = -1;
+    // Test target is an enemy
     if(test_trg != i && a[test_trg].in_use && a[test_trg].team != team && a[test_trg].self_destoy < 0) {
-        v1 = a[i].pos - a[test_trg].pos;
-        f1 = v1.x * v1.x + v1.y * v1.y;
-    }
+        
+        // Get distance to test
+        f1 = -1;
+        if(test_trg != i && a[test_trg].in_use && a[test_trg].team != team && a[test_trg].self_destoy < 0) {
+            v1 = pos - a[test_trg].pos;
+            f1 = v1.x * v1.x + v1.y * v1.y;
+        }
+        
+        // Compare and select
+        if(f1 > -1 && (f1 < nearest_dis || nearest_dis < 0)) {
+            nearest_trg = test_trg;
+            nearest_dis = f1;
+        }
     
-    // Compare and select
-    if(f1 > -1 && (f1 < nearest_dis || nearest_dis < 0)) {
-        nearest_trg = test_trg;
-        nearest_dis = f1;
+    // Test target is friend
+    } else if(test_trg != i && a[test_trg].in_use && a[test_trg].team == team && a[test_trg].self_destoy < 0) {
+        
+        // Make sure test ship is in front of this ship
+        i1 = test_trg;
+        f1 = RR_g_vec2.dot(nrm, a[test_trg].pos - pos);
+        if(f1 > size) f2 = RR_g_vec2.distance(pos, a[test_trg].pos);
+        else i1 = -1;
+        
+        // Loop through mate list
+        for(int m = 0; m < RR_UNIT_MATES; m++) {
+            
+            // Make sure current mate ID is valid
+            if(mate_id[m] >= 0 && mate_id[m] < n) {
+                
+                // Make sure current mate is alive and friendly
+                if(a[mate_id[m]].in_use && a[mate_id[m]].team == team && a[mate_id[m]].self_destoy < 0) {
+                    
+                    // Make sure current mate is in front of this ship
+                    f3 = RR_g_vec2.dot(nrm, a[mate_id[m]].pos - pos);
+                    if(f3 > size) mate_dis[m] = RR_g_vec2.distance(pos, a[mate_id[m]].pos);
+                    else mate_id[m] = -1;
+                } else mate_id[m] = -1;
+            } else mate_id[m] = -1;
+            
+            // If previous mate values are valid and better than current mate then swap
+            if(i1 > -1 && i1 != mate_id[m] && (mate_id[m] < 0 || (mate_id[m] > -1 && mate_dis[m] > f2))) {
+                
+                // Replace previous mate values with current
+                if(m > 0) {
+                    mate_id[m - 1] = mate_id[m];
+                    mate_dis[m - 1] = mate_dis[m];
+                }
+                
+                // Replace current with prevous
+                mate_id[m] = i1;
+                mate_dis[m] = f2;
+            }
+            
+            // Prevent duplicates
+            if(m > 0 && mate_id[m] > -1) if(mate_id[m - 1] == mate_id[m]) mate_id[m - 1] = -1;
+            
+            // Remember current mate values for next time
+            i1 = mate_id[m];
+            f2 = mate_dis[m];
+        }
     }
 }
 
