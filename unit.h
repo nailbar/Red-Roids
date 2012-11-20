@@ -334,52 +334,65 @@ void RR_unit::find_nearest_target(RR_unit* a, int n, int i) {
             nearest_trg = test_trg;
             nearest_dis = f1;
         }
+    }
     
-    // Test target is friend
-    } else if(test_trg != i && a[test_trg].in_use && a[test_trg].team == team && a[test_trg].self_destoy < 0) {
-        
-        // Make sure test ship is in front of this ship
-        i1 = test_trg;
-        f1 = RR_g_vec2.dot(nrm, a[test_trg].pos - pos);
-        if(f1 > size) f2 = RR_g_vec2.distance(pos, a[test_trg].pos);
-        else i1 = -1;
-        
-        // Loop through mate list
-        for(int m = 0; m < RR_UNIT_MATES; m++) {
+    // Loop through mate list
+    bool mate_exists = false;
+    for(int m = 0; m < RR_UNIT_MATES; m++) {
+    
+        // Make sure current mate ID is valid
+        if(mate_id[m] >= 0 && mate_id[m] < n) {
             
-            // Make sure current mate ID is valid
-            if(mate_id[m] >= 0 && mate_id[m] < n) {
+            // Make sure current mate is alive and friendly
+            if(a[mate_id[m]].in_use && a[mate_id[m]].team == team && a[mate_id[m]].self_destoy < 0) {
                 
-                // Make sure current mate is alive and friendly
-                if(a[mate_id[m]].in_use && a[mate_id[m]].team == team && a[mate_id[m]].self_destoy < 0) {
-                    
-                    // Make sure current mate is in front of this ship
-                    f3 = RR_g_vec2.dot(nrm, a[mate_id[m]].pos - pos);
-                    if(f3 > size) mate_dis[m] = RR_g_vec2.distance(pos, a[mate_id[m]].pos);
-                    else mate_id[m] = -1;
-                } else mate_id[m] = -1;
+                // Make sure current mate is in front of this ship
+                f3 = RR_g_vec2.dot(nrm, RR_g_vec2.normal(pos, a[mate_id[m]].pos));
+                if(f3 > 0.8) mate_dis[m] = RR_g_vec2.dot(nrm, a[mate_id[m]].pos - pos);
+                else mate_id[m] = -1;
             } else mate_id[m] = -1;
+        } else mate_id[m] = -1;
+        
+        // If this is not the first mate
+        if(m > 0) {
             
-            // If previous mate values are valid and better than current mate then swap
+            // If previous mate is better than current mate
             if(i1 > -1 && i1 != mate_id[m] && (mate_id[m] < 0 || (mate_id[m] > -1 && mate_dis[m] > f2))) {
                 
-                // Replace previous mate values with current
-                if(m > 0) {
-                    mate_id[m - 1] = mate_id[m];
-                    mate_dis[m - 1] = mate_dis[m];
-                }
-                
-                // Replace current with prevous
+                // Swap mate values
+                mate_id[m - 1] = mate_id[m];
+                mate_dis[m - 1] = mate_dis[m];
                 mate_id[m] = i1;
                 mate_dis[m] = f2;
             }
             
-            // Prevent duplicates
-            if(m > 0 && mate_id[m] > -1) if(mate_id[m - 1] == mate_id[m]) mate_id[m - 1] = -1;
+            // Remove any duplicates
+            if(mate_id[m - 1] == mate_id[m]) mate_id[m - 1] = -1;
+        }
+        
+        // Remember mate values
+        i1 = mate_id[m];
+        f2 = mate_dis[m];
+        
+        // Prevent existing mate from being added
+        if(i1 == test_trg) mate_exists = true;
+    }
+    
+    // If test target is friend and is not in mate list
+    if(!mate_exists && test_trg != i && a[test_trg].in_use && a[test_trg].team == team && a[test_trg].self_destoy < 0) {
+        
+        // Make sure test ship is in front of this ship
+        i1 = test_trg;
+        f1 = RR_g_vec2.dot(nrm, RR_g_vec2.normal(pos, a[i1].pos));
+        if(f1 > 0.8) f2 = RR_g_vec2.dot(nrm, a[i1].pos - pos);
+        else i1 = -1;
+        
+        // Replace first mate if test ship is better
+        if(i1 > -1 && i1 != mate_id[0] && (mate_id[0] < 0 || (mate_id[0] > -1 && mate_dis[0] > f2))) {
             
-            // Remember current mate values for next time
-            i1 = mate_id[m];
-            f2 = mate_dis[m];
+            // Swap mate values
+            mate_id[0] = i1;
+            mate_dis[0] = f2;
         }
     }
 }
@@ -456,6 +469,9 @@ void RR_unit::follow(RR_vec2 target, bool fixmode) {
         // Fire if target is close enough
         if(t_dot > 0.9 && distance2 < 600.0 + ai[4] * 600.0) fire = true;
         else fire = false;
+        
+        // Prevent firing if friendlies at risk
+        if(fire) for(int i = 0; i < RR_UNIT_MATES; i++) if(mate_id[i] > -1 && mate_dis[i] < 800) fire = false;
     
     // Escape mode
     } else if(mode == 1) {

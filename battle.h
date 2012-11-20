@@ -350,24 +350,6 @@ public:
                 sprintf(str, "Distance: %d", int(RR_g_vec2.distance(a[player].pos, a[a[player].trg].pos) * 0.01));
                 RR_g_text.draw(win, RR_vec2(RR_g.wid - 100 * f1, RR_g.hgt - 20 * f1), 2.0 * f1, 120, 160, 205, str);
             }
-            
-            // Show nearest friends
-            for(int m = 0; m < RR_UNIT_MATES; m++) {
-                cout<<a[player].mate_id[m]<<", ";
-                if(a[player].mate_id[m] >= 0 && a[player].mate_id[m] < RR_BATTLE_MAX_UNITS) {
-                    if(a[a[player].mate_id[m]].in_use && a[a[player].mate_id[m]].team == a[player].team) {
-                        
-                        RR_g_text.draw(win, (a[a[player].mate_id[m]].pos - cam) * zoom + RR_vec2(RR_g.cntx, RR_g.cnty), 2, 120, 160, 205, "MATE");
-//                         a[a[player].mate_id[m]].target_indicator(
-//                             win,
-//                             (a[a[player].mate_id[m]].pos - cam) * zoom + RR_vec2(RR_g.cntx, RR_g.cnty),
-//                             a[a[player].mate_id[m]].size,
-//                             zoom
-//                         );
-                        
-                    }
-                }
-            } cout<<endl;
         }
         
         // Spawn reinforcements
