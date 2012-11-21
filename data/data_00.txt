@@ -817,3 +817,85 @@ begin part 19
         vector: -5, 5
     end polygon
 end part
+
+begin part 20
+    name: Left Shield
+    type: hull
+    power: 0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 12.0
+    strength: 20.0
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 0.0
+        ambient: 0.2
+        phong: 1.0
+        vector: -35, 0
+        vector: 0, -9
+        vector: 43, 0
+        vector: 42, 2
+        vector: 0, -4
+        vector: -34, 2
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 1.0
+        ambient: 0.2
+        phong: 0.2
+        vector: 40, 5
+        vector: 42, 2
+        vector: 0, -4
+        vector: -34, 2
+        vector: -33, 5
+    end polygon
+end part
+
+begin part 21
+    name: Right Shield
+    type: hull
+    power: 0
+    weapon: 0
+    reload: 0
+    thrust: 0
+    weight: 12.0
+    strength: 20.0
+    power_draw: 0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 1.0
+        ambient: 0.2
+        phong: 1.0
+        vector: -35, 0
+        vector: 0, 9
+        vector: 43, 0
+        vector: 42, -2
+        vector: 0, 4
+        vector: -34, -2
+    end polygon
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 0.0
+        ambient: 0.2
+        phong: 0.2
+        vector: 40, -5
+        vector: 42, -2
+        vector: 0, 4
+        vector: -34, -2
+        vector: -33, -5
+    end polygon
+end part

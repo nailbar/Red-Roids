@@ -417,26 +417,10 @@ public:
             }
         }
         
-//         // Test part intersection
-//         static float partrot = 0.0;
-//         partrot += fspd;
+//         // Dev tests
 //         RR_unit_part testpart;
-//         RR_vec2 inter_nrm, inter_pos;
-//         RR_vec2 pos1 = RR_vec2(150, 150);
-//         RR_vec2 pos2 = RR_vec2(180, 150);
-//         float inter_dis;
-//         bool touching = testpart.intersect(
-//             1, pos1, RR_vec2(0 - partrot * 0.8),
-//             9, pos2, a[player].nrm,
-//             inter_nrm, inter_dis, inter_pos
-//         );
-//         RR_vec2 pos1b = pos1 - inter_nrm * inter_dis * 0.5;
-//         RR_vec2 pos2b = pos2 + inter_nrm * inter_dis * 0.5;
-//         testpart.draw(win, pos1b * 2.0, RR_vec2(0 - partrot * 0.8), 2.0, 1, 0, RR_vec2(0), touching);
-//         testpart.draw(win, pos2b * 2.0, a[player].nrm, 2.0, 9, 0, RR_vec2(0), touching);
-//         if(touching) boxRGBA(win, inter_pos.x * 2 - 1, inter_pos.y * 2 - 1, inter_pos.x * 2 + 1, inter_pos.y * 2 + 1, 255, 255, 0, 255);
-//         boxRGBA(win, pos1.x * 2 - 1, pos1.y * 2 - 1, pos1.x * 2 + 1, pos1.y * 2 + 1, 0, 255, 0, 255);
-//         boxRGBA(win, pos2.x * 2 - 1, pos2.y * 2 - 1, pos2.x * 2 + 1, pos2.y * 2 + 1, 0, 255, 0, 255);
+//         testpart.draw(win, RR_vec2(200, 200), a[player].nrm, 2.0, 20, 0, RR_vec2(0), false);
+//         testpart.draw(win, RR_vec2(200, 300), a[player].nrm, 2.0, 21, 0, RR_vec2(0), false);
         
         // Done
         return 0;

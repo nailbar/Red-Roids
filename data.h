@@ -10,7 +10,7 @@
 #endif
 
 #ifndef RR_DATA_MAX_POLYGON_SIZE
-#define RR_DATA_MAX_POLYGON_SIZE 5
+#define RR_DATA_MAX_POLYGON_SIZE 6
 #endif
 
 #ifndef RR_DATA_MAX_UNITS
