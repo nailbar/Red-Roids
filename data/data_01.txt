@@ -550,3 +550,183 @@ begin unit 8
         parent: 0
     end upart
 end unit
+
+begin unit 9
+    name: Gen 2 Light fighter
+    type: fighter
+    
+    # Cockpit
+    begin upart 0
+        type: 2
+        increment: team
+        vector: 3, 0
+        parent: 3
+    end upart
+    
+    # Body segments
+    begin upart 1
+        type: 5
+        increment: 0
+        vector: 56, 0
+        parent: 4
+    end upart
+    begin upart 2
+        type: 14
+        increment: 0
+        vector: -12, 0
+        parent: 3
+    end upart
+    begin upart 3
+        type: 14
+        increment: 0
+        vector: 12, 0
+        parent: 12
+    end upart
+    begin upart 4
+        type: 14
+        increment: 0
+        vector: 36, 0
+        parent: 3
+    end upart
+    
+    # Wings
+    begin upart 7
+        type: 10
+        increment: 0
+        vector: 4, 10
+        parent: 3
+    end upart
+    begin upart 8
+        type: 11
+        increment: 0
+        vector: 4, -10
+        parent: 3
+    end upart
+    
+    # Weapons
+    begin upart 9
+        type: 18
+        increment: 0
+        vector: 18, 14
+        parent: 7
+    end upart
+    begin upart 10
+        type: 18
+        increment: 0
+        vector: 18, -14
+        parent: 8
+    end upart
+    
+    # Thruster
+    begin upart 11
+        type: 19
+        increment: 0
+        vector: -31, 0
+        parent: 2
+    end upart
+    
+    # Core
+    begin upart 12
+        type: 17
+        increment: 0
+        vector: 5, 0
+        parent: 0
+    end upart
+end unit
+
+begin unit 10
+    name: Gen 2 Shielded light fighter
+    type: fighter
+    
+    # Cockpit
+    begin upart 0
+        type: 2
+        increment: team
+        vector: 3, 0
+        parent: 3
+    end upart
+    
+    # Body segments
+    begin upart 1
+        type: 5
+        increment: 0
+        vector: 56, 0
+        parent: 4
+    end upart
+    begin upart 2
+        type: 14
+        increment: 0
+        vector: -12, 0
+        parent: 3
+    end upart
+    begin upart 3
+        type: 14
+        increment: 0
+        vector: 12, 0
+        parent: 12
+    end upart
+    begin upart 4
+        type: 14
+        increment: 0
+        vector: 36, 0
+        parent: 3
+    end upart
+    
+    # Shields
+    begin upart 5
+        type: 21
+        increment: 0
+        vector: -10, 24
+        parent: 7
+    end upart
+    begin upart 6
+        type: 20
+        increment: 0
+        vector: -10, -24
+        parent: 8
+    end upart
+    
+    # Wings
+    begin upart 7
+        type: 10
+        increment: 0
+        vector: 4, 10
+        parent: 3
+    end upart
+    begin upart 8
+        type: 11
+        increment: 0
+        vector: 4, -10
+        parent: 3
+    end upart
+    
+    # Weapons
+    begin upart 9
+        type: 18
+        increment: 0
+        vector: 18, 14
+        parent: 7
+    end upart
+    begin upart 10
+        type: 18
+        increment: 0
+        vector: 18, -14
+        parent: 8
+    end upart
+    
+    # Thruster
+    begin upart 11
+        type: 19
+        increment: 0
+        vector: -31, 0
+        parent: 2
+    end upart
+    
+    # Core
+    begin upart 12
+        type: 17
+        increment: 0
+        vector: 5, 0
+        parent: 0
+    end upart
+end unit
