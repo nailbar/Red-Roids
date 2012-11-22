@@ -730,3 +730,68 @@ begin unit 10
         parent: 0
     end upart
 end unit
+
+begin unit 11
+    name: Updated Light fighter 2
+    type: fighter
+    
+    # Cockpit
+    begin upart 0
+        type: 2
+        increment: team
+        vector: -4, 0
+        parent: 7
+    end upart
+    
+    # Nose
+    begin upart 1
+        type: 1
+        increment: 0
+        vector: 11, 0
+        parent: 7
+    end upart
+    
+    # Side shields
+    begin upart 2
+        type: 7
+        increment: 0
+        vector: -13, 10
+        parent: 7
+    end upart
+    begin upart 3
+        type: 8
+        increment: 0
+        vector: -13, -10
+        parent: 7
+    end upart
+    
+    # Thruster
+    begin upart 4
+        type: 19
+        increment: 0
+        vector: -12, 0
+        parent: 7
+    end upart
+    
+    # Weapons
+    begin upart 5
+        type: 22
+        increment: 0
+        vector: -6, 15
+        parent: 2
+    end upart
+    begin upart 6
+        type: 22
+        increment: 0
+        vector: -6, -15
+        parent: 3
+    end upart
+    
+    # Core
+    begin upart 7
+        type: 17
+        increment: 0
+        vector: 0, 0
+        parent: 0
+    end upart
+end unit

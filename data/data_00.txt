@@ -899,3 +899,53 @@ begin part 21
         vector: -33, -5
     end polygon
 end part
+
+begin part 22
+    name: Light Rail Blaster
+    type: weapon
+    power: 0
+    weapon: 1
+    reload: 0.25
+    thrust: 0
+    weight: 5.0
+    strength: 3.0
+    power_draw: 20.0
+    fire_pos: 0, 0
+    fire_size: 0, 0
+    begin polygon
+        color_r: 180
+        color_g: 180
+        color_b: 200
+        tilt_dir: 1.0
+        ambient: 0.2
+        phong: 0.5
+        vector: -8, -2
+        vector: 0, -4
+        vector: 0, 4
+        vector: -8, 2
+    end polygon
+    begin polygon
+        color_r: 100
+        color_g: 110
+        color_b: 130
+        tilt_dir: 0.5
+        ambient: 0.2
+        phong: 0.3
+        vector: -4, 1
+        vector: 7, 1
+        vector: 7, 3
+        vector: -4, 3
+    end polygon
+    begin polygon
+        color_r: 100
+        color_g: 110
+        color_b: 130
+        tilt_dir: -0.5
+        ambient: 0.2
+        phong: 0.3
+        vector: -4, -3
+        vector: 7, -3
+        vector: 7, -1
+        vector: -4, -1
+    end polygon
+end part

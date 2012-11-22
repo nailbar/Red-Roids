@@ -445,7 +445,7 @@ public:
     
     // Add a single ship to the battlefield
     int addship(int ship_type, char ship_team, RR_vec2 ship_pos, RR_vec2 ship_nrm, int ifrom) {
-//         std::cout<<"addship: "<<ship_type<<", "<<int(ship_team)<<"\n";
+// ship_type = 11;
         for(int i = ifrom; i < RR_BATTLE_MAX_UNITS; i++) if(!a[i].in_use) {
             a[i] = RR_unit(ship_type, ship_team, ship_pos, ship_nrm);
             return i + 1;
