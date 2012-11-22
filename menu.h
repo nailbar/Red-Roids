@@ -69,11 +69,11 @@ public:
             }
             
             // Ships follow cursor
-            a[i].follow(RR_vec2(mpos[0], mpos[1]), true);
+            a[i].follow(RR_vec2(mpos[0], mpos[1]), false);
             
             // Some bouncing
             for(int u = i + 1; u < RR_MENU_UNITS; u++) {
-                a[i].bounce(a[u], true, false);
+                a[i].bounce(a[u], false, false);
             }
             
             // Move ships
