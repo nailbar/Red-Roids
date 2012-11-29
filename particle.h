@@ -245,7 +245,7 @@ public:
                     p1 = a[i].pos + a[i].nrm * a[i].p[u].pos.x + a[i].nrm.extrude() * a[i].p[u].pos.y;
                     
                     // Test if part is hit
-                    if(a[i].p[u].intersect(a[i].p[u].type, p1, a[i].nrm, pos, lpos + (lpos - pos) * 2.0, inter_pos, inter_dis)) {
+                    if(a[i].p[u].intersect(a[i].p[u].type, p1, a[i].nrm, lpos - (nrm * 5.0), pos, inter_pos, inter_dis)) {
                         if(top_dis < 0 || inter_dis < top_dis) {
                             top_dis = inter_dis;
                             top_pos = inter_pos;
